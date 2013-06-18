@@ -1,0 +1,51 @@
+@(contacts: List[Contact], contactForm: Form[Contact], user: User) 
+
+@import helper._
+
+@main("Contacts", user) {
+	
+	<ul class="nav nav-tabs">
+	    <li class="active">
+	    <a href="#">List</a>
+	    </li>
+	    <li><a href=@routes.Application.add()>Add</a></li>
+	    <li><a href="#">Export</a></li>
+    </ul>
+	
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>First Name</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Street</th>
+				<th>City</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@for(contact <- contacts) {
+			<tr>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.name</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.firstName</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.email</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.phone</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.street</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.city</a>
+				</td>
+				<td>@form(action = routes.Application.deleteContact(contact.id)) {
+					<input type="submit" value="Delete" class="btn btn-danger">
+					}
+				</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+}

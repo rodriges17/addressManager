@@ -1,0 +1,20 @@
+@(contact: Contact, user: User) 
+
+@import helper._ 
+
+@main(title = "Contact View", user) {
+
+<address>
+	<strong>@contact.firstName @contact.name</strong><br>
+	@contact.street<br>
+	@contact.city<br>
+	<abbr title="Phone">P:</abbr>(123) 456-7845<br>
+	<a href="mailto:@contact.email">@contact.email</a>
+</address>
+<p>
+	<a href="@routes.Application.contacts()" class="btn">back</a>
+	<a href="@routes.Application.editContact(contact.id)" class="btn">edit</a>	
+	<a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger">delete</a>
+</p>
+
+}

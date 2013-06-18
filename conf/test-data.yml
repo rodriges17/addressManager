@@ -1,0 +1,25 @@
+- !!models.User
+    email:      bob@sample.com
+    password:   secret
+    
+- !!models.User
+    email:      alice@sample.com
+    password:   secret
+    
+- !!models.User
+    email:      radek@sample.com
+    password:   secret
+    
+- !!models.User
+    email:      erwan@sample.com
+    password:   secret
+
+- !!models.Contact
+    id:         1
+    name:       Test
+    firstName:  Jeff
+    email:      test@test.com
+    street:     Teststreet
+    city:       Test City
+    phone:      012-345678
+        
