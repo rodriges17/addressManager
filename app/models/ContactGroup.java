@@ -15,7 +15,7 @@ public class ContactGroup extends Model {
 	public String name;
 	
     @ManyToMany
-	public List<User> owners = new LinkedList<User>();
+	public List<User> owners = new ArrayList<User>();
 	
 //    @OneToMany(cascade = CascadeType.PERSIST)
 //	public List<Contact> contacts = new LinkedList<Contact>();;
@@ -28,7 +28,7 @@ public class ContactGroup extends Model {
 	}
 
 	public static ContactGroup create(String name, String owner) {
-		ContactGroup contactGroup = new ContactGroup(name, User.find.byId(owner));
+		ContactGroup contactGroup = new ContactGroup(name, User.find.ref(owner));
 		contactGroup.save();
 		contactGroup.saveManyToManyAssociations("owners");
 		return contactGroup;
@@ -36,6 +36,10 @@ public class ContactGroup extends Model {
 	
 	public static List<ContactGroup> all() {
 		return find.all();
+	}
+	
+	public static List<ContactGroup> findInvolvingOwner(User owner) {
+		return find.where().eq("owners.email", owner.email).findList();
 	}
 	
 	public void delete(String id) {

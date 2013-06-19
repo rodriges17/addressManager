@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.List;
 
 import org.junit.*;
 
@@ -21,15 +22,16 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveUser() {
-        new User("bob@gmail.com", "secret").save();
+        new User("bob@gmail.com", "secret", false).save();
         User bob = User.find.where().eq("email", "bob@gmail.com").findUnique();
         assertNotNull(bob);
+        assertEquals("bob@gmail.com", bob.email);
         assertEquals("secret", bob.password);
     }
 	
 	@Test
 	public void tryAuthenticateUser() {
-		new User("bob@gmail.com", "secret").save();
+		new User("bob@gmail.com", "secret", false).save();
 		assertNotNull(User.authenticate("bob@gmail.com", "secret"));
 		assertNull(User.authenticate("bob@gmail.com", "badpassword"));
 		assertNull(User.authenticate("tom@gmail.com", "secret"));
@@ -37,7 +39,7 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveContact() {
-		new User("admin@test.com", "admin").save();
+		new User("admin@test.com", "admin", false).save();
 		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
 		new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
@@ -46,11 +48,24 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveContactGroup() {
-		new User("admin@test.com", "admin").save();
+		new User("admin@test.com", "admin", false).save();
 		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
 		new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
 		assertNotNull(cg);
+    }
+	
+	@Test
+    public void findContactGroupsInvolving() {
+        User bob = new User("bob@gmail.com", "secret", false);bob.save();
+        new User("jane@gmail.com", "secret", false).save();
+        
+        ContactGroup.create("Bern", "bob@gmail.com");
+        ContactGroup.create("Basel", "jane@gmail.com");
+
+        List<ContactGroup> results = ContactGroup.findInvolvingOwner(bob);
+        assertEquals(1, results.size());
+        assertEquals("Bern", results.get(0).name);
     }
 	
 //	@Test

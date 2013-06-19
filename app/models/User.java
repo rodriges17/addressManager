@@ -17,13 +17,15 @@ public class User extends Model {
 	@Id
     public String email;
     public String password;
+    public boolean isAdmin;
 
 //    @ManyToMany
 //    public LinkedList<ContactGroup> administratedContactGroups;
     
-    public User(String email, String password) {
+    public User(String email, String password, boolean isAdmin) {
       this.email = email;
       this.password = password;
+      this.isAdmin = isAdmin;
 //      this.administratedContactGroups = new LinkedList<ContactGroup>();
     }
 

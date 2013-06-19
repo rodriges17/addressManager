@@ -22,6 +22,7 @@ create table contact_group (
 create table user (
   email                     varchar(255) not null,
   password                  varchar(255),
+  is_admin                  boolean,
   constraint pk_user primary key (email))
 ;
 

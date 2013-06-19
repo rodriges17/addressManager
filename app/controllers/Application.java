@@ -8,7 +8,7 @@ import views.html.*;
 
 public class Application extends Controller {
 	
-	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass");
+	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass", false);
 	
 	static Form<Contact> contactForm = Form.form(Contact.class);
 	
