@@ -2,25 +2,42 @@
 
 @import helper._
 
-	@main("Add Contact", user) {
-	
-		<ul class="nav nav-tabs">
-	    <li>
-	    <a href=@routes.Application.contacts()>List</a>
-	    </li>
-	    <li class="active"><a href="#">Add</a></li>
-	    <li><a href="#">Export</a></li>
+@main("Add Contact", user) {
+
+	<ul class="nav nav-tabs">
+    	<li>
+			<a href=@routes.Application.contacts()>List</a>
+		</li>
+		<li class="active">
+			<a href="#">Add</a>
+		</li>
+		<li>
+			<a href="#">Export</a>
+		</li>
     </ul>
-	
+
 	<h2>Add a new contact</h2>
-	    
-	    @form(action = routes.Application.newContact()) {
-	        @inputText(contactForm("name"))
-	        @inputText(contactForm("firstName"))
-	        @inputText(contactForm("email")) 
-	        @inputText(contactForm("phone"))
-	        @inputText(contactForm("street"))
-	        @inputText(contactForm("city"))
-	        <input type="submit" value="Create">    
-	    }
+	
+	@form(action = routes.Application.newContact()) {
+	
+		<fieldset>
+		@inputText(contactForm("name"), '_label -> "Name", '_showConstraints -> false)		
+		@inputText(contactForm("firstName"), '_label -> "First name")	
+		@inputText(contactForm("email"), '_label -> "Email", '_showConstraints -> false)	
+		@inputText(contactForm("phone"), '_label -> "Phone")
+		@inputText(contactForm("street"), '_label -> "Street")
+		@inputText(contactForm("city"), '_label -> "City")
+		@select(
+			contactForm("belongsTo.id"),
+			options(ContactGroup.options),
+			'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
+			'_showConstraints -> false
+		)
+		
+		<input type="submit" value="Create" class="btn">
+		
+		</fieldset>
+		
 	}
+	
+}

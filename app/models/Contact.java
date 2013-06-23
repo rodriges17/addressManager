@@ -1,12 +1,13 @@
 package models;
 
-import play.data.Form;
-import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-
-import javax.persistence.*;
 import java.util.*;
-import java.util.List.*;
+import javax.persistence.*;
+
+import play.db.ebean.*;
+import play.data.Form;
+import play.data.validation.Constraints.*;
+
+import com.avaje.ebean.*;
 
 @Entity
 public class Contact extends Model {
@@ -14,10 +15,15 @@ public class Contact extends Model {
 	@Id
 	public Long id;
 	
+	@Required
 	public String name;
 	
 	public String firstName;
 	
+	@Email
+	@Pattern(value="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 	public String email;
 	
 	public String street;
@@ -26,11 +32,13 @@ public class Contact extends Model {
 	
 	public String phone;
 	
-	public static Finder<Long, Contact> find = new Finder(Long.class, Contact.class);
+	@Required
+	@ManyToOne
+	public ContactGroup belongsTo;
+	  
+	public static Finder<Long,Contact> find = 
+			new Finder<Long,Contact>(Long.class, Contact.class);
 
-    @ManyToOne
-	public static ContactGroup belongsTo;
-	
 	public Contact(String name, String firstName, String email,
 			String street, String city, String phone, ContactGroup belongsTo) {
 		this.name = name;
@@ -39,12 +47,16 @@ public class Contact extends Model {
 		this.street = street;
 		this.city = city;
 		this.phone = phone;
-		this.belongsTo = belongsTo;
+		this.belongsTo = belongsTo;	
 	}
 	
-	public static Contact create(String name, String firstName, String email, String street, String city, String phone, String belongsTo) {
-		Contact contact = new Contact(name, firstName, email, street, city, phone, ContactGroup.find.byId(belongsTo));
+	public static Contact create(String name, String firstName, String email,
+			String street, String city, String phone, String belongsTo) {
+		ContactGroup cg = ContactGroup.find.where().eq("name", belongsTo).findUnique();
+		System.out.println(cg.name);
+		Contact contact = new Contact(name, firstName, email, street, city, phone, cg);
 		contact.save();
+		System.out.println(contact.belongsTo);
 		return contact;
 	}
 
@@ -52,7 +64,13 @@ public class Contact extends Model {
 		return find.all();
 	}
 	
-	public static List<Contact> ofGroup(String groupName) {
+	public static List<Contact> findInvolvingGroupOwner(String user) {
+	       return find.fetch("belongsTo").where()
+	                .eq("belongsTo.owners.email", user)
+	           .findList();
+	}
+	
+	public List<Contact> ofGroup(String groupName) {
 		return find.where().eq(groupName, belongsTo).findList();
 	}
 
@@ -61,22 +79,21 @@ public class Contact extends Model {
 		find.ref(id).delete();
 	}
 
-	public void update(Long id, Form<Contact> updatedForm) {
-		Contact toUpdate = find.ref(id);
+	public void update(Form<Contact> updatedForm) {
 		Contact updatedSource = updatedForm.get();
-		System.out.println(updatedSource.name);
-		toUpdate.name = updatedSource.name;
-		toUpdate.firstName = updatedSource.firstName;
-		toUpdate.email = updatedSource.email;
-		toUpdate.street = updatedSource.street;
-		toUpdate.city = updatedSource.city;
-		toUpdate.phone = updatedSource.phone;
-		toUpdate.save();	
+		this.name = updatedSource.name;
+		this.firstName = updatedSource.firstName;
+		this.email = updatedSource.email;
+		this.street = updatedSource.street;
+		this.city = updatedSource.city;
+		this.phone = updatedSource.phone;
+		this.belongsTo = updatedSource.belongsTo;
+		this.save();	
 	}
 
-	public static void create(Contact contact) {
+	public static Contact create(Contact contact) {
 		contact.save();
-		
+		return contact;
 	}
 	
 }

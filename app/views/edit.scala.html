@@ -15,13 +15,24 @@
 	<h2>Edit contact</h2>
 	    
 	    @form(action = routes.Application.updateContact(contact.id)) {
-	        @inputText(contactForm("name"))
-	        @inputText(contactForm("firstName"))
-	        @inputText(contactForm("email")) 
-	        @inputText(contactForm("phone"))
-	        @inputText(contactForm("street"))
-	        @inputText(contactForm("city"))
-	        <input type="submit" value="Update">    
+	        <fieldset>
+			@inputText(contactForm("name"), '_label -> "Name", '_showConstraints -> false)		
+			@inputText(contactForm("firstName"), '_label -> "First name")	
+			@inputText(contactForm("email"), '_label -> "Email", '_showConstraints -> false)	
+			@inputText(contactForm("phone"), '_label -> "Phone")
+			@inputText(contactForm("street"), '_label -> "Street")
+			@inputText(contactForm("city"), '_label -> "City")
+			@select(
+				contactForm("belongsTo.id"),
+				options(ContactGroup.options),
+				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
+				'_showConstraints -> false
+			)
+			
+			<input type="submit" value="Update" class="btn">
+			
+			</fieldset>
+		  
 	    }
 	    
 	    

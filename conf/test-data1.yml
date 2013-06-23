@@ -1,0 +1,41 @@
+- !!models.User
+    email:      bob@sample.com
+    password:   secret
+    isAdmin:    false
+    
+- !!models.User
+    email:      alice@sample.com
+    password:   secret
+    isAdmin:    false
+    
+- !!models.User
+    email:      radek@sample.com
+    password:   secret
+    isAdmin:    false
+    
+- !!models.User
+    email:      erwan@sample.com
+    password:   secret
+    isAdmin:    false
+
+- !!models.Contact
+    id:         1
+    name:       Test
+    firstName:  Jeff
+    email:      test@test.com
+    street:     Teststreet
+    city:       Test City
+    phone:      012-345678
+    belongsTo:  
+        - !!models.ContactGroup
+            id: 1
+       
+- !!models.ContactGroup
+    id:         1
+    name:       Bern
+    owners:     
+        - !!models.User
+            email: bob@sample.com
+    contacts:
+        - !!models.Contact
+            id: 1

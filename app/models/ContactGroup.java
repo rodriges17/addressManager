@@ -1,26 +1,27 @@
 package models;
 
-import play.data.Form;
-import play.data.validation.Constraints.Required;
-import play.db.ebean.Model;
-
-import javax.persistence.*;
 import java.util.*;
-import java.util.List.*;
+import javax.persistence.*;
+
+import play.db.ebean.*;
+import play.data.validation.*;
 
 @Entity
 public class ContactGroup extends Model {
 	
-	@Id	
+	@Id
+	public Long id;
+
+	@Constraints.Required
 	public String name;
 	
     @ManyToMany
-	public List<User> owners = new ArrayList<User>();
+	public List<User> owners = new LinkedList<User>();
 	
-//    @OneToMany(cascade = CascadeType.PERSIST)
-//	public List<Contact> contacts = new LinkedList<Contact>();;
+	@OneToMany(mappedBy="belongsTo")
+	public List<Contact> contacts = new LinkedList<Contact>();
 	
-	public static Finder<String, ContactGroup> find = new Finder(String.class, ContactGroup.class);
+	public static Finder<Long, ContactGroup> find = new Finder<Long,ContactGroup>(Long.class, ContactGroup.class);
 	
 	public ContactGroup(String name, User owner) {
 		this.name = name;
@@ -42,8 +43,20 @@ public class ContactGroup extends Model {
 		return find.where().eq("owners.email", owner.email).findList();
 	}
 	
-	public void delete(String id) {
+	public static Map<String,String> options() {
+        LinkedHashMap<String,String> options = new LinkedHashMap<String,String>();
+        for(ContactGroup cg: ContactGroup.find.orderBy("name").findList()) {
+            options.put(cg.id.toString(), cg.name);
+        }
+        return options;
+    }
+	
+	public void delete(Long id) {
 		find.ref(id).delete();
+	}
+	
+	public String toString() {
+		return name;
 	}
 	
 }

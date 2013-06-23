@@ -44,9 +44,8 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
     public static Result contacts() {
     	User user = getCurrentUser();
-    		
     	return ok(
-    		views.html.index.render(Contact.all(), contactForm, user)
+    		views.html.index.render(Contact.findInvolvingGroupOwner(user.email), contactForm, user)    		
     	);
     }
 
@@ -58,19 +57,36 @@ public class Application extends Controller {
     	else {
 			current = User.find.byId(request().username());
 		}
-    	System.out.println(currentId);
     	return current;
 	}
 
 	@Security.Authenticated(Secured.class)
     public static Result newContact() {
     	Form<Contact> filledForm = contactForm.bindFromRequest();
+  
+    	System.out.println(filledForm.data().values().toString());
+    	System.out.println(filledForm.data().get("name"));
     	  if(filledForm.hasErrors()) {
+    		  System.out.println(filledForm.errors().toString());
     	    return badRequest(
-    	      views.html.index.render(Contact.all(), filledForm, getCurrentUser())
+    	      views.html.add.render(filledForm, getCurrentUser())
     	    );
     	  } else {
+    	    
     	    Contact.create(filledForm.get());
+    	  
+//    	    String name = filledForm.data().get("name");
+//    	    String firstName = filledForm.data().get("firstName");
+//    	    String email = filledForm.data().get("email");
+//    	    String phone = filledForm.data().get("phone");
+//    	    String street = filledForm.data().get("street");
+//    	    String city = filledForm.data().get("city");
+//    	    String belongsTo = filledForm.data().get("belongsTo");
+//    	    ContactGroup belongsToGroup = ContactGroup.find.where().eq("name", belongsTo).findUnique();
+//    	    if (belongsToGroup == null)
+//    	    	belongsToGroup = ContactGroup.create(belongsTo, getCurrentUser().email);
+//    	    Contact.create(name, firstName, email, street, city, phone, belongsTo);
+    	    
     	    return redirect(routes.Application.contacts());  
     	  }
     }
@@ -89,7 +105,7 @@ public class Application extends Controller {
   	      views.html.index.render(Contact.all(), updatedForm, getCurrentUser())
   	    );
   	  } else {
-  	    Contact.find.byId(id).update(id, updatedForm);
+  	    Contact.find.byId(id).update(updatedForm);
   	    return redirect(routes.Application.contacts());  
   	  }
     }
@@ -112,6 +128,8 @@ public class Application extends Controller {
     public static Result add() {
 		contactForm = Form.form(Contact.class);
     	return ok(views.html.add.render(contactForm, getCurrentUser()));
+    	//return ok(views.html.add.render(contactForm));
+        
     }
     
     public static class Login {

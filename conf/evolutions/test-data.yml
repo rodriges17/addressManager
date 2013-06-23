@@ -13,3 +13,13 @@
 - !!models.User
     email:      erwan@sample.com
     password:   secret
+
+- !!models.Contact
+    id:         1
+    name:       Test
+    firstName:  Jeff
+    email:      test@test.com
+    street:     Teststreet
+    city:       Test City
+    phone:      012-345678
+        

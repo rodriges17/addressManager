@@ -11,12 +11,14 @@ create table contact (
   street                    varchar(255),
   city                      varchar(255),
   phone                     varchar(255),
+  belongs_to_id             bigint,
   constraint pk_contact primary key (id))
 ;
 
 create table contact_group (
-  name                      varchar(255) not null,
-  constraint pk_contact_group primary key (name))
+  id                        bigint not null,
+  name                      varchar(255),
+  constraint pk_contact_group primary key (id))
 ;
 
 create table user (
@@ -28,9 +30,9 @@ create table user (
 
 
 create table contact_group_user (
-  contact_group_name             varchar(255) not null,
+  contact_group_id               bigint not null,
   user_email                     varchar(255) not null,
-  constraint pk_contact_group_user primary key (contact_group_name, user_email))
+  constraint pk_contact_group_user primary key (contact_group_id, user_email))
 ;
 create sequence contact_seq;
 
@@ -38,10 +40,12 @@ create sequence contact_group_seq;
 
 create sequence user_seq;
 
+alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id) on delete restrict on update restrict;
+create index ix_contact_belongsTo_1 on contact (belongs_to_id);
 
 
 
-alter table contact_group_user add constraint fk_contact_group_user_contact_01 foreign key (contact_group_name) references contact_group (name) on delete restrict on update restrict;
+alter table contact_group_user add constraint fk_contact_group_user_contact_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
 alter table contact_group_user add constraint fk_contact_group_user_user_02 foreign key (user_email) references user (email) on delete restrict on update restrict;
 

@@ -1,22 +1,25 @@
 package models;
 
-import play.db.ebean.*;
-import javax.persistence.*;
-import com.avaje.ebean.*;
-
-import play.data.validation.Constraints.Required.*;
-import play.db.ebean.Model.*;
-
-import javax.persistence.*;
 import java.util.*;
-import java.util.List.*;
+import javax.persistence.*;
+
+import play.db.ebean.*;
+import play.data.format.*;
+import play.data.validation.*;
+
+import com.avaje.ebean.*;
 
 @Entity
 public class User extends Model {
 	
 	@Id
+	@Constraints.Required
+    @Formats.NonEmpty
     public String email;
+	
+	@Constraints.Required
     public String password;
+	
     public boolean isAdmin;
 
 //    @ManyToMany
@@ -34,6 +37,13 @@ public class User extends Model {
     public static User authenticate(String email, String password) {
         return find.where().eq("email", email)
             .eq("password", password).findUnique();
+    }
+    
+    /**
+     * Retrieve a User from email.
+     */
+    public static User findByEmail(String email) {
+        return find.where().eq("email", email).findUnique();
     }
     
     public Object getId() {

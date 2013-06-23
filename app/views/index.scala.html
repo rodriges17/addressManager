@@ -21,6 +21,7 @@
 				<th>Phone</th>
 				<th>Street</th>
 				<th>City</th>
+				<th>Belongs To</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -38,6 +39,8 @@
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.street</a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.city</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
 				</td>
 				<td>@form(action = routes.Application.deleteContact(contact.id)) {
 					<input type="submit" value="Delete" class="btn btn-danger">
