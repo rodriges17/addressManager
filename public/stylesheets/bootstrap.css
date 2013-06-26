@@ -7,26 +7,39 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
- 
+
+body > header {
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: black;
+  z-index: 9;
+  box-shadow: 0 0 7px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.8);
+}
+#logo {
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  text-shadow: 1px 1px 0 #000;
+}
+#logo span {
+  color: ;
+}
 #user {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    > * {
-        display: inline-block;
-    }
-    dt {
-        color: #fff;
-        span {
-            opacity: .5;
-            font-size: 11px;
-        }
-    }
-    dd {
-        a , button {
-            .button();
-        }
-    }
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+#user > * {
+  display: inline-block;
+}
+#user dt {
+  color: #000;
+}
+#user dt span {
+  opacity: .5;
+  font-size: 11px;
 }
 
 .clearfix {

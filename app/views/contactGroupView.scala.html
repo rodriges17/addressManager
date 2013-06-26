@@ -1,0 +1,29 @@
+@(cg: ContactGroup, contacts: List[Contact], owners: List[User], allUsers: List[User])
+
+@import helper._
+
+<h2>Contact group: @cg.name</h2>
+
+<h2>Contacts</h2>
+<ul>
+    @for(contact <- contacts) {
+    	<li><strong>@contact.name</strong> @contact.firstName</li>
+    }
+</ul>
+    
+<h2>Owners</h2>
+<ul>
+    @for(owner <- owners) {
+    	<li><strong>@owner.email</strong></li>
+    }
+</ul>
+
+<select multiple="multiple" id="owners" name="owners">
+                @for(user <- allUsers) {
+                    @if(owners.contains(user)) {
+                        <option value="@user.email" selected="selected">@user.email</option>
+                    } else {
+                        <option value="@user.email">@user.email</option>
+                    }
+                }
+</select>

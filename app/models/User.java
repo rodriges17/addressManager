@@ -1,6 +1,7 @@
 package models;
 
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -46,16 +47,15 @@ public class User extends Model {
         return find.where().eq("email", email).findUnique();
     }
     
-    public Object getId() {
-        return email;
-    }
-    
-    protected void setId_(Object id) {
-        email = (String) processId_(id);
-    }
-    
-    protected static Object processId_(Object id) {
-        return id.toString();
-    }
+
+
+	public String toString() {
+		return "User [email=" + email + ", password=" + password + ", isAdmin="
+				+ isAdmin + "]";
+	}
+
+	public static void create(User user) {
+		user.save();	
+	}
 
 }

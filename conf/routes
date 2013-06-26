@@ -13,6 +13,12 @@ GET		/contacts/add				controllers.Application.add()
 GET     /contacts/:id               controllers.Application.viewContact(id:Long)
 GET     /contacts/:id/edit          controllers.Application.editContact(id:Long)
 POST    /contacts/:id/update        controllers.Application.updateContact(id:Long)
+GET     /users/add                  controllers.Application.addUser()
+POST    /users                      controllers.Application.newUser()
+GET     /contactgroups/add          controllers.Application.addContactGroup()
+POST    /contactgroups              controllers.Application.newContactGroup()
+POST    /contactgroups/:name/addowner controllers.Application.addOwner(name:String)
+GET     /contactgroups/:id          controllers.Application.showContactGroup(id:Long)
 
 # Login
 GET		/login						controllers.Application.login()

@@ -1,0 +1,38 @@
+@(userForm: Form[User], user: User, users: List[User])
+
+@import helper._
+
+@main("Add Contact", user, nav = "adduser") {
+    
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Ooops!</strong> @flash.get("error")
+        </div>
+    }
+    
+    <h2>Existing users</h2>
+    <ul>
+    @for(exuser <- users) {
+    	<li><strong>@exuser.email</strong> @if(exuser.isAdmin) {<span class="label label-warning">Admin</span>}</li>
+    }
+    </ul>
+
+	<h2>Add a user</h2>
+	
+	@form(action = routes.Application.newUser()) {
+	
+		<fieldset>
+		@inputText(userForm("email"), '_label -> "Email")		
+		@inputText(userForm("password"), '_label -> "Password")		
+		
+		@checkbox(field = userForm("isAdmin"), '_label -> "User has admin-rights" )
+		<input type="hidden" name="isAdmin" value="false" /> 
+	
+		<input type="submit" value="Create" class="btn">
+		
+		</fieldset>
+		
+	}
+	
+}

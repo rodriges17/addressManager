@@ -2,19 +2,14 @@
 
 @import helper._
 
-@main("Add Contact", user) {
-
-	<ul class="nav nav-tabs">
-    	<li>
-			<a href=@routes.Application.contacts()>List</a>
-		</li>
-		<li class="active">
-			<a href="#">Add</a>
-		</li>
-		<li>
-			<a href="#">Export</a>
-		</li>
-    </ul>
+@main("Add Contact", user, nav = "add") {
+    
+    @if(flash.containsKey("error")) {
+        <div class="alert alert-error">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Ooops!</strong> @flash.get("error")
+        </div>
+    }
 
 	<h2>Add a new contact</h2>
 	
@@ -32,6 +27,7 @@
 			options(ContactGroup.options),
 			'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
 			'_showConstraints -> false
+			
 		)
 		
 		<input type="submit" value="Create" class="btn">

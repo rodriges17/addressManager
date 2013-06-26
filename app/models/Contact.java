@@ -32,8 +32,8 @@ public class Contact extends Model {
 	
 	public String phone;
 	
-	@Required
 	@ManyToOne
+	@Required
 	public ContactGroup belongsTo;
 	  
 	public static Finder<Long,Contact> find = 
@@ -94,6 +94,11 @@ public class Contact extends Model {
 	public static Contact create(Contact contact) {
 		contact.save();
 		return contact;
+	}
+
+	public String toString() {
+		return "Contact [id=" + id + ", name=" + name + ", firstName="
+				+ firstName + ", belongsTo=" + belongsTo + "]";
 	}
 	
 }

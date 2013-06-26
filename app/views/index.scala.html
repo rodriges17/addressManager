@@ -2,15 +2,14 @@
 
 @import helper._
 
-@main("Contacts", user) {
-	
-	<ul class="nav nav-tabs">
-	    <li class="active">
-	    <a href="#">List</a>
-	    </li>
-	    <li><a href=@routes.Application.add()>Add</a></li>
-	    <li><a href="#">Export</a></li>
-    </ul>
+@main("Contacts", user, nav = "list") {
+    
+    @if(flash.containsKey("success")) {
+        <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Done!</strong> @flash.get("success")
+        </div>
+    } 
 	
 	<table class="table table-striped">
 		<thead>

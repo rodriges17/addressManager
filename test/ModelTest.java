@@ -51,6 +51,8 @@ public class ModelTest extends WithApplication {
 		assertEquals(2, ContactGroup.all().size());
     }
 	
+	
+	
 	@Test
     public void findContactGroupsInvolving() {
         User bob = new User("bob@gmail.com", "secret", false);

@@ -1,4 +1,6 @@
-@(form: Form[Application.Login]) 
+@(form: Form[Application.Login], user: User) 
+
+@main("Login", user) {
 
 @helper.form(action =
 	routes.Application.authenticate) {
@@ -23,4 +25,5 @@
 	<button type="submit">Login</button>
 </p>
 
+}
 }

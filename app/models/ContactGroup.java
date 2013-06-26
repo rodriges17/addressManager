@@ -55,6 +55,15 @@ public class ContactGroup extends Model {
 		find.ref(id).delete();
 	}
 	
+	public static void create(ContactGroup contactGroup) {
+		contactGroup.save();
+	}
+	
+	public void addOwner(User owner) {
+		this.owners.add(owner);
+		this.save();
+	}
+	
 	public String toString() {
 		return name;
 	}
