@@ -15,26 +15,36 @@
     <header>
         
 	    	<h1>Contact Manager <small>Version 1.0</small></h1>
+	    	
 	    	<dl id="user">
+	    	@if(user.email == "anon@ymous.com") {
+		        You are not logged in
+		    } else {
 		        <dt>User <span>@user.email</span></dt>
 		        <dd>
 		            <a href="@routes.Application.logout()" class="btn">Logout</a>
 		        </dd>
+		    }
 	    	</dl>
     	
     </header>
     
-    <ul class="nav nav-tabs">
-	    <li class="@("active".when(nav == "list"))">
-	        <a href="@routes.Application.contacts()">List</a>
-	    </li>
-	    <li class="@("active".when(nav == "add"))">
-	        <a href=@routes.Application.add()>Add</a>
-	    </li>
-	    <li class="@("active".when(nav == "export"))">
-	        <a href="#">Export</a>
-	    </li>
-    </ul>
+	    @if(user.email != "anon@ymous.com") {		                          
+			<ul class="nav nav-tabs">
+			    <li class="@("active".when(nav == "list"))">
+			        <a href="@routes.Application.contacts()">Contacts</a>
+			    </li>
+			    <li class="@("active".when(nav == "addcontactgroup"))">
+			        <a href=@routes.Application.addContactGroup()>Contact Groups</a>
+			    </li>
+			    <li class="@("active".when(nav == "adduser"))">
+			        <a href=@routes.Application.addUser()>Users</a>
+			    </li>
+			    <li class="@("active".when(nav == "export"))">
+			        <a href="#">Export</a>
+			    </li>
+	        </ul>
+	    }   
         @content
     </body>
     </div>

@@ -76,15 +76,12 @@ public class Application extends Controller {
 					views.html.add.render(filledForm, getCurrentUser())
 					);
 		} else {
-
 			if(filledForm.get().belongsTo.id == null){
 				flash("error", "Please correct your entries");
 				return badRequest(views.html.add.render(filledForm, getCurrentUser()));
 			}
-
 			Contact.create(filledForm.get());
 			flash("success", "Contact " + filledForm.get().name + " has been created");
-
 			return redirect(routes.Application.contacts());  
 		}
 	}
@@ -132,7 +129,6 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result addUser() {
-		System.out.println(getCurrentUser());
 		if(getCurrentUser().isAdmin == false)
 			return redirect(routes.Application.contacts());
 		Form<User> userForm = Form.form(User.class);
@@ -142,7 +138,6 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result newUser() {
 		Form<User> filledForm = userForm.bindFromRequest();
-
 		if(filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
 			flash("error", "Please correct your entries");
@@ -150,24 +145,21 @@ public class Application extends Controller {
 					views.html.addUser.render(filledForm, getCurrentUser(), User.find.all())
 					);
 		} else {
-
-
 			User.create(filledForm.get());
 			flash("success", "User " + filledForm.get().email + " has been created");
-
 			return redirect(routes.Application.contacts());  
 		}
 	}
-	
+
 	@Security.Authenticated(Secured.class)
 	public static Result addContactGroup() {
-		System.out.println(getCurrentUser());
-		if(getCurrentUser().isAdmin == false)
-			return redirect(routes.Application.contacts());
+		// isAdmin now checked in the template
+		//		if(getCurrentUser().isAdmin == false)
+		//			return redirect(routes.Application.contacts());
 		Form<ContactGroup> contactGroupForm = Form.form(ContactGroup.class);
 		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
-	
+
 	// Automatic binding of owner is still missing at the moment
 	@Security.Authenticated(Secured.class)
 	public static Result newContactGroup() {
@@ -184,22 +176,22 @@ public class Application extends Controller {
 
 			ContactGroup.create(filledForm.get());
 			flash("success", "ContactGroup " + filledForm.get().name + " has been created");
-			System.out.println(filledForm.get().id);
-			// manual binding of owner
-			addOwner(filledForm.get().name);
+			if(User.findByEmail(request().username()).isAdmin) {
+				// manual binding of owner
+				addOwner(filledForm.get().name);
+			}
 			return redirect(routes.Application.contacts());  
 		}
 	}
-	
+
 	// Change to use ContactGroup.id instead of name
 	@Security.Authenticated(Secured.class)
 	public static Result addOwner(String name) {
-		System.out.println(request().username());
 		ContactGroup.find.where().eq("name", name).findUnique().addOwner(User.findByEmail(request().username()));
-		flash("success", "You are now owner of the group");
-		return ok();
+		flash("success", "You are now owner of the group" + name);
+		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
-	
+
 	@Security.Authenticated(Secured.class)
 	public static Result showContactGroup(Long id) {
 		ContactGroup cg = ContactGroup.find.ref(id);

@@ -2,19 +2,7 @@
 
 @import helper._
 
-@main("Add Contact", user) {
-
-	<ul class="nav nav-tabs">
-    	<li>
-			<a href=@routes.Application.contacts()>List</a>
-		</li>
-		<li class="active">
-			<a href="#">Add</a>
-		</li>
-		<li>
-			<a href="#">Export</a>
-		</li>
-    </ul>
+@main("Contact Groups", user, nav = "addcontactgroup") {
     
     @if(flash.containsKey("error")) {
         <div class="alert alert-error">
@@ -26,13 +14,20 @@
     <h2>Existing contact-groups</h2>
     <ul>
     @for(group <- groups) {
-    	<li><strong>@group.name</strong>@form(action = routes.Application.addOwner(group.name)) {
-					<input type="submit" value="Add Owner" class="btn btn-danger">
-					}</li>
+    	<li><strong>@group.name</strong> @group.ownersToString @form(action = routes.Application.addOwner(group.name)) {
+					@if(group.owners.contains(user)) {
+					    You are owner
+					} else {
+						@if(user.isAdmin) {
+					        <input type="submit" value="Make me owner" class="btn btn-danger">
+					    }
+					}
+					}
+		</li>
     }
     </ul>
 
-	<h2>Add a cg</h2>
+	<h2>Add a contact-group</h2>
 	
 	@form(action = routes.Application.newContactGroup()) {
 	

@@ -68,4 +68,13 @@ public class ContactGroup extends Model {
 		return name;
 	}
 	
+	public String ownersToString() {
+		String ownersList = "";
+		for(User owner : owners) {
+			ownersList += owner.email;
+			ownersList += " ";
+		}
+		return ("owners: " + ownersList);
+	}
+	
 }
