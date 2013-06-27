@@ -11,7 +11,7 @@ import play.data.validation.*;
 import com.avaje.ebean.*;
 
 @Entity
-@Table(name = "User")
+@Table(name = "users")
 public class User extends Model {
 	
 	@Id
