@@ -97,8 +97,10 @@ public class Contact extends Model {
 	}
 
 	public String toString() {
-		return "Contact [id=" + id + ", name=" + name + ", firstName="
-				+ firstName + ", belongsTo=" + belongsTo + "]";
+		return "Name: " + name + ", First Name: "
+				+ firstName + ", Street: " + street
+				+ ", City: " + city + ", Email: " + email
+				+ ", Phone: " + phone + ", Group: " + belongsTo;
 	}
 	
 }

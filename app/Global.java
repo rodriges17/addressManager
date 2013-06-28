@@ -12,7 +12,7 @@ public class Global extends GlobalSettings {
     public void onStart(Application app) {
         // Check if the database is empty
         if (User.find.findRowCount() == 0) {
-            //Ebean.save((List) Yaml.load("test-data.yml"));
+            //Ebean.save((List) Yaml.load("test-data1.yml"));
             
             User admin = new User("admin@test.com", "admin", true);
             admin.save();
@@ -22,7 +22,7 @@ public class Global extends GlobalSettings {
             ContactGroup basel = new ContactGroup("Basel", admin);
             basel.save();
             
-            Contact contact = new Contact("John", "Test", "john.test@test.com", "Teststreet 3", "Test City", "012 345 6789", bern);
+            Contact contact = new Contact("Test", "John", "john.test@test.com", "Teststreet 3", "Test City", "012 345 6789", bern);
             contact.save();
             
         }

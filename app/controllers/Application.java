@@ -7,7 +7,12 @@ import play.data.*;
 import play.mvc.*;
 import models.*;
 import views.html.*;
+import util.pdf.PDF;
 
+/**
+ * @author administrator
+ *
+ */
 public class Application extends Controller {
 
 	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass", false);
@@ -46,6 +51,11 @@ public class Application extends Controller {
 		return redirect(routes.Application.contacts());
 	}
 
+	
+	/**
+	 * Lists all the contacts, where the logged in user
+	 * is owner of the corresponding contact group
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result contacts() {
 		User user = getCurrentUser();
@@ -53,6 +63,14 @@ public class Application extends Controller {
 				views.html.index.render(Contact.findInvolvingGroupOwner(user.email), contactForm, user)    		
 				);
 	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result pdfSummary() {
+		User user = getCurrentUser();
+		return PDF.ok(views.html.pdfSummary.render(Contact.findInvolvingGroupOwner(user.email)));
+        //return PDF.ok(views.html.document.render("This is a test"));
+    }
+
 
 	private static User getCurrentUser() {
 		String currentId = request().username();

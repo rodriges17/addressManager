@@ -41,7 +41,7 @@
 			        <a href=@routes.Application.addUser()>Users</a>
 			    </li>
 			    <li class="@("active".when(nav == "export"))">
-			        <a href="#">Export</a>
+			        <a href=@routes.Application.pdfSummary() target="_blank">.pdf - Export</a>
 			    </li>
 	        </ul>
 	    }   

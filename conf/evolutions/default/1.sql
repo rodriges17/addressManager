@@ -21,33 +21,33 @@ create table contact_group (
   constraint pk_contact_group primary key (id))
 ;
 
-create table User (
+create table users (
   email                     varchar(255) not null,
   password                  varchar(255),
   is_admin                  boolean,
-  constraint pk_User primary key (email))
+  constraint pk_users primary key (email))
 ;
 
 
-create table contact_group_User (
+create table contact_group_users (
   contact_group_id               bigint not null,
-  User_email                     varchar(255) not null,
-  constraint pk_contact_group_User primary key (contact_group_id, User_email))
+  users_email                    varchar(255) not null,
+  constraint pk_contact_group_users primary key (contact_group_id, users_email))
 ;
 create sequence contact_seq;
 
 create sequence contact_group_seq;
 
-create sequence User_seq;
+create sequence users_seq;
 
 alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id) on delete restrict on update restrict;
 create index ix_contact_belongsTo_1 on contact (belongs_to_id);
 
 
 
-alter table contact_group_User add constraint fk_contact_group_User_contact_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
+alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
-alter table contact_group_User add constraint fk_contact_group_User_User_02 foreign key (User_email) references User (email) on delete restrict on update restrict;
+alter table contact_group_users add constraint fk_contact_group_users_users_02 foreign key (users_email) references users (email) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -57,9 +57,9 @@ drop table if exists contact;
 
 drop table if exists contact_group;
 
-drop table if exists contact_group_User;
+drop table if exists contact_group_users;
 
-drop table if exists User;
+drop table if exists users;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
@@ -67,5 +67,5 @@ drop sequence if exists contact_seq;
 
 drop sequence if exists contact_group_seq;
 
-drop sequence if exists User_seq;
+drop sequence if exists users_seq;
 

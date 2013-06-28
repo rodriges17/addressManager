@@ -1,0 +1,16 @@
+@(contacts: List[Contact])
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>PDF Sample</title>
+    </head>
+    <body>
+    <ul>
+    @for(contact <- contacts) {
+        <li>@contact</li>
+    }
+    </ul>
+    </body>
+</html>
