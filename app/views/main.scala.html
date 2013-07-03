@@ -37,15 +37,33 @@
 			    <li class="@("active".when(nav == "addcontactgroup"))">
 			        <a href=@routes.Application.addContactGroup()>Contact Groups</a>
 			    </li>
-			    <li class="@("active".when(nav == "adduser"))">
-			        <a href=@routes.Application.addUser()>Users</a>
-			    </li>
+			    @if(user.isAdmin == true) {
+				    <li class="@("active".when(nav == "adduser"))">
+				        <a href=@routes.Application.addUser()>Users</a>
+				    </li>
+			    }
 			    <li class="@("active".when(nav == "export"))">
 			        <a href=@routes.Application.pdfSummary() target="_blank">.pdf - Export</a>
 			    </li>
 	        </ul>
 	    }   
+	    
+	    @if(flash.containsKey("success")) {
+        	<div class="alert alert-success">
+        		<button type="button" class="close" data-dismiss="alert">&times;</button>
+            	<strong>Done!</strong> @flash.get("success")
+        	</div>
+   		} 
+   		
+   		 @if(flash.containsKey("error")) {
+        	<div class="alert alert-error">
+        	<button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Ooops!</strong> @flash.get("error")
+        	</div>
+    	}
+	    
         @content
+        
     </body>
     </div>
 </html>

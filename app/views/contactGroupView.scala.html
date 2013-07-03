@@ -18,7 +18,8 @@
     }
 </ul>
 
-<select multiple="multiple" id="owners" name="owners">
+@form(action = routes.Application.addOwner(cg.id)) {
+	<select multiple="multiple" id="owners" name="owners[]">
                 @for(user <- allUsers) {
                     @if(owners.contains(user)) {
                         <option value="@user.email" selected="selected">@user.email</option>
@@ -27,3 +28,5 @@
                     }
                 }
 </select>
+	<input type="submit" value="Make owner" class="btn btn-danger">
+}

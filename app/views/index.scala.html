@@ -4,13 +4,6 @@
 
 @main("Contacts", user, nav = "list") {
     
-    @if(flash.containsKey("success")) {
-        <div class="alert alert-success">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Done!</strong> @flash.get("success")
-        </div>
-    } 
-    
     <a href="@routes.Application.add()" class="btn">New Contact</a>
 	
 	<table class="table table-striped">

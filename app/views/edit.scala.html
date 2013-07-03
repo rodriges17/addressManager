@@ -4,14 +4,6 @@
 
 	@main("Add Contact", user) {
 	
-		<ul class="nav nav-tabs">
-	    <li>
-	    <a href=@routes.Application.contacts()>List</a>
-	    </li>
-	    <li class="active"><a href="#">Add</a></li>
-	    <li><a href="#">Export</a></li>
-    </ul>
-	
 	<h2>Edit contact</h2>
 	    
 	    @form(action = routes.Application.updateContact(contact.id)) {

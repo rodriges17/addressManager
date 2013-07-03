@@ -11,10 +11,6 @@
 	<p class="error">@form.globalError.message</p>
 }
 
-@if(flash.contains("success")) {
-	<p>@flash.get("success")</p>
-}
-
 <p>
 	<input type="email" name="email" placeholder="Email" value="@form("email").value">
 </p>

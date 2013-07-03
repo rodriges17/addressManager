@@ -4,13 +4,6 @@
 
 @main("Add Contact", user, nav = "add") {
     
-    @if(flash.containsKey("error")) {
-        <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Ooops!</strong> @flash.get("error")
-        </div>
-    }
-
 	<h2>Add a new contact</h2>
 	
 	@form(action = routes.Application.newContact()) {

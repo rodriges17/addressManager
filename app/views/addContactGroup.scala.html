@@ -4,23 +4,15 @@
 
 @main("Contact Groups", user, nav = "addcontactgroup") {
     
-    @if(flash.containsKey("error")) {
-        <div class="alert alert-error">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Ooops!</strong> @flash.get("error")
-        </div>
-    }
-    
     <h2>Existing contact-groups</h2>
     <ul>
     @for(group <- groups) {
-    	<li><strong>@group.name</strong> @group.ownersToString @form(action = routes.Application.addOwner(group.name)) {
+    	<li><a href="@routes.Application.showContactGroup(group.id)"><strong>@group.name</strong></a> @group.ownersToString <br>
 					@if(group.owners.contains(user)) {
 					    You are owner
 					} else {
-						@if(user.isAdmin) {
-					        <input type="submit" value="Make me owner" class="btn btn-danger">
-					    }
+					@if(user.isAdmin == true) {
+						Make me owner
 					}
 					}
 		</li>

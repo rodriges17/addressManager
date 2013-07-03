@@ -1,6 +1,8 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import play.data.*;
@@ -64,6 +66,11 @@ public class Application extends Controller {
 				);
 	}
 	
+	/**
+	 * Generates a pdf file of all the contacts, 
+	 * where the logged in user is owner of the
+	 * corresponding contact group
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result pdfSummary() {
 		User user = getCurrentUser();
@@ -99,6 +106,7 @@ public class Application extends Controller {
 				return badRequest(views.html.add.render(filledForm, getCurrentUser()));
 			}
 			Contact.create(filledForm.get());
+			
 			flash("success", "Contact " + filledForm.get().name + " has been created");
 			return redirect(routes.Application.contacts());  
 		}
@@ -191,12 +199,11 @@ public class Application extends Controller {
 					);
 		} else {
 
-
 			ContactGroup.create(filledForm.get());
 			flash("success", "ContactGroup " + filledForm.get().name + " has been created");
 			if(User.findByEmail(request().username()).isAdmin) {
 				// manual binding of owner
-				addOwner(filledForm.get().name);
+				ContactGroup.find.ref(filledForm.get().id).addOwner(User.findByEmail(request().username()));
 			}
 			return redirect(routes.Application.contacts());  
 		}
@@ -204,16 +211,24 @@ public class Application extends Controller {
 
 	// Change to use ContactGroup.id instead of name
 	@Security.Authenticated(Secured.class)
-	public static Result addOwner(String name) {
-		ContactGroup.find.where().eq("name", name).findUnique().addOwner(User.findByEmail(request().username()));
-		flash("success", "You are now owner of the group" + name);
+	public static Result addOwner(Long id) {
+		DynamicForm form = Form.form().bindFromRequest();
+		Collection<String> newOwners = form.data().values();
+		ContactGroup group = ContactGroup.find.byId(id);
+		
+		Iterator it = newOwners.iterator();
+		while(it.hasNext()){
+			String userEmail = (String) it.next();
+			group.addOwner(User.findByEmail(userEmail));
+		}
+		
+		flash("success", newOwners.toString() + " is / are now owner of the group " + group.name);
 		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result showContactGroup(Long id) {
 		ContactGroup cg = ContactGroup.find.ref(id);
-		System.out.println(cg);
 		List<Contact> groupContacts = cg.contacts;
 		List<User> groupOwners = cg.owners;
 		List<User> allUsers = User.find.all();

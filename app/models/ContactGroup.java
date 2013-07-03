@@ -60,8 +60,10 @@ public class ContactGroup extends Model {
 	}
 	
 	public void addOwner(User owner) {
-		this.owners.add(owner);
-		this.save();
+		if(!this.owners.contains(owner)){
+			this.owners.add(owner);
+			this.save();
+		}	
 	}
 	
 	public String toString() {
