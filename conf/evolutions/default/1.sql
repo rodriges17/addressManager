@@ -21,24 +21,24 @@ create table contact_group (
   constraint pk_contact_group primary key (id))
 ;
 
-create table users (
+create table cm_users (
   email                     varchar(255) not null,
   password                  varchar(255),
   is_admin                  boolean,
-  constraint pk_users primary key (email))
+  constraint pk_cm_users primary key (email))
 ;
 
 
 create table contact_group_users (
   contact_group_id               bigint not null,
-  users_email                    varchar(255) not null,
-  constraint pk_contact_group_users primary key (contact_group_id, users_email))
+  cm_users_email                 varchar(255) not null,
+  constraint pk_contact_group_users primary key (contact_group_id, cm_users_email))
 ;
 create sequence contact_seq;
 
 create sequence contact_group_seq;
 
-create sequence users_seq;
+create sequence cm_users_seq;
 
 alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id) on delete restrict on update restrict;
 create index ix_contact_belongsTo_1 on contact (belongs_to_id);
@@ -47,7 +47,7 @@ create index ix_contact_belongsTo_1 on contact (belongs_to_id);
 
 alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
-alter table contact_group_users add constraint fk_contact_group_users_users_02 foreign key (users_email) references users (email) on delete restrict on update restrict;
+alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 foreign key (cm_users_email) references cm_users (email) on delete restrict on update restrict;
 
 # --- !Downs
 
@@ -59,7 +59,7 @@ drop table if exists contact_group;
 
 drop table if exists contact_group_users;
 
-drop table if exists users;
+drop table if exists cm_users;
 
 SET REFERENTIAL_INTEGRITY TRUE;
 
@@ -67,5 +67,5 @@ drop sequence if exists contact_seq;
 
 drop sequence if exists contact_group_seq;
 
-drop sequence if exists users_seq;
+drop sequence if exists cm_users_seq;
 
