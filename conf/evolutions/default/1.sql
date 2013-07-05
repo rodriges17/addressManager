@@ -14,10 +14,11 @@ create table contact (
   city                      varchar(255),
   country                   varchar(255),
   belongs_to_id             bigint,
-  yearbook_subscription     boolean,
   created_at                timestamp,
   last_edited_at            timestamp,
   membership_since          timestamp,
+  member_category           varchar(255),
+  yearbook_subscription     boolean,
   constraint pk_contact primary key (id))
 ;
 

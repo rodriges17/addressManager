@@ -8,8 +8,6 @@ import play.db.ebean.*;
 import play.data.format.*;
 import play.data.validation.*;
 
-import com.avaje.ebean.*;
-
 @Entity
 @Table(name="cm_users")
 public class User extends Model {
@@ -25,13 +23,12 @@ public class User extends Model {
     public boolean isAdmin;
 
 //    @ManyToMany
-//    public LinkedList<ContactGroup> administratedContactGroups;
+//    public List<ContactGroup> administratedContactGroups = new LinkedList<ContactGroup>();
     
     public User(String email, String password, boolean isAdmin) {
       this.email = email;
       this.password = password;
       this.isAdmin = isAdmin;
-//      this.administratedContactGroups = new LinkedList<ContactGroup>();
     }
 
     public static Finder<String, User> find = new Finder<String, User>(String.class, User.class);
@@ -48,8 +45,6 @@ public class User extends Model {
         return find.where().eq("email", email).findUnique();
     }
     
-
-
 	public String toString() {
 		return "User [email=" + email + ", password=" + password + ", isAdmin="
 				+ isAdmin + "]";

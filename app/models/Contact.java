@@ -8,8 +8,7 @@ import javax.persistence.*;
 import play.db.ebean.*;
 import play.data.Form;
 import play.data.validation.Constraints.*;
-
-import com.avaje.ebean.*;
+import play.data.format.*;
 
 @Entity
 public class Contact extends Model {
@@ -20,6 +19,7 @@ public class Contact extends Model {
 	@Required
 	public String name;
 	
+	@Required
 	public String firstName;
 	
 	public String title;
@@ -42,13 +42,16 @@ public class Contact extends Model {
 	@Required
 	public ContactGroup belongsTo;
 	
+	public Date createdAt;
+	
+	public Date lastEditedAt;
+	
+	@Formats.DateTime(pattern="dd.MM.yyyy")
+	public Date membershipSince;
+	
+	public String memberCategory;
+	
 	public boolean yearbookSubscription;
-	
-	public Timestamp createdAt;
-	
-	public Timestamp lastEditedAt;
-	
-	public Timestamp membershipSince;
 	  
 	public static Finder<Long,Contact> find = 
 			new Finder<Long,Contact>(Long.class, Contact.class);
@@ -62,7 +65,7 @@ public class Contact extends Model {
 		this.city = city;
 		this.phone = phone;
 		this.belongsTo = belongsTo;
-		this.createdAt = new Timestamp(new Date().getTime());
+		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
 	}
 	
@@ -99,12 +102,17 @@ public class Contact extends Model {
 		Contact updatedSource = updatedForm.get();
 		this.name = updatedSource.name;
 		this.firstName = updatedSource.firstName;
+		this.title = updatedSource.title;
 		this.email = updatedSource.email;
+		this.phone = updatedSource.phone;
 		this.street = updatedSource.street;
 		this.city = updatedSource.city;
-		this.phone = updatedSource.phone;
-		this.belongsTo = updatedSource.belongsTo;
-		this.lastEditedAt = new Timestamp(new Date().getTime());
+		this.country = updatedSource.country;
+		this.belongsTo = updatedSource.belongsTo;;
+		this.lastEditedAt = new Date();
+		this.membershipSince = updatedSource.membershipSince;
+		this.memberCategory = updatedSource.memberCategory;
+		this.yearbookSubscription = updatedSource.yearbookSubscription;
 		this.save();	
 	}
 

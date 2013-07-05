@@ -9,21 +9,27 @@
 	<table class="table table-striped">
 		<thead>
 			<tr>
+				<th>Titel</th>
 				<th>Name</th>
 				<th>Vorname</th>
 				<th>Email</th>
 				<th>Telefon</th>
 				<th>Strasse</th>
 				<th>Ort</th>
+				<th>Land</th>
 				<th>Gruppe</th>
+				<th>Kategorie</th>
 				<th>Erstellt</th>
 				<th>Bearbeitet</th>
+				<th>Jahrbuch</th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			@for(contact <- contacts) {
 			<tr>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.title</a>
+				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.name</a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.firstName</a>
@@ -36,11 +42,17 @@
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.city</a>
 				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.country</a>
+				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
 				</td>
-				<td><a href="@routes.Application.viewContact(contact.id)">@contact.createdAt</a>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.memberCategory</a>
 				</td>
-				<td><a href="@routes.Application.viewContact(contact.id)">@contact.lastEditedAt</a>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.createdAt.format("dd.MM.yyyy HH:mm")</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.lastEditedAt.format("dd.MM.yyyy HH:mm")</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.yearbookSubscription</a>
 				</td>
 				<td><a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
 				</td>

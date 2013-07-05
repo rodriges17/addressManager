@@ -9,23 +9,31 @@
 	    @form(action = routes.Application.updateContact(contact.id)) {
 	        <fieldset>
 			@inputText(contactForm("name"), '_label -> "Name", '_showConstraints -> false)		
-			@inputText(contactForm("firstName"), '_label -> "First name")	
+			@inputText(contactForm("firstName"), '_label -> "First name", '_showConstraints -> false)
+			@inputText(contactForm("title"), '_label -> "Title")	
 			@inputText(contactForm("email"), '_label -> "Email", '_showConstraints -> false)	
 			@inputText(contactForm("phone"), '_label -> "Phone")
 			@inputText(contactForm("street"), '_label -> "Street")
 			@inputText(contactForm("city"), '_label -> "City")
+			@inputText(contactForm("country"), '_label -> "Country")
 			@select(
 				contactForm("belongsTo.id"),
 				options(ContactGroup.options),
 				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
-				'_showConstraints -> false
+				'_showConstraints -> false	
 			)
+			@inputText(contactForm("membershipSince"), '_label -> "Member since")
+			@select(
+				contactForm("memberCategory"),
+				options(MemberCategories.list),
+				'_label -> "Mitgliederkategorie", '_default -> "-- WŠhlen sie eine Kategorie --"
+			)
+			@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Subscribe for yearbook" )
+			<input type="hidden" name="yearbookSubscription" value="false" />
 			
 			<input type="submit" value="Update" class="btn">
-			
 			</fieldset>
 		  
 	    }
-	    
 	    
 	}
