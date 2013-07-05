@@ -4,18 +4,20 @@
 
 @main("Contacts", user, nav = "list") {
     
-    <a href="@routes.Application.add()" class="btn">New Contact</a>
+    <a href="@routes.Application.add()" class="btn">Neuer Kontakt</a>
 	
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Name</th>
-				<th>First Name</th>
+				<th>Vorname</th>
 				<th>Email</th>
-				<th>Phone</th>
-				<th>Street</th>
-				<th>City</th>
-				<th>Belongs To</th>
+				<th>Telefon</th>
+				<th>Strasse</th>
+				<th>Ort</th>
+				<th>Gruppe</th>
+				<th>Erstellt</th>
+				<th>Bearbeitet</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -35,6 +37,10 @@
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.city</a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.createdAt</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.lastEditedAt</a>
 				</td>
 				<td><a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
 				</td>

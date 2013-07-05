@@ -14,13 +14,13 @@
     <body>
     <header>
         
-	    	<h1>Contact Manager <small>Version 1.0</small></h1>
+	    	<h1>Kontaktmanager <small>Version 1.0</small></h1>
 	    	
 	    	<dl id="user">
 	    	@if(user.email == "anon@ymous.com") {
-		        You are not logged in
+		        Sie sind nicht eingeloggt
 		    } else {
-		        <dt>User <span>@user.email</span></dt>
+		        <dt>Benutzer <span>@user.email</span></dt>
 		        <dd>
 		            <a href="@routes.Application.logout()" class="btn">Logout</a>
 		        </dd>
@@ -32,14 +32,14 @@
 	    @if(user.email != "anon@ymous.com") {		                          
 			<ul class="nav nav-tabs">
 			    <li class="@("active".when(nav == "list"))">
-			        <a href="@routes.Application.contacts()">Contacts</a>
+			        <a href="@routes.Application.contacts()">Kontakte</a>
 			    </li>
 			    <li class="@("active".when(nav == "addcontactgroup"))">
-			        <a href=@routes.Application.addContactGroup()>Contact Groups</a>
+			        <a href=@routes.Application.addContactGroup()>Kontaktgruppen</a>
 			    </li>
 			    @if(user.isAdmin == true) {
 				    <li class="@("active".when(nav == "adduser"))">
-				        <a href=@routes.Application.addUser()>Users</a>
+				        <a href=@routes.Application.addUser()>Benutzer</a>
 				    </li>
 			    }
 			    <li class="@("active".when(nav == "export"))">

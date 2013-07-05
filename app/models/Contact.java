@@ -1,6 +1,8 @@
 package models;
 
+import java.sql.Timestamp;
 import java.util.*;
+
 import javax.persistence.*;
 
 import play.db.ebean.*;
@@ -20,21 +22,33 @@ public class Contact extends Model {
 	
 	public String firstName;
 	
+	public String title;
+	
 	@Email
 	@Pattern(value="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
 	        +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
 	        +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 	public String email;
 	
+	public String phone;
+	
 	public String street;
 	
 	public String city;
 	
-	public String phone;
+	public String country;
 	
 	@ManyToOne
 	@Required
 	public ContactGroup belongsTo;
+	
+	public boolean yearbookSubscription;
+	
+	public Timestamp createdAt;
+	
+	public Timestamp lastEditedAt;
+	
+	public Timestamp membershipSince;
 	  
 	public static Finder<Long,Contact> find = 
 			new Finder<Long,Contact>(Long.class, Contact.class);
@@ -47,7 +61,9 @@ public class Contact extends Model {
 		this.street = street;
 		this.city = city;
 		this.phone = phone;
-		this.belongsTo = belongsTo;	
+		this.belongsTo = belongsTo;
+		this.createdAt = new Timestamp(new Date().getTime());
+		this.lastEditedAt = this.createdAt;
 	}
 	
 	public static Contact create(String name, String firstName, String email,
@@ -88,6 +104,7 @@ public class Contact extends Model {
 		this.city = updatedSource.city;
 		this.phone = updatedSource.phone;
 		this.belongsTo = updatedSource.belongsTo;
+		this.lastEditedAt = new Timestamp(new Date().getTime());
 		this.save();	
 	}
 

@@ -7,11 +7,17 @@ create table contact (
   id                        bigint not null,
   name                      varchar(255),
   first_name                varchar(255),
+  title                     varchar(255),
   email                     varchar(255),
+  phone                     varchar(255),
   street                    varchar(255),
   city                      varchar(255),
-  phone                     varchar(255),
+  country                   varchar(255),
   belongs_to_id             bigint,
+  yearbook_subscription     boolean,
+  created_at                timestamp,
+  last_edited_at            timestamp,
+  membership_since          timestamp,
   constraint pk_contact primary key (id))
 ;
 

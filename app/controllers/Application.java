@@ -1,5 +1,7 @@
 package controllers;
 
+import java.util.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -105,6 +107,10 @@ public class Application extends Controller {
 				flash("error", "Please correct your entries");
 				return badRequest(views.html.add.render(filledForm, getCurrentUser()));
 			}
+			
+			filledForm.get().createdAt = new Timestamp(new Date().getTime());
+			filledForm.get().lastEditedAt = filledForm.get().createdAt;
+			
 			Contact.create(filledForm.get());
 			
 			flash("success", "Contact " + filledForm.get().name + " has been created");
