@@ -36,9 +36,7 @@
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
 				</td>
-				<td>@form(action = routes.Application.deleteContact(contact.id)) {
-					<input type="submit" value="Delete" class="btn btn-danger">
-					}
+				<td><a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
 				</td>
 				</tr>
 			}

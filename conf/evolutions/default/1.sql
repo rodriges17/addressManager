@@ -40,24 +40,28 @@ create sequence contact_group_seq;
 
 create sequence cm_users_seq;
 
-alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id);
+alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id) on delete restrict on update restrict;
 create index ix_contact_belongsTo_1 on contact (belongs_to_id);
 
 
 
-alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id);
+alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
-alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 foreign key (cm_users_email) references cm_users (email);
+alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 foreign key (cm_users_email) references cm_users (email) on delete restrict on update restrict;
 
 # --- !Downs
 
-drop table if exists contact cascade;
+SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table if exists contact_group cascade;
+drop table if exists contact;
 
-drop table if exists contact_group_users cascade;
+drop table if exists contact_group;
 
-drop table if exists cm_users cascade;
+drop table if exists contact_group_users;
+
+drop table if exists cm_users;
+
+SET REFERENTIAL_INTEGRITY TRUE;
 
 drop sequence if exists contact_seq;
 
