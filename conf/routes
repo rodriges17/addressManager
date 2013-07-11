@@ -20,6 +20,7 @@ POST    /contactgroups              controllers.Application.newContactGroup()
 POST    /contactgroups/:id/addowner controllers.Application.addOwner(id:Long)
 GET     /contactgroups/:id          controllers.Application.showContactGroup(id:Long)
 GET     /pdfsummary                 controllers.Application.pdfSummary()
+GET     /pdflabels                  controllers.Application.pdfLabels()
 
 # Login
 GET		/login						controllers.Application.login()

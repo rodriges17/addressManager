@@ -1,17 +1,34 @@
 package controllers;
 
 import java.util.Date;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfWriter;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+
+import play.api.Play;
 import play.data.*;
 import play.mvc.*;
 import models.*;
 import views.html.*;
 import util.pdf.PDF;
+
+import utils.PDFiText;
+
 
 /**
  * @author administrator
@@ -77,9 +94,16 @@ public class Application extends Controller {
 	public static Result pdfSummary() {
 		User user = getCurrentUser();
 		return PDF.ok(views.html.pdfSummary.render(Contact.findInvolvingGroupOwner(user.email)));
-        //return PDF.ok(views.html.document.render("This is a test"));
     }
-
+	
+	@Security.Authenticated(Secured.class)
+	public static Result pdfLabels() {
+		User user = getCurrentUser();
+		PDFiText.generateLabels(Contact.findInvolvingGroupOwner(user.email));
+		response().setContentType("application/pdf");
+		//response().setHeader("Content-disposition","attachment; filename=labels.pdf");
+		return ok(new File("output/labels.pdf"));
+	}
 
 	private static User getCurrentUser() {
 		String currentId = request().username();
