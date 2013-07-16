@@ -14,12 +14,8 @@
 			@inputText(contactForm("phone"), '_label -> "Phone")
 			@inputText(contactForm("street"), '_label -> "Street")
 			@inputText(contactForm("city"), '_label -> "City")
-			@select(
-				contactForm("belongsTo.id"),
-				options(ContactGroup.options),
-				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
-				'_showConstraints -> false
-			)
+			
+			@select(contactForm("belongsTo[]"), options(ContactGroup.options), 'multiple -> true)
 			
 			<input type="submit" value="Update" class="btn">
 			

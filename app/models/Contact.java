@@ -32,13 +32,14 @@ public class Contact extends Model {
 	
 	public String phone;
 	
-	@ManyToOne
-	@Required
-	public ContactGroup belongsTo;
+	@ManyToMany
+	public List<ContactGroup> belongsTo = new LinkedList<ContactGroup>();
 	  
 	public static Finder<Long,Contact> find = 
 			new Finder<Long,Contact>(Long.class, Contact.class);
 
+	public Contact() {};
+	
 	public Contact(String name, String firstName, String email,
 			String street, String city, String phone, ContactGroup belongsTo) {
 		this.name = name;
@@ -47,7 +48,7 @@ public class Contact extends Model {
 		this.street = street;
 		this.city = city;
 		this.phone = phone;
-		this.belongsTo = belongsTo;	
+		this.belongsTo.add(belongsTo);	
 	}
 	
 	public static Contact create(String name, String firstName, String email,
@@ -87,7 +88,7 @@ public class Contact extends Model {
 		this.street = updatedSource.street;
 		this.city = updatedSource.city;
 		this.phone = updatedSource.phone;
-		this.belongsTo = updatedSource.belongsTo;
+		//this.belongsTo = updatedSource.belongsTo;
 		this.save();	
 	}
 

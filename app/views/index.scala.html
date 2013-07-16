@@ -34,7 +34,7 @@
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.city</a>
 				</td>
-				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
+				<td><a href="@routes.Application.viewContact(contact.id)">@for(cg <- contact.belongsTo) {@cg.name } </a>
 				</td>
 				<td>@form(action = routes.Application.deleteContact(contact.id)) {
 					<input type="submit" value="Delete" class="btn btn-danger">

@@ -1,4 +1,4 @@
-@(contactForm: Form[Contact], user: User)
+@(contactForm: Form[Contact], user: User, contactGroups: List[ContactGroup])
 
 @import helper._
 
@@ -15,13 +15,16 @@
 		@inputText(contactForm("phone"), '_label -> "Phone")
 		@inputText(contactForm("street"), '_label -> "Street")
 		@inputText(contactForm("city"), '_label -> "City")
-		@select(
-			contactForm("belongsTo.id"),
-			options(ContactGroup.options),
-			'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
-			'_showConstraints -> false
-			
-		)
+		
+		@select(contactForm("belongsTo[]"), options(ContactGroup.options), 'multiple -> true)
+		
+<!-- 		<select multiple="multiple" id="belongsTo" name="belongsTo[]"> -->
+<!--                 @for(group <- contactGroups) { -->
+                    
+<!--                         <option value="@group.id">@group.name</option> -->
+                    
+<!--                 } -->
+<!-- 		</select> -->
 		
 		<input type="submit" value="Create" class="btn">
 		
