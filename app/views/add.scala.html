@@ -17,12 +17,7 @@
 		@inputText(contactForm("street"), '_label -> "Street")
 		@inputText(contactForm("city"), '_label -> "City")
 		@inputText(contactForm("country"), '_label -> "Country")
-<!-- 		@select( -->
-<!-- 			contactForm("belongsTo.id"), -->
-<!-- 			options(ContactGroup.options), -->
-<!-- 			'_label -> "Contact Group", '_default -> "-- Choose a contact group --", -->
-<!-- 			'_showConstraints -> false		 -->
-<!-- 		) -->
+ 		
 		@inputText(contactForm("membershipSince"), '_label -> "Member since")
 		@select(
 			contactForm("memberCategory"),

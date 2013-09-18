@@ -125,18 +125,23 @@ public class Application extends Controller {
 
 		String name = filledForm.data().get("name");
 		String firstName = filledForm.data().get("firstName");
+		String title = filledForm.data().get("title");
 		String email = filledForm.data().get("email");
 		String street = filledForm.data().get("street");
 		String city = filledForm.data().get("city");
 		String phone = filledForm.data().get("phone");
+		String memberCategory = filledForm.data().get("memberCategory");
+		
 
 		Contact newContact = new Contact();
 		newContact.name = name;
 		newContact.firstName = firstName;
+		newContact.title = title;
 		newContact.email = email;
 		newContact.street = street;
 		newContact.city = city;
 		newContact.phone = phone;
+		newContact.memberCategory = memberCategory;
 
 		for(int j = 0; j < ContactGroup.options().size(); j++){
 			String item = "belongsTo[" + j + "]";
@@ -145,21 +150,21 @@ public class Application extends Controller {
 				System.out.println(cg);
 				newContact.belongsTo.add(cg);
 			}
-			
-			filledForm.get().createdAt = new Timestamp(new Date().getTime());
-			filledForm.get().lastEditedAt = filledForm.get().createdAt;
-			
-			Contact.create(filledForm.get());
-			
-			flash("success", "Contact " + filledForm.get().name + " has been created");
-			return redirect(routes.Application.contacts());  
-
 		}
+			newContact.createdAt = new Timestamp(new Date().getTime());
+			newContact.lastEditedAt = newContact.createdAt;
+			
+			//Contact.create(filledForm.get());
+			
+			//flash("success", "Contact " + filledForm.get().name + " has been created");
+			//return redirect(routes.Application.contacts());  
 
-//		newContact.save();
-//
-//		flash("success", "Contact " + newContact + " has been created");
-//		return redirect(routes.Application.contacts());  
+		
+
+		newContact.save();
+
+		flash("success", "Contact " + newContact + " has been created");
+		return redirect(routes.Application.contacts());  
 	}
 
 	@Security.Authenticated(Secured.class)

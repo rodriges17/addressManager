@@ -13,7 +13,6 @@ create table contact (
   street                    varchar(255),
   city                      varchar(255),
   country                   varchar(255),
-  belongs_to_id             bigint,
   created_at                timestamp,
   last_edited_at            timestamp,
   membership_since          timestamp,
@@ -59,16 +58,6 @@ create sequence contact_group_seq;
 
 create sequence cm_users_seq;
 
-<<<<<<< HEAD
-alter table contact add constraint fk_contact_belongsTo_1 foreign key (belongs_to_id) references contact_group (id) on delete restrict on update restrict;
-create index ix_contact_belongsTo_1 on contact (belongs_to_id);
-
-
-
-alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
-
-alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 foreign key (cm_users_email) references cm_users (email) on delete restrict on update restrict;
-=======
 
 
 
@@ -83,7 +72,6 @@ alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 
 alter table contact_group_contact add constraint fk_contact_group_contact_cont_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
 alter table contact_group_contact add constraint fk_contact_group_contact_cont_02 foreign key (contact_id) references contact (id) on delete restrict on update restrict;
->>>>>>> multipleGroups
 
 # --- !Downs
 
@@ -91,11 +79,6 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists contact;
 
-<<<<<<< HEAD
-drop table if exists contact_group;
-
-drop table if exists contact_group_users;
-=======
 drop table if exists contact_contact_group;
 
 drop table if exists contact_group;
@@ -103,7 +86,6 @@ drop table if exists contact_group;
 drop table if exists contact_group_users;
 
 drop table if exists contact_group_contact;
->>>>>>> multipleGroups
 
 drop table if exists cm_users;
 
