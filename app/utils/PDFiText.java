@@ -6,8 +6,6 @@ import java.util.List;
 
 import models.Contact;
 
-import org.bouncycastle.jce.provider.symmetric.AES.CBC;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -17,7 +15,6 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class PDFiText {
 	

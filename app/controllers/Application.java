@@ -18,7 +18,7 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+//import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 import play.api.Play;
 import play.data.*;
@@ -239,7 +239,6 @@ public class Application extends Controller {
 		}
 	}
 
-	// Change to use ContactGroup.id instead of name
 	@Security.Authenticated(Secured.class)
 	public static Result addOwner(Long id) {
 		DynamicForm form = Form.form().bindFromRequest();
