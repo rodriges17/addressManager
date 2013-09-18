@@ -38,10 +38,6 @@ public class Contact extends Model {
 	
 	public String country;
 	
-	@ManyToOne
-	@Required
-	public ContactGroup belongsTo;
-	
 	public Date createdAt;
 	
 	public Date lastEditedAt;
@@ -52,10 +48,16 @@ public class Contact extends Model {
 	public String memberCategory;
 	
 	public boolean yearbookSubscription;
+
+	@ManyToMany
+	public List<ContactGroup> belongsTo = new LinkedList<ContactGroup>();
+
 	  
 	public static Finder<Long,Contact> find = 
 			new Finder<Long,Contact>(Long.class, Contact.class);
 
+	public Contact() {};
+	
 	public Contact(String name, String firstName, String email,
 			String street, String city, String phone, ContactGroup belongsTo) {
 		this.name = name;
@@ -64,9 +66,9 @@ public class Contact extends Model {
 		this.street = street;
 		this.city = city;
 		this.phone = phone;
-		this.belongsTo = belongsTo;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
+		this.belongsTo.add(belongsTo);	
 	}
 	
 	public static Contact create(String name, String firstName, String email,
@@ -113,6 +115,8 @@ public class Contact extends Model {
 		this.membershipSince = updatedSource.membershipSince;
 		this.memberCategory = updatedSource.memberCategory;
 		this.yearbookSubscription = updatedSource.yearbookSubscription;
+		//this.belongsTo = updatedSource.belongsTo;
+
 		this.save();	
 	}
 

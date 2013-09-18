@@ -16,12 +16,12 @@
 			@inputText(contactForm("street"), '_label -> "Street")
 			@inputText(contactForm("city"), '_label -> "City")
 			@inputText(contactForm("country"), '_label -> "Country")
-			@select(
+	<!-- 		@select(
 				contactForm("belongsTo.id"),
 				options(ContactGroup.options),
 				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
 				'_showConstraints -> false	
-			)
+	 -->		)
 			@inputText(contactForm("membershipSince"), '_label -> "Member since")
 			@select(
 				contactForm("memberCategory"),
@@ -30,6 +30,8 @@
 			)
 			@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Subscribe for yearbook" )
 			<input type="hidden" name="yearbookSubscription" value="false" />
+			
+			@select(contactForm("belongsTo[]"), options(ContactGroup.options), 'multiple -> true)
 			
 			<input type="submit" value="Update" class="btn">
 			</fieldset>

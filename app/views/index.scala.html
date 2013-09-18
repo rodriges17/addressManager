@@ -44,7 +44,7 @@
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.country</a>
 				</td>
-				<td><a href="@routes.Application.viewContact(contact.id)">@contact.belongsTo</a>
+				<td><a href="@routes.Application.viewContact(contact.id)">@for(cg <- contact.belongsTo) {@cg.name } </a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.memberCategory</a>
 				</td>

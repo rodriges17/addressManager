@@ -1,4 +1,4 @@
-@(contactForm: Form[Contact], user: User)
+@(contactForm: Form[Contact], user: User, contactGroups: List[ContactGroup])
 
 @import helper._
 
@@ -17,12 +17,12 @@
 		@inputText(contactForm("street"), '_label -> "Street")
 		@inputText(contactForm("city"), '_label -> "City")
 		@inputText(contactForm("country"), '_label -> "Country")
-		@select(
-			contactForm("belongsTo.id"),
-			options(ContactGroup.options),
-			'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
-			'_showConstraints -> false		
-		)
+<!-- 		@select( -->
+<!-- 			contactForm("belongsTo.id"), -->
+<!-- 			options(ContactGroup.options), -->
+<!-- 			'_label -> "Contact Group", '_default -> "-- Choose a contact group --", -->
+<!-- 			'_showConstraints -> false		 -->
+<!-- 		) -->
 		@inputText(contactForm("membershipSince"), '_label -> "Member since")
 		@select(
 			contactForm("memberCategory"),
@@ -31,6 +31,16 @@
 		)
 		@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Subscribe for yearbook" )
 		<input type="hidden" name="yearbookSubscription" value="false" />
+		
+		@select(contactForm("belongsTo[]"), options(ContactGroup.options), 'multiple -> true)
+		
+<!-- 		<select multiple="multiple" id="belongsTo" name="belongsTo[]"> -->
+<!--                 @for(group <- contactGroups) { -->
+                    
+<!--                         <option value="@group.id">@group.name</option> -->
+                    
+<!--                 } -->
+<!-- 		</select> -->
 		
 		<input type="submit" value="Create" class="btn">
 		

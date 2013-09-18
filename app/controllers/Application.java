@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -118,18 +120,30 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result newContact() {
+
 		Form<Contact> filledForm = contactForm.bindFromRequest();
 
-		if(filledForm.hasErrors()) {
-			System.out.println(filledForm.errors().toString());
-			flash("error", "Please correct your entries");
-			return badRequest(
-					views.html.add.render(filledForm, getCurrentUser())
-					);
-		} else {
-			if(filledForm.get().belongsTo.id == null){
-				flash("error", "Please correct your entries");
-				return badRequest(views.html.add.render(filledForm, getCurrentUser()));
+		String name = filledForm.data().get("name");
+		String firstName = filledForm.data().get("firstName");
+		String email = filledForm.data().get("email");
+		String street = filledForm.data().get("street");
+		String city = filledForm.data().get("city");
+		String phone = filledForm.data().get("phone");
+
+		Contact newContact = new Contact();
+		newContact.name = name;
+		newContact.firstName = firstName;
+		newContact.email = email;
+		newContact.street = street;
+		newContact.city = city;
+		newContact.phone = phone;
+
+		for(int j = 0; j < ContactGroup.options().size(); j++){
+			String item = "belongsTo[" + j + "]";
+			if(filledForm.data().get(item) != null){
+				ContactGroup cg = ContactGroup.find.byId((long) Integer.parseInt(filledForm.data().get(item)));
+				System.out.println(cg);
+				newContact.belongsTo.add(cg);
 			}
 			
 			filledForm.get().createdAt = new Timestamp(new Date().getTime());
@@ -139,7 +153,13 @@ public class Application extends Controller {
 			
 			flash("success", "Contact " + filledForm.get().name + " has been created");
 			return redirect(routes.Application.contacts());  
+
 		}
+
+//		newContact.save();
+//
+//		flash("success", "Contact " + newContact + " has been created");
+//		return redirect(routes.Application.contacts());  
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -178,8 +198,8 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result add() {
-		contactForm = Form.form(Contact.class);
-		return ok(views.html.add.render(contactForm, getCurrentUser()));
+		//DynamicForm dForm = new DynamicForm();
+		return ok(views.html.add.render(contactForm, getCurrentUser(), ContactGroup.all()));
 
 	}
 

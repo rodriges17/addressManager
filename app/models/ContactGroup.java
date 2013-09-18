@@ -18,7 +18,7 @@ public class ContactGroup extends Model {
     @ManyToMany
 	public List<User> owners = new LinkedList<User>();
 	
-	@OneToMany(mappedBy="belongsTo")
+	@ManyToMany
 	public List<Contact> contacts = new LinkedList<Contact>();
 	
 	public static Finder<Long, ContactGroup> find = new Finder<Long,ContactGroup>(Long.class, ContactGroup.class);
