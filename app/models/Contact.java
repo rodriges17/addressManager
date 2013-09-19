@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.persistence.*;
 
+import com.avaje.ebean.Ebean;
+
 import play.db.ebean.*;
 import play.data.Form;
 import play.data.validation.Constraints.*;
