@@ -21,8 +21,19 @@ public class Global extends GlobalSettings {
             bern.save();
             ContactGroup basel = new ContactGroup("Basel", admin);
             basel.save();
-            
-            Contact contact = new Contact("Test", "John", "john.test@test.com", "Teststreet 3", "Test City", "012 345 6789", bern);
+            ContactGroup zurich = new ContactGroup("Zürich", admin);
+            zurich.save();
+            ContactGroup tessin = new ContactGroup("Tessin", admin);
+            tessin.save();
+            ContactGroup luzern = new ContactGroup("Luzern", admin);
+            luzern.save();
+            ContactGroup romande = new ContactGroup("Romande", admin);
+            romande.save();
+            ContactGroup stgallen = new ContactGroup("St. Gallen-Ostschweiz", admin);
+            stgallen.save();
+            ContactGroup fribourg = new ContactGroup("Fribourg", admin);
+            fribourg.save();
+            Contact contact = new Contact("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", bern, true);
             contact.save();
             
         }

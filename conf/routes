@@ -10,6 +10,7 @@ GET     /contacts                   controllers.Application.contacts()
 POST    /contacts                   controllers.Application.newContact()
 GET     /contacts/:id/delete        controllers.Application.deleteContact(id:Long)
 GET		/contacts/add				controllers.Application.add()
+GET     /contacts/edited            controllers.Application.editedContacts()
 GET     /contacts/:id               controllers.Application.viewContact(id:Long)
 GET     /contacts/:id/edit          controllers.Application.editContact(id:Long)
 POST    /contacts/:id/update        controllers.Application.updateContact(id:Long)
@@ -21,6 +22,8 @@ POST    /contactgroups/:id/addowner controllers.Application.addOwner(id:Long)
 GET     /contactgroups/:id          controllers.Application.showContactGroup(id:Long)
 GET     /pdfsummary                 controllers.Application.pdfSummary()
 GET     /pdflabels                  controllers.Application.pdfLabels()
+GET     /readfile                   controllers.Application.readFile()
+
 
 # Login
 GET		/login						controllers.Application.login()

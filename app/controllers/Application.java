@@ -30,6 +30,7 @@ import views.html.*;
 import util.pdf.PDF;
 
 import utils.PDFiText;
+import utils.PoiExcelFileReader;
 
 
 /**
@@ -87,6 +88,15 @@ public class Application extends Controller {
 				);
 	}
 	
+	@Security.Authenticated(Secured.class)
+	public static Result editedContacts() {
+		User user = getCurrentUser();
+		return ok(
+				views.html.editedContacts.render(Contact.findEditedContacts(), user)    		
+				);
+	}
+	
+	
 	/**
 	 * Generates a pdf file of all the contacts, 
 	 * where the logged in user is owner of the
@@ -105,6 +115,12 @@ public class Application extends Controller {
 		response().setContentType("application/pdf");
 		//response().setHeader("Content-disposition","attachment; filename=labels.pdf");
 		return ok(new File("output/labels.pdf"));
+	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result readFile() {
+		PoiExcelFileReader.readFile();
+		return redirect(routes.Application.contacts());
 	}
 
 	private static User getCurrentUser() {

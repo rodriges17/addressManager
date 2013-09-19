@@ -1,10 +1,8 @@
-@(contacts: List[Contact], contactForm: Form[Contact], user: User) 
+@(contacts: List[Contact], user: User) 
 
 @import helper._
 
-@main("Contacts", user, nav = "list") {
-    
-    <a href="@routes.Application.add()" class="btn">Neuer Kontakt</a>
+@main("Edited contacts", user, nav = "editedContacts") {
 	
 	<table class="table table-striped">
 		<thead>
@@ -61,11 +59,7 @@
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.lastEditedAt.format("dd.MM.yyyy HH:mm")</a>
 				</td>
-				<td><a href="@routes.Application.viewContact(contact.id)">@if(contact.yearbookSubscription) {
-		        ja
-		    } else {
-		        nein
-		    }</a>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.yearbookSubscription</a>
 				</td>
 				<td><a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
 				</td>

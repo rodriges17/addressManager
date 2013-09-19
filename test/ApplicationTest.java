@@ -18,6 +18,8 @@ import play.libs.F.*;
 import static play.test.Helpers.*;
 import static org.fest.assertions.Assertions.*;
 
+import utils.*;
+
 
 /**
 *
@@ -37,6 +39,12 @@ public class ApplicationTest {
     public void renderTemplate() {
        
     }
+    
+    @Test
+    public void readFile() {
+    	PoiExcelFileReader.readFile();
+    }
+    
   
    
 }

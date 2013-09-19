@@ -34,6 +34,12 @@ public class Contact extends Model {
 	
 	public String street;
 	
+	public String appendix1;
+	
+	public String appendix2;
+	
+	public String zipcode;
+	
 	public String city;
 	
 	public String country;
@@ -41,6 +47,8 @@ public class Contact extends Model {
 	public Date createdAt;
 	
 	public Date lastEditedAt;
+	
+	public boolean isEdited = false;
 	
 	@Formats.DateTime(pattern="dd.MM.yyyy")
 	public Date membershipSince;
@@ -58,27 +66,67 @@ public class Contact extends Model {
 
 	public Contact() {};
 	
-	public Contact(String name, String firstName, String email,
-			String street, String city, String phone, ContactGroup belongsTo) {
+	public Contact(String title, String name, String firstName, String email,
+			String street, String appendix1, String appendix2, String zipcode, String city, String phone, ContactGroup belongsTo, boolean yearbookSubscription) {
+		this.title = title;
 		this.name = name;
 		this.firstName = firstName;
 		this.email = email;
 		this.street = street;
+		this.appendix1 = appendix1;
+		this.appendix2 = appendix2;
+		this.zipcode = zipcode;
 		this.city = city;
 		this.phone = phone;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
 		this.belongsTo.add(belongsTo);	
+		this.yearbookSubscription = yearbookSubscription;
 	}
 	
-	public static Contact create(String name, String firstName, String email,
-			String street, String city, String phone, String belongsTo) {
-		ContactGroup cg = ContactGroup.find.where().eq("name", belongsTo).findUnique();
-		System.out.println(cg.name);
-		Contact contact = new Contact(name, firstName, email, street, city, phone, cg);
-		contact.save();
-		System.out.println(contact.belongsTo);
-		return contact;
+	public Contact(String title, String name, String firstName, String email,
+			String street, String appendix1, String appendix2, String zipcode, String city, String phone, List<ContactGroup> belongingContactGroups, boolean yearbookSubscription) {
+		this.title = title;
+		this.name = name;
+		this.firstName = firstName;
+		this.email = email;
+		this.street = street;
+		this.appendix1 = appendix1;
+		this.appendix1 = appendix2;
+		this.zipcode = zipcode;
+		this.city = city;
+		this.phone = phone;
+		this.createdAt = new Date();
+		this.lastEditedAt = this.createdAt;
+		for(int i = 0; i < belongingContactGroups.size(); i++){
+			this.belongsTo.add(belongingContactGroups.get(i));
+		}
+		this.yearbookSubscription = yearbookSubscription;
+			
+	}
+	
+	public static Contact create(String title, String name, String firstName, String email,
+			String street, String appendix1, String appendix2, String zipcode, String city, String phone, String belongsTo, String yearbook) {
+		boolean yearbookSubscription = false;
+		if(yearbook.contains("ja"))
+			yearbookSubscription = true;
+		if(belongsTo.contains("/")){
+			String[] belongsToSplit = belongsTo.split("/");
+			List<ContactGroup> belongingContactGroups = new LinkedList<ContactGroup>();
+			for(int i = 0; i < belongsToSplit.length; i++){
+				ContactGroup cg = ContactGroup.find.where().eq("name", belongsToSplit[i]).findUnique();
+				belongingContactGroups.add(cg);
+			}
+			Contact contact = new Contact(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, belongingContactGroups, yearbookSubscription);
+			contact.save();
+			return contact;
+		}
+		else{
+			ContactGroup cg = ContactGroup.find.where().eq("name", belongsTo).findUnique();
+			Contact contact = new Contact(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, cg, yearbookSubscription);
+			contact.save();
+			return contact;
+		}
 	}
 
 	public static List<Contact> all() {
@@ -110,12 +158,12 @@ public class Contact extends Model {
 		this.street = updatedSource.street;
 		this.city = updatedSource.city;
 		this.country = updatedSource.country;
-		this.belongsTo = updatedSource.belongsTo;;
+		//this.belongsTo = updatedSource.belongsTo;
 		this.lastEditedAt = new Date();
+		this.isEdited = true;
 		this.membershipSince = updatedSource.membershipSince;
 		this.memberCategory = updatedSource.memberCategory;
 		this.yearbookSubscription = updatedSource.yearbookSubscription;
-		//this.belongsTo = updatedSource.belongsTo;
 
 		this.save();	
 	}
@@ -128,8 +176,14 @@ public class Contact extends Model {
 	public String toString() {
 		return "Name: " + name + ", First Name: "
 				+ firstName + ", Street: " + street
-				+ ", City: " + city + ", Email: " + email
+				+ ", City: " + city + ", Country: " + country
+				+ ", Email: " + email
 				+ ", Phone: " + phone + ", Group: " + belongsTo;
+	}
+
+	public static List<Contact> findEditedContacts() {
+		// TODO Auto-generated method stub
+		return find.where().eq("isEdited", true).findList();
 	}
 	
 }
