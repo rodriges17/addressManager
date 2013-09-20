@@ -39,12 +39,5 @@ public class ApplicationTest {
     public void renderTemplate() {
        
     }
-    
-    @Test
-    public void readFile() {
-    	PoiExcelFileReader.readFile();
-    }
-    
-  
-   
+
 }
