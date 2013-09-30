@@ -18,7 +18,7 @@ public class ContactGroup extends Model {
     @ManyToMany
 	public List<User> owners = new LinkedList<User>();
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.PERSIST)
 	public List<Contact> contacts = new LinkedList<Contact>();
 	
 	public static Finder<Long, ContactGroup> find = new Finder<Long,ContactGroup>(Long.class, ContactGroup.class);
@@ -77,6 +77,10 @@ public class ContactGroup extends Model {
 			ownersList += " ";
 		}
 		return ("owners: " + ownersList);
+	}
+
+	public void addContact(Contact contact) {
+		this.contacts.add(contact);	
 	}
 	
 }

@@ -39,12 +39,6 @@ create table cm_users (
 ;
 
 
-create table contact_contact_group (
-  contact_id                     bigint not null,
-  contact_group_id               bigint not null,
-  constraint pk_contact_contact_group primary key (contact_id, contact_group_id))
-;
-
 create table contact_group_users (
   contact_group_id               bigint not null,
   cm_users_email                 varchar(255) not null,
@@ -65,10 +59,6 @@ create sequence cm_users_seq;
 
 
 
-alter table contact_contact_group add constraint fk_contact_contact_group_cont_01 foreign key (contact_id) references contact (id) on delete restrict on update restrict;
-
-alter table contact_contact_group add constraint fk_contact_contact_group_cont_02 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
-
 alter table contact_group_users add constraint fk_contact_group_users_contac_01 foreign key (contact_group_id) references contact_group (id) on delete restrict on update restrict;
 
 alter table contact_group_users add constraint fk_contact_group_users_cm_use_02 foreign key (cm_users_email) references cm_users (email) on delete restrict on update restrict;
@@ -83,13 +73,11 @@ SET REFERENTIAL_INTEGRITY FALSE;
 
 drop table if exists contact;
 
-drop table if exists contact_contact_group;
+drop table if exists contact_group_contact;
 
 drop table if exists contact_group;
 
 drop table if exists contact_group_users;
-
-drop table if exists contact_group_contact;
 
 drop table if exists cm_users;
 

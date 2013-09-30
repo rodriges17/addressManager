@@ -32,11 +32,6 @@ import util.pdf.PDF;
 import utils.PDFiText;
 import utils.PoiExcelFileReader;
 
-
-/**
- * @author administrator
- *
- */
 public class Application extends Controller {
 
 	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass", false);
@@ -75,7 +70,6 @@ public class Application extends Controller {
 		return redirect(routes.Application.contacts());
 	}
 
-	
 	/**
 	 * Lists all the contacts, where the logged in user
 	 * is owner of the corresponding contact group
@@ -95,7 +89,6 @@ public class Application extends Controller {
 				views.html.editedContacts.render(Contact.findEditedContacts(), user)    		
 				);
 	}
-	
 	
 	/**
 	 * Generates a pdf file of all the contacts, 
@@ -134,6 +127,7 @@ public class Application extends Controller {
 		return current;
 	}
 
+	//TODO change to use Contact.create() method
 	@Security.Authenticated(Secured.class)
 	public static Result newContact() {
 
@@ -147,7 +141,6 @@ public class Application extends Controller {
 		String city = filledForm.data().get("city");
 		String phone = filledForm.data().get("phone");
 		String memberCategory = filledForm.data().get("memberCategory");
-		
 
 		Contact newContact = new Contact();
 		newContact.name = name;
@@ -174,8 +167,6 @@ public class Application extends Controller {
 			
 			//flash("success", "Contact " + filledForm.get().name + " has been created");
 			//return redirect(routes.Application.contacts());  
-
-		
 
 		newContact.save();
 
@@ -257,7 +248,7 @@ public class Application extends Controller {
 		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
 
-	// Automatic binding of owner is still missing at the moment
+	//TODO Automatic binding of owner is still missing at the moment
 	@Security.Authenticated(Secured.class)
 	public static Result newContactGroup() {
 		Form<ContactGroup> filledForm = contactGroupForm.bindFromRequest();
@@ -300,6 +291,7 @@ public class Application extends Controller {
 	public static Result showContactGroup(Long id) {
 		ContactGroup cg = ContactGroup.find.ref(id);
 		List<Contact> groupContacts = cg.contacts;
+		System.out.println(cg.contacts.size());
 		List<User> groupOwners = cg.owners;
 		List<User> allUsers = User.find.all();
 		return ok(views.html.contactGroupView.render(cg, groupContacts, groupOwners, allUsers));

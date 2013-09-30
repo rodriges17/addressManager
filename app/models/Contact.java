@@ -1,6 +1,5 @@
 package models;
 
-import java.sql.Timestamp;
 import java.util.*;
 
 import javax.persistence.*;
@@ -59,9 +58,8 @@ public class Contact extends Model {
 	
 	public boolean yearbookSubscription;
 
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.PERSIST, mappedBy="contacts")
 	public List<ContactGroup> belongsTo = new LinkedList<ContactGroup>();
-
 	  
 	public static Finder<Long,Contact> find = 
 			new Finder<Long,Contact>(Long.class, Contact.class);
@@ -82,7 +80,11 @@ public class Contact extends Model {
 		this.phone = phone;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
-		this.belongsTo.add(belongsTo);	
+		this.save();
+		// register contact in specified contact group
+		belongsTo.addContact(this);
+		belongsTo.save();
+		this.belongsTo.add(belongsTo);
 		this.yearbookSubscription = yearbookSubscription;
 	}
 	
@@ -100,11 +102,15 @@ public class Contact extends Model {
 		this.phone = phone;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
+		this.save();
+		// register contact in specified contact groups
 		for(int i = 0; i < belongingContactGroups.size(); i++){
+			belongingContactGroups.get(i).addContact(this);
+			belongingContactGroups.get(i).save();
 			this.belongsTo.add(belongingContactGroups.get(i));
-		}
-		this.yearbookSubscription = yearbookSubscription;
 			
+		}
+		this.yearbookSubscription = yearbookSubscription;	
 	}
 	
 	public static Contact create(String title, String name, String firstName, String email,
@@ -112,6 +118,7 @@ public class Contact extends Model {
 		boolean yearbookSubscription = false;
 		if(yearbook.contains("ja"))
 			yearbookSubscription = true;
+		// case: contact belongs to more than 1 contact group
 		if(belongsTo.contains("/")){
 			String[] belongsToSplit = belongsTo.split("/");
 			List<ContactGroup> belongingContactGroups = new LinkedList<ContactGroup>();
@@ -123,6 +130,7 @@ public class Contact extends Model {
 			contact.save();
 			return contact;
 		}
+		// case: contact belongs to only 1 contact group
 		else{
 			ContactGroup cg = ContactGroup.find.where().eq("name", belongsTo).findUnique();
 			Contact contact = new Contact(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, cg, yearbookSubscription);
@@ -144,10 +152,16 @@ public class Contact extends Model {
 	public List<Contact> ofGroup(String groupName) {
 		return find.where().eq(groupName, belongsTo).findList();
 	}
-
 	
 	public static void delete(Long id) {
-		find.ref(id).delete();
+		Contact toDelete = find.ref(id);
+		for(int i = 0; i < toDelete.belongsTo.size(); i++) {
+			ContactGroup cg = toDelete.belongsTo.get(i);
+			cg.contacts.remove(toDelete);
+			cg.save();
+		}
+		toDelete.update();
+		toDelete.delete();
 	}
 
 	public void update(Form<Contact> updatedForm) {
@@ -166,7 +180,6 @@ public class Contact extends Model {
 		this.membershipSince = updatedSource.membershipSince;
 		this.memberCategory = updatedSource.memberCategory;
 		this.yearbookSubscription = updatedSource.yearbookSubscription;
-
 		this.save();	
 	}
 
@@ -184,7 +197,6 @@ public class Contact extends Model {
 	}
 
 	public static List<Contact> findEditedContacts() {
-		// TODO Auto-generated method stub
 		return find.where().eq("isEdited", true).findList();
 	}
 	

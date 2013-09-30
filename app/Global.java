@@ -33,8 +33,10 @@ public class Global extends GlobalSettings {
             stgallen.save();
             ContactGroup fribourg = new ContactGroup("Fribourg", admin);
             fribourg.save();
-            Contact contact = new Contact("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", bern, true);
-            contact.save();
+
+            //Contact contact = new Contact("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", bern, true);
+            //contact.save();
+            Contact.create("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", "Bern", "Ja");
             
         }
     }

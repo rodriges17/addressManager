@@ -40,7 +40,7 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveContactGroup() {
-		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
+		//User admin = User.find.where().eq("email", "admin@test.com").findUnique();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
 		assertNotNull(cg);
 		assertEquals("Bern", cg.name);
@@ -49,7 +49,7 @@ public class ModelTest extends WithApplication {
     }
 	
 	@Test
-    public void findContactGroupsInvolving() {
+    public void findContactGroupsInvolvingOwner() {
         User bob = new User("bob@gmail.com", "secret", false);
         bob.save();
         User jane = new User("jane@gmail.com", "secret", false);
@@ -67,7 +67,6 @@ public class ModelTest extends WithApplication {
     public void createAndRetrieveContact() {
 		//new User("admin@test.com", "admin", false).save();
 		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
-		System.out.println(admin);
 		//new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
 		new Contact("Mr.", "Doe", "Mark", "mark.doe@test.com", "Test Street 5", "App1", "App2", "3012", "Test City", "01234567", cg, true).save();
@@ -97,5 +96,17 @@ public class ModelTest extends WithApplication {
         List<Contact> resultsEmpty = Contact.findInvolvingGroupOwner("alice@gmail.com");
         assertEquals(0, resultsEmpty.size());
     }
+	
+	@Test
+	public void deleteContact() {
+		assertEquals(1, Contact.all().size());
+		assertEquals(8, ContactGroup.all().size());
+		Contact contactToDelete = Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
+		assertEquals(2, Contact.all().size());
+		Contact createdContactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
+		System.out.println(createdContactToDelete.id);
+		createdContactToDelete.delete(createdContactToDelete.id);
+		assertEquals(1, Contact.all().size());
+	}
 
 }
