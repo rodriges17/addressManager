@@ -5,11 +5,18 @@
 @main(title = "Contact View", user, nav = "contactView") {
 
 <address>
+	@contact.title<br>
 	<strong>@contact.firstName @contact.name</strong><br>
 	@contact.street<br>
+	@if(contact.appendix1){@contact.appendix1<br>}
+	@if(contact.appendix2){@contact.appendix2<br>}
 	@contact.city<br>
 	<abbr title="Phone">P:</abbr>(123) 456-7845<br>
-	<a href="mailto:@contact.email">@contact.email</a>
+	<a href="mailto:@contact.email">@contact.email</a><br>
+	<strong>Sektion: </strong>
+	@for(contactgroup <- contact.belongsTo) {
+    	@contactgroup.name
+    }
 </address>
 <p>
 	<a href="@routes.Application.contacts()" class="btn">back</a>

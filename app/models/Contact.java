@@ -116,7 +116,7 @@ public class Contact extends Model {
 	public static Contact create(String title, String name, String firstName, String email,
 			String street, String appendix1, String appendix2, String zipcode, String city, String phone, String belongsTo, String yearbook) {
 		boolean yearbookSubscription = false;
-		if(yearbook.contains("ja"))
+		if(yearbook.contains("ja") || yearbook.contains("Ja"))
 			yearbookSubscription = true;
 		// case: contact belongs to more than 1 contact group
 		if(belongsTo.contains("/")){
@@ -198,6 +198,23 @@ public class Contact extends Model {
 
 	public static List<Contact> findEditedContacts() {
 		return find.where().eq("isEdited", true).findList();
+	}
+
+	public static List<Contact> findByGroupname(String groupname) {
+		System.out.println(groupname);
+		if(groupname.equals("St.+Gallen-Ostschweiz"))
+			groupname = "St. Gallen-Ostschweiz";
+		if(groupname.equals("zurich"))
+			groupname = "Zürich";
+		List<Contact> all = all();
+		List<Contact> result = new LinkedList<Contact>();
+		for(Contact contact : all) {
+			for(int i = 0; i < contact.belongsTo.size(); i++){
+				if(contact.belongsTo.get(i).name.equals(groupname))
+					result.add(contact);
+			}
+		}
+		return result;
 	}
 	
 }

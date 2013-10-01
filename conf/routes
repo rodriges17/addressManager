@@ -14,6 +14,7 @@ GET     /contacts/edited            controllers.Application.editedContacts()
 GET     /contacts/:id               controllers.Application.viewContact(id:Long)
 GET     /contacts/:id/edit          controllers.Application.editContact(id:Long)
 POST    /contacts/:id/update        controllers.Application.updateContact(id:Long)
+GET     /filteredcontacts/:groupname    controllers.Application.filteredContactsBy(groupname:String)
 GET     /users/add                  controllers.Application.addUser()
 POST    /users                      controllers.Application.newUser()
 GET     /contactgroups/add          controllers.Application.addContactGroup()
@@ -23,6 +24,8 @@ GET     /contactgroups/:id          controllers.Application.showContactGroup(id:
 GET     /pdfsummary                 controllers.Application.pdfSummary()
 GET     /pdflabels                  controllers.Application.pdfLabels()
 GET     /readfile                   controllers.Application.readFile()
+GET     /fileupload                 controllers.Application.fileUpload()
+POST    /upload                     controllers.Application.upload()
 
 
 # Login

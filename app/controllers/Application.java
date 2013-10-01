@@ -90,6 +90,14 @@ public class Application extends Controller {
 				);
 	}
 	
+	@Security.Authenticated(Secured.class)
+	public static Result filteredContactsBy(String groupname) {
+		User user = getCurrentUser();
+		return ok(
+				views.html.index.render(Contact.findByGroupname(groupname), contactForm, user)    		
+				);
+	}
+	
 	/**
 	 * Generates a pdf file of all the contacts, 
 	 * where the logged in user is owner of the
@@ -109,6 +117,29 @@ public class Application extends Controller {
 		//response().setHeader("Content-disposition","attachment; filename=labels.pdf");
 		return ok(new File("output/labels.pdf"));
 	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result fileUpload() {
+		return ok(views.html.fileUpload.render(getCurrentUser()));
+	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result upload() {
+		  Http.MultipartFormData body = request().body().asMultipartFormData();
+		  Http.MultipartFormData.FilePart contactfile = body.getFile("contactfile");
+		  if (contactfile != null) {
+		    String fileName = contactfile.getFilename();
+		    String contentType = contactfile.getContentType(); 
+		    File file = contactfile.getFile();
+		    file.renameTo(new File("/public/upload", fileName));
+		    System.out.println(fileName);
+			flash("success", "File: " + fileName + " uploaded");
+		    return redirect(routes.Application.contacts());
+		  } else {
+		    flash("error", "Missing file");
+		    return redirect(routes.Application.contacts());    
+		  }
+		}
 	
 	@Security.Authenticated(Secured.class)
 	public static Result readFile() {

@@ -1,0 +1,17 @@
+@(user: User) 
+
+@import helper._ 
+
+@main(title = "Excel File Upload", user, nav = "fileUpload") {
+
+	@form(action = routes.Application.upload, 'enctype -> "multipart/form-data") {
+    
+    <input type="file" name="contactfile">
+    
+    <p>
+        <input type="submit">
+    </p>
+    
+}
+
+}

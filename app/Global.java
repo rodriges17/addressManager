@@ -36,7 +36,7 @@ public class Global extends GlobalSettings {
 
             //Contact contact = new Contact("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", bern, true);
             //contact.save();
-            Contact.create("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", "Bern", "Ja");
+            Contact.create("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", "Bern", "ja");
             
         }
     }
