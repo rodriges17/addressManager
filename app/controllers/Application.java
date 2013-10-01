@@ -90,9 +90,14 @@ public class Application extends Controller {
 				);
 	}
 	
+	/**
+	 * Lists all the contacts of the specifed group
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsBy(String groupname) {
 		User user = getCurrentUser();
+		//if(!user.isAdmin)
+		//    return redirect(routes.Application.contacts());
 		return ok(
 				views.html.index.render(Contact.findByGroupname(groupname), contactForm, user)    		
 				);
@@ -118,8 +123,13 @@ public class Application extends Controller {
 		return ok(new File("output/labels.pdf"));
 	}
 	
+	/**
+	 * Renders the file upload form
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result fileUpload() {
+		//if(!user.isAdmin)
+	    //    return redirect(routes.Application.contacts());
 		return ok(views.html.fileUpload.render(getCurrentUser()));
 	}
 	
@@ -205,6 +215,10 @@ public class Application extends Controller {
 		return redirect(routes.Application.contacts());  
 	}
 
+	/**
+	 * Deletes the contact by first removing contact from
+	 * corresponding contact groups and then deleting the contact
+	 */
 	@Security.Authenticated(Secured.class)
 	public static Result deleteContact(Long id) {
 		Contact.delete(id);

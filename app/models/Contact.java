@@ -201,7 +201,6 @@ public class Contact extends Model {
 	}
 
 	public static List<Contact> findByGroupname(String groupname) {
-		System.out.println(groupname);
 		if(groupname.equals("St.+Gallen-Ostschweiz"))
 			groupname = "St. Gallen-Ostschweiz";
 		if(groupname.equals("zurich"))
