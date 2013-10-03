@@ -1,13 +1,15 @@
-@(cg: ContactGroup, contacts: List[Contact], owners: List[User], allUsers: List[User])
+@(cg: ContactGroup, contacts: List[Contact], owners: List[User], allUsers: List[User], user: User)
 
 @import helper._
+
+@main(title = "Contact Group View", user, nav = "contactGroupView") {
 
 <h2>Contact group: @cg.name</h2>
 
 <h2>Contacts</h2>
 <ul>
     @for(contact <- contacts) {
-    	<li><strong>@contact.name</strong> @contact.firstName</li>
+    	<li><a href="@routes.Application.viewContact(contact.id)"><strong>@contact.name</strong> @contact.firstName</a></li>
     }
 </ul>
     
@@ -29,4 +31,5 @@
                 }
 	</select>
 	<input type="submit" value="Make owner" class="btn btn-danger">
+}
 }

@@ -351,7 +351,7 @@ public class Application extends Controller {
 		System.out.println(cg.contacts.size());
 		List<User> groupOwners = cg.owners;
 		List<User> allUsers = User.find.all();
-		return ok(views.html.contactGroupView.render(cg, groupContacts, groupOwners, allUsers));
+		return ok(views.html.contactGroupView.render(cg, groupContacts, groupOwners, allUsers, getCurrentUser()));
 	}
 
 	public static class Login {
