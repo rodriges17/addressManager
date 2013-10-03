@@ -11,7 +11,7 @@
 	@if(contact.appendix1){@contact.appendix1<br>}
 	@if(contact.appendix2){@contact.appendix2<br>}
 	@contact.city<br>
-	<abbr title="Phone">P:</abbr>(123) 456-7845<br>
+	<abbr title="Phone">P:</abbr>@contact.phone<br>
 	<a href="mailto:@contact.email">@contact.email</a><br>
 	<strong>Sektion: </strong>
 	@for(contactgroup <- contact.belongsTo) {
