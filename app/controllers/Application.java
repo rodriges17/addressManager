@@ -179,8 +179,13 @@ public class Application extends Controller {
 		String title = filledForm.data().get("title");
 		String email = filledForm.data().get("email");
 		String street = filledForm.data().get("street");
+		String appendix1 = filledForm.data().get("appendix1");
+		String appendix2 = filledForm.data().get("appendix2");
+		String zipcode = filledForm.data().get("zipcode");
+		String country = filledForm.data().get("country");
 		String city = filledForm.data().get("city");
 		String phone = filledForm.data().get("phone");
+		String yearbook = filledForm.data().get("yearbookSubscription");
 		String memberCategory = filledForm.data().get("memberCategory");
 
 		Contact newContact = new Contact();
@@ -189,8 +194,15 @@ public class Application extends Controller {
 		newContact.title = title;
 		newContact.email = email;
 		newContact.street = street;
+		newContact.appendix1 = appendix1;
+		newContact.appendix2 = appendix2;
+		newContact.zipcode = zipcode;
 		newContact.city = city;
+		newContact.country = country;
 		newContact.phone = phone;
+		System.out.println(filledForm.data().get("yearbookSubscription"));
+		if(yearbook.equals("true"))
+			newContact.yearbookSubscription = true;
 		newContact.memberCategory = memberCategory;
 
 		for(int j = 0; j < ContactGroup.options().size(); j++){
