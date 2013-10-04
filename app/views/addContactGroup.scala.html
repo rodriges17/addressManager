@@ -4,29 +4,30 @@
 
 @main("Contact Groups", user, nav = "addcontactgroup") {
     
-    <h2>Existing contact-groups</h2>
+    <h2>Existierende Kontaktgruppen</h2>
     <ul>
     @for(group <- groups) {
-    	<li><a href="@routes.Application.showContactGroup(group.id)"><strong>@group.name</strong></a> @group.ownersToString <br>
+    	<li><a href="@routes.Application.showContactGroup(group.id)"><strong>@group.name</strong></a><br>
+    	Besitzer: @group.ownersToString <br>
 					@if(group.owners.contains(user)) {
-					    You are owner
+					    Sie sind Besitzer dieser Gruppe
 					} else {
 					@if(user.isAdmin == true) {
-						Make me owner
+						Besitzer werden
 					}
 					}
 		</li>
     }
     </ul>
 
-	<h2>Add a contact-group</h2>
+	<h2>Kontaktgruppe hinzuf&uuml;gen</h2>
 	
 	@form(action = routes.Application.newContactGroup()) {
 	
 		<fieldset>
 		@inputText(cgForm("name"), '_label -> "Name")			
 	
-		<input type="submit" value="Create" class="btn">
+		<input type="submit" value="Speichern" class="btn">
 		
 		</fieldset>
 		

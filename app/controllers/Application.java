@@ -104,6 +104,19 @@ public class Application extends Controller {
 	}
 	
 	/**
+	 * Lists all the contacts of the specifed group
+	 */
+	@Security.Authenticated(Secured.class)
+	public static Result filteredContactsWithYearbookSubscription() {
+		User user = getCurrentUser();
+		//if(!user.isAdmin)
+		//    return redirect(routes.Application.contacts());
+		return ok(
+				views.html.index.render(Contact.withYearbookSubscription(), contactForm, user)    		
+				);
+	}
+	
+	/**
 	 * Generates a pdf file of all the contacts, 
 	 * where the logged in user is owner of the
 	 * corresponding contact group

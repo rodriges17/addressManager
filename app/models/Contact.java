@@ -215,5 +215,9 @@ public class Contact extends Model {
 		}
 		return result;
 	}
+	//TODO fix
+	public static List<Contact> withYearbookSubscription() {
+		return find.where().eq("yearbookSubscription", "true").findList();
+	}
 	
 }

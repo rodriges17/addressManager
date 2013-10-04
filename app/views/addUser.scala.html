@@ -4,22 +4,22 @@
 
 @main("Users", user, nav = "adduser") {
     
-    <h2>Existing users</h2>
+    <h2>Existierende Benutzer</h2>
     <ul>
     @for(exuser <- users) {
     	<li><strong>@exuser.email</strong> @if(exuser.isAdmin) {<span class="label label-warning">Admin</span>}</li>
     }
     </ul>
 
-	<h2>Add a user</h2>
+	<h2>Benutzer hinzuf&uuml;gen</h2>
 	
 	@form(action = routes.Application.newUser()) {
 	
 		<fieldset>
 		@inputText(userForm("email"), '_label -> "Email")		
-		@inputText(userForm("password"), '_label -> "Password")		
+		@inputText(userForm("password"), '_label -> "Passwort")		
 		
-		@checkbox(field = userForm("isAdmin"), '_label -> "User has admin-rights" )
+		@checkbox(field = userForm("isAdmin"), '_label -> "Benutzer hat Adminrechte" )
 		<input type="hidden" name="isAdmin" value="false" /> 
 	
 		<input type="submit" value="Create" class="btn">

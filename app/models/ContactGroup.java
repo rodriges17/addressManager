@@ -76,7 +76,7 @@ public class ContactGroup extends Model {
 			ownersList += owner.email;
 			ownersList += " ";
 		}
-		return ("owners: " + ownersList);
+		return ownersList;
 	}
 
 	public void addContact(Contact contact) {
