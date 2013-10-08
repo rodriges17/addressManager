@@ -104,7 +104,7 @@ public class Application extends Controller {
 	}
 	
 	/**
-	 * Lists all the contacts of the specifed group
+	 * Lists all the contacts with yearbook subscription
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsWithYearbookSubscription() {
