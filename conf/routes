@@ -26,6 +26,7 @@ GET     /pdfsummary                 controllers.Application.pdfSummary()
 GET     /pdflabels                  controllers.Application.pdfLabels()
 GET     /readfile                   controllers.Application.readFile()
 GET     /fileupload                 controllers.Application.fileUpload()
+GET     /excelimportexport          controllers.Application.excelImportExport()
 POST    /upload                     controllers.Application.upload()
 
 

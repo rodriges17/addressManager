@@ -2,33 +2,35 @@
 
 @import helper._
 
-	@main("Add Contact", user) {
+	@main("Kontakt bearbeiten", user) {
 	
-	<h2>Edit contact</h2>
+	<h2>Kontakt bearbeiten</h2>
 	    
 	    @form(action = routes.Application.updateContact(contact.id)) {
 	        <fieldset>
 			@inputText(contactForm("name"), '_label -> "Name", '_showConstraints -> false)		
-			@inputText(contactForm("firstName"), '_label -> "First name", '_showConstraints -> false)
-			@inputText(contactForm("title"), '_label -> "Title")	
+			@inputText(contactForm("firstName"), '_label -> "Vorname", '_showConstraints -> false)
+			@inputText(contactForm("title"), '_label -> "Titel")	
 			@inputText(contactForm("email"), '_label -> "Email", '_showConstraints -> false)	
-			@inputText(contactForm("phone"), '_label -> "Phone")
-			@inputText(contactForm("street"), '_label -> "Street")
-			@inputText(contactForm("city"), '_label -> "City")
-			@inputText(contactForm("country"), '_label -> "Country")
+			@inputText(contactForm("phone"), '_label -> "Telefon")
+			@inputText(contactForm("street"), '_label -> "Strasse")
+			@inputText(contactForm("appendix1"), '_label -> "Zusatz 1")
+			@inputText(contactForm("appendix2"), '_label -> "Zusatz 2")
+			@inputText(contactForm("city"), '_label -> "Stadt")
+			@inputText(contactForm("country"), '_label -> "Land")
 	<!-- 		@select(
 				contactForm("belongsTo.id"),
 				options(ContactGroup.options),
 				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
 				'_showConstraints -> false	
 			) -->
-			@inputText(contactForm("membershipSince"), '_label -> "Member since")
+			@inputText(contactForm("membershipSince"), '_label -> "Mitglied seit")
 			@select(
 				contactForm("memberCategory"),
 				options(MemberCategories.list),
 				'_label -> "Mitgliederkategorie", '_default -> "-- WŠhlen sie eine Kategorie --"
 			)
-			@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Subscribe for yearbook" )
+			@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Jahrbuch abonniert" )
 			<input type="hidden" name="yearbookSubscription" value="false" />
 			
 			@select(contactForm("belongsTo[]"), options(ContactGroup.options), 'multiple -> true)

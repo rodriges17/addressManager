@@ -4,7 +4,7 @@
 
 @main("Contacts", user, nav = "list") {
     
-    <a href="@routes.Application.add()" class="btn">Neuer Kontakt</a> <a href="@routes.Application.editedContacts()" class="btn">Editierte Kontakte</a><br>
+    <a href="@routes.Application.add()" class="btn btn-primary">Neuer Kontakt</a> @if(user.isAdmin == true) {<a href="@routes.Application.editedContacts()" class="btn">Editierte Kontakte</a>}<br>
     
     <p>
 	<h3>Filter: </h3> 

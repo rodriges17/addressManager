@@ -137,13 +137,23 @@ public class Application extends Controller {
 	}
 	
 	/**
-	 * Renders the file upload form
+	 * Renders the file upload view
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result fileUpload() {
 		//if(!user.isAdmin)
 	    //    return redirect(routes.Application.contacts());
 		return ok(views.html.fileUpload.render(getCurrentUser()));
+	}
+	
+	/**
+	 * Renders the excel import / export view
+	 */
+	@Security.Authenticated(Secured.class)
+	public static Result excelImportExport() {
+		//if(!user.isAdmin)
+	    //    return redirect(routes.Application.contacts());
+		return ok(views.html.excelImportExport.render(getCurrentUser()));
 	}
 	
 	@Security.Authenticated(Secured.class)

@@ -4,16 +4,16 @@
 
 @main(title = "Contact Group View", user, nav = "contactGroupView") {
 
-<h2>Contact group: @cg.name</h2>
+<h2>Kontaktgruppe: @cg.name</h2>
 
-<h2>Contacts</h2>
+<h2>Kontakte</h2>
 <ul>
     @for(contact <- contacts) {
     	<li><a href="@routes.Application.viewContact(contact.id)"><strong>@contact.name</strong> @contact.firstName</a></li>
     }
 </ul>
     
-<h2>Owners</h2>
+<h2>Besitzer</h2>
 <ul>
     @for(owner <- owners) {
     	<li><strong>@owner.email</strong></li>

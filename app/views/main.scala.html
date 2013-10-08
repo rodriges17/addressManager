@@ -35,17 +35,17 @@
 			    <li class="@("active".when(nav == "list"))">
 			        <a href="@routes.Application.contacts()">Kontakte</a>
 			    </li>
-			    <li class="@("active".when(nav == "addcontactgroup"))">
-			        <a href=@routes.Application.addContactGroup()>Kontaktgruppen</a>
-			    </li>
 			    @if(user.isAdmin == true) {
+			    	<li class="@("active".when(nav == "addcontactgroup"))">
+			     	   <a href=@routes.Application.addContactGroup()>Kontaktgruppen</a>
+			    	</li>
 				    <li class="@("active".when(nav == "adduser"))">
 				        <a href=@routes.Application.addUser()>Benutzer</a>
-				    </li>
+				    </li>			    
+			    	<li class="@("active".when(nav == "importexport"))">
+			        	<a href=@routes.Application.excelImportExport() target="_blank">Excel Import / Export</a>
+			    	</li>
 			    }
-			    <li class="@("active".when(nav == "export"))">
-			        <a href=@routes.Application.pdfSummary() target="_blank">.pdf - Export</a>
-			    </li>
 	        </ul>
 	    }   
 	    
