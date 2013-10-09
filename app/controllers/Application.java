@@ -51,7 +51,7 @@ public class Application extends Controller {
 		} else {
 			session().clear();
 			session("email", loginForm.get().email);
-			flash("success", "You successfully logged in as " + loginForm.get().email);
+			flash("success", "Sie haben sich erfolgreich eingeloggt als: " + loginForm.get().email);
 			return redirect(
 					routes.Application.contacts()
 					);
@@ -61,7 +61,7 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result logout(){
 		session().clear();
-		flash("success", "You've been logged out");
+		flash("success", "Sie sind nun ausgeloggt.");
 		return redirect(routes.Application.login());
 	}
 
@@ -97,8 +97,8 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsBy(String groupname) {
 		User user = getCurrentUser();
-		//if(!user.isAdmin)
-		//    return redirect(routes.Application.contacts());
+		if(!user.isAdmin)
+		    return redirect(routes.Application.contacts());
 		String btn = groupname;
 		System.out.println(btn);
 		return ok(
@@ -112,8 +112,8 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsWithYearbookSubscription() {
 		User user = getCurrentUser();
-		//if(!user.isAdmin)
-		//    return redirect(routes.Application.contacts());
+		if(!user.isAdmin)
+		    return redirect(routes.Application.contacts());
 		String btn = "yearbook";
 		return ok(
 				views.html.index.render(Contact.withYearbookSubscription(), contactForm, user, btn)    		
@@ -145,8 +145,8 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result fileUpload() {
-		//if(!user.isAdmin)
-	    //    return redirect(routes.Application.contacts());
+		if(!getCurrentUser().isAdmin)
+	        return redirect(routes.Application.contacts());
 		return ok(views.html.fileUpload.render(getCurrentUser()));
 	}
 	
@@ -155,8 +155,8 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result excelImportExport() {
-		//if(!user.isAdmin)
-	    //    return redirect(routes.Application.contacts());
+		if(!getCurrentUser().isAdmin)
+	        return redirect(routes.Application.contacts());
 		return ok(views.html.excelImportExport.render(getCurrentUser()));
 	}
 	
@@ -170,10 +170,10 @@ public class Application extends Controller {
 		    File file = contactfile.getFile();
 		    file.renameTo(new File("/public/upload", fileName));
 		    System.out.println(fileName);
-			flash("success", "File: " + fileName + " uploaded");
+			flash("success", "Datei: " + fileName + " hochgeladen und Kontakte importiert");
 		    return redirect(routes.Application.contacts());
 		  } else {
-		    flash("error", "Missing file");
+		    flash("error", "Fehlende Datei");
 		    return redirect(routes.Application.contacts());    
 		  }
 		}
@@ -227,7 +227,7 @@ public class Application extends Controller {
 		newContact.city = city;
 		newContact.country = country;
 		newContact.phone = phone;
-		System.out.println(filledForm.data().get("yearbookSubscription"));
+		
 		if(yearbook.equals("true"))
 			newContact.yearbookSubscription = true;
 		newContact.memberCategory = memberCategory;
@@ -236,21 +236,15 @@ public class Application extends Controller {
 			String item = "belongsTo[" + j + "]";
 			if(filledForm.data().get(item) != null){
 				ContactGroup cg = ContactGroup.find.byId((long) Integer.parseInt(filledForm.data().get(item)));
-				System.out.println("The created contact belongs to: " + cg);
 				newContact.belongsTo.add(cg);
 			}
 		}
-			newContact.createdAt = new Timestamp(new Date().getTime());
-			newContact.lastEditedAt = newContact.createdAt;
-			
-			//Contact.create(filledForm.get());
-			
-			//flash("success", "Contact " + filledForm.get().name + " has been created");
-			//return redirect(routes.Application.contacts());  
-
+		newContact.createdAt = new Timestamp(new Date().getTime());
+		newContact.lastEditedAt = newContact.createdAt;
+		
 		newContact.save();
-
-		flash("success", "Contact " + newContact + " has been created");
+		
+		flash("success", "Kontakt " + newContact + " erstellt und gespeichert.");
 		return redirect(routes.Application.contacts());  
 	}
 
@@ -274,7 +268,7 @@ public class Application extends Controller {
 					);
 		} else {
 			Contact.find.byId(id).update(updatedForm);
-			flash("success", "Contact " + updatedForm.get().name + " has been updated");
+			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
 			return redirect(routes.Application.contacts());  
 		}
 	}
@@ -295,14 +289,12 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result add() {
-		//DynamicForm dForm = new DynamicForm();
 		return ok(views.html.add.render(contactForm, getCurrentUser(), ContactGroup.all()));
-
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result addUser() {
-		if(getCurrentUser().isAdmin == false)
+		if(!getCurrentUser().isAdmin)
 			return redirect(routes.Application.contacts());
 		Form<User> userForm = Form.form(User.class);
 		return ok(views.html.addUser.render(userForm, getCurrentUser(), User.find.all()));
@@ -313,22 +305,21 @@ public class Application extends Controller {
 		Form<User> filledForm = userForm.bindFromRequest();
 		if(filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
-			flash("error", "Please correct your entries");
+			flash("error", "Bitte korrigieren sie ihre Eingaben!");
 			return badRequest(
 					views.html.addUser.render(filledForm, getCurrentUser(), User.find.all())
 					);
 		} else {
 			User.create(filledForm.get());
-			flash("success", "User " + filledForm.get().email + " has been created");
+			flash("success", "Benutzer " + filledForm.get().email + " erstellt.");
 			return redirect(routes.Application.contacts());  
 		}
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result addContactGroup() {
-		// isAdmin now checked in the template
-		//		if(getCurrentUser().isAdmin == false)
-		//			return redirect(routes.Application.contacts());
+		if(!getCurrentUser().isAdmin)
+			return redirect(routes.Application.contacts());
 		Form<ContactGroup> contactGroupForm = Form.form(ContactGroup.class);
 		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
@@ -340,14 +331,14 @@ public class Application extends Controller {
 
 		if(filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
-			flash("error", "Please correct your entries");
+			flash("error", "Bitte korrigieren sie ihre Eingaben!");
 			return badRequest(
 					views.html.addContactGroup.render(filledForm, getCurrentUser(), ContactGroup.find.all())
 					);
 		} else {
 
 			ContactGroup.create(filledForm.get());
-			flash("success", "ContactGroup " + filledForm.get().name + " has been created");
+			flash("success", "Kontaktgruppe " + filledForm.get().name + " erstellt.");
 			if(User.findByEmail(request().username()).isAdmin) {
 				// manual binding of owner
 				ContactGroup.find.ref(filledForm.get().id).addOwner(User.findByEmail(request().username()));
@@ -368,7 +359,7 @@ public class Application extends Controller {
 			group.addOwner(User.findByEmail(userEmail));
 		}
 		
-		flash("success", newOwners.toString() + " is / are now owner of the group " + group.name);
+		flash("success", newOwners.toString() + " ist / sind nun Besitzer der Gruppe " + group.name);
 		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
 	}
 
@@ -376,7 +367,6 @@ public class Application extends Controller {
 	public static Result showContactGroup(Long id) {
 		ContactGroup cg = ContactGroup.find.ref(id);
 		List<Contact> groupContacts = cg.contacts;
-		System.out.println(cg.contacts.size());
 		List<User> groupOwners = cg.owners;
 		List<User> allUsers = User.find.all();
 		return ok(views.html.contactGroupView.render(cg, groupContacts, groupOwners, allUsers, getCurrentUser()));
@@ -393,7 +383,5 @@ public class Application extends Controller {
 			}
 			return null;
 		}
-
 	}
-
 }

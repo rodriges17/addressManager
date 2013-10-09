@@ -23,7 +23,6 @@ public class ModelTest extends WithApplication {
 	@Test
     public void createAndRetrieveUser() {
         new User("bob@gmail.com", "secret", false).save();
-        System.out.println(User.find.all().size());
         User bob = User.find.where().eq("email", "bob@gmail.com").findUnique();
         assertNotNull(bob);
         assertEquals("bob@gmail.com", bob.email);
@@ -104,7 +103,6 @@ public class ModelTest extends WithApplication {
 		Contact contactToDelete = Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
 		assertEquals(2, Contact.all().size());
 		Contact createdContactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
-		System.out.println(createdContactToDelete.id);
 		createdContactToDelete.delete(createdContactToDelete.id);
 		assertEquals(1, Contact.all().size());
 	}

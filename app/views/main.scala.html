@@ -52,14 +52,14 @@
 	    @if(flash.containsKey("success")) {
         	<div class="alert alert-success">
         		<button type="button" class="close" data-dismiss="alert">&times;</button>
-            	<strong>Done!</strong> @flash.get("success")
+            	<strong>OK!</strong> @flash.get("success")
         	</div>
    		} 
    		
    		 @if(flash.containsKey("error")) {
         	<div class="alert alert-error">
         	<button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Ooops!</strong> @flash.get("error")
+            <strong>Hoppla!</strong> @flash.get("error")
         	</div>
     	}
 	    
