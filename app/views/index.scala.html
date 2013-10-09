@@ -1,4 +1,4 @@
-@(contacts: List[Contact], contactForm: Form[Contact], user: User) 
+@(contacts: List[Contact], contactForm: Form[Contact], user: User, btn: String) 
 
 @import helper._
 
@@ -8,8 +8,8 @@
     
     <p>
 	<h3>Filter: </h3> 
-	<a href="@routes.Application.contacts()" class="btn">Alle</a> <a href="@routes.Application.filteredContactsBy("Bern")" class="btn">Bern</a> <a href="@routes.Application.filteredContactsBy("Basel")" class="btn">Basel</a> <a href="@routes.Application.filteredContactsBy("Fribourg")" class="btn">Fribourg</a> <a href="@routes.Application.filteredContactsBy("Luzern")" class="btn">Luzern</a> <a href="@routes.Application.filteredContactsBy("Romande")" class="btn">Romande</a> <a href="@routes.Application.filteredContactsBy("St. Gallen-Ostschweiz")" class="btn">St. Gallen-Ostschweiz</a> <a href="@routes.Application.filteredContactsBy("Tessin")" class="btn">Tessin</a> <a href="@routes.Application.filteredContactsBy("zurich")" class="btn">Z&uuml;rich</a> <a href="@routes.Application.filteredContactsWithYearbookSubscription" class="btn">Jahrbuch</a>
-	<h3>@contacts.size Kontakte</h3>
+	<a href="@routes.Application.contacts()" @if(btn == "all"){class="btn btn-info"} else{class="btn"}>Alle</a> <a href="@routes.Application.filteredContactsBy("Bern")" @if(btn == "Bern"){class="btn btn-info"} else{class="btn"}>Bern</a> <a href="@routes.Application.filteredContactsBy("Basel")" @if(btn == "Basel"){class="btn btn-info"} else{class="btn"}>Basel</a> <a href="@routes.Application.filteredContactsBy("Fribourg")" @if(btn == "Fribourg"){class="btn btn-info"} else{class="btn"}>Fribourg</a> <a href="@routes.Application.filteredContactsBy("Luzern")" @if(btn == "Luzern"){class="btn btn-info"} else{class="btn"}>Luzern</a> <a href="@routes.Application.filteredContactsBy("Romande")" @if(btn == "Romande"){class="btn btn-info"} else{class="btn"}>Romande</a> <a href="@routes.Application.filteredContactsBy("St. Gallen-Ostschweiz")" @if(btn == "St.+Gallen-Ostschweiz"){class="btn btn-info"} else{class="btn"}>St. Gallen-Ostschweiz</a> <a href="@routes.Application.filteredContactsBy("Tessin")" @if(btn == "Tessin"){class="btn btn-info"} else{class="btn"}>Tessin</a> <a href="@routes.Application.filteredContactsBy("zurich")" @if(btn == "zurich"){class="btn btn-info"} else{class="btn"}>Z&uuml;rich</a> <a href="@routes.Application.filteredContactsWithYearbookSubscription" @if(btn == "yearbook"){class="btn btn-info"} else{class="btn"}>Jahrbuch</a>
+	<h3>@contacts.size Kontakte @if(btn == "all"){insgesamt} @if(btn == "yearbook"){mit Jahrbuch Abonnement} else {@if(btn!="all"){in der Sektion @contacts.get(0).belongsTo()}}</h3>
 	</p>
 	<table class="table table-striped">
 		<thead>

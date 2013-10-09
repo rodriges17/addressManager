@@ -146,11 +146,12 @@ public class Contact extends Model {
 	public static List<Contact> findInvolvingGroupOwner(String user) {
 	       return find.fetch("belongsTo").where()
 	                .eq("belongsTo.owners.email", user)
+	                .orderBy("name asc")
 	           .findList();
 	}
 	
 	public List<Contact> ofGroup(String groupName) {
-		return find.where().eq(groupName, belongsTo).findList();
+		return find.where().eq(groupName, belongsTo).orderBy("name asc").findList();
 	}
 	
 	public static void delete(Long id) {
@@ -197,7 +198,7 @@ public class Contact extends Model {
 	}
 
 	public static List<Contact> findEditedContacts() {
-		return find.where().eq("isEdited", true).findList();
+		return find.where().eq("isEdited", true).orderBy("name asc").findList();
 	}
 
 	public static List<Contact> findByGroupname(String groupname) {
@@ -217,7 +218,14 @@ public class Contact extends Model {
 	}
 	//TODO fix
 	public static List<Contact> withYearbookSubscription() {
-		return find.where().eq("yearbookSubscription", "true").findList();
+		return find.where().eq("yearbookSubscription", "true").orderBy("name asc").findList();
 	}
 	
+	public String belongsTo() {
+		String result = "";
+		for(int i = 0; i < belongsTo.size(); i++) {
+			result += belongsTo.get(i).toString();
+		}
+		return result;
+	}
 }

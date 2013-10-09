@@ -77,8 +77,9 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result contacts() {
 		User user = getCurrentUser();
+		String btn = "all";
 		return ok(
-				views.html.index.render(Contact.findInvolvingGroupOwner(user.email), contactForm, user)    		
+				views.html.index.render(Contact.findInvolvingGroupOwner(user.email), contactForm, user, btn)    		
 				);
 	}
 	
@@ -98,8 +99,10 @@ public class Application extends Controller {
 		User user = getCurrentUser();
 		//if(!user.isAdmin)
 		//    return redirect(routes.Application.contacts());
+		String btn = groupname;
+		System.out.println(btn);
 		return ok(
-				views.html.index.render(Contact.findByGroupname(groupname), contactForm, user)    		
+				views.html.index.render(Contact.findByGroupname(groupname), contactForm, user, btn)    		
 				);
 	}
 	
@@ -111,8 +114,9 @@ public class Application extends Controller {
 		User user = getCurrentUser();
 		//if(!user.isAdmin)
 		//    return redirect(routes.Application.contacts());
+		String btn = "yearbook";
 		return ok(
-				views.html.index.render(Contact.withYearbookSubscription(), contactForm, user)    		
+				views.html.index.render(Contact.withYearbookSubscription(), contactForm, user, btn)    		
 				);
 	}
 	
@@ -232,7 +236,7 @@ public class Application extends Controller {
 			String item = "belongsTo[" + j + "]";
 			if(filledForm.data().get(item) != null){
 				ContactGroup cg = ContactGroup.find.byId((long) Integer.parseInt(filledForm.data().get(item)));
-				System.out.println(cg);
+				System.out.println("The created contact belongs to: " + cg);
 				newContact.belongsTo.add(cg);
 			}
 		}
@@ -264,8 +268,9 @@ public class Application extends Controller {
 	public static Result updateContact(Long id) {
 		Form<Contact> updatedForm = contactForm.bindFromRequest();
 		if(updatedForm.hasErrors()) {
+			String btn = "all";
 			return badRequest(
-					views.html.index.render(Contact.all(), updatedForm, getCurrentUser())
+					views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn)
 					);
 		} else {
 			Contact.find.byId(id).update(updatedForm);
