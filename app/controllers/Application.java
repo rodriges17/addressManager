@@ -1,65 +1,58 @@
 package controllers;
 
-import java.util.Date;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.BaseFont;
-import com.lowagie.text.pdf.ColumnText;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfWriter;
-//import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import org.apache.commons.io.FileUtils;
 
-import play.api.Play;
-import play.data.*;
-import play.mvc.*;
-import models.*;
-import views.html.*;
+import models.Contact;
+import models.ContactGroup;
+import models.User;
+import play.data.DynamicForm;
+import play.data.Form;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
+import play.mvc.Security;
 import util.pdf.PDF;
-
 import utils.PDFiText;
 import utils.PoiExcelFileReader;
 
 public class Application extends Controller {
 
-	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass", false);
+	private static final User ANONYMOUS = new User("anon@ymous.com", "nopass",
+			false);
 
 	static Form<Contact> contactForm = Form.form(Contact.class);
 	static Form<User> userForm = Form.form(User.class);
 	static Form<ContactGroup> contactGroupForm = Form.form(ContactGroup.class);
 
-	public static Result login(){
-		return ok(views.html.login.render(Form.form(Login.class), getCurrentUser()));
+	public static Result login() {
+		return ok(views.html.login.render(Form.form(Login.class),
+				getCurrentUser()));
 	}
 
 	public static Result authenticate() {
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {
-			return badRequest(views.html.login.render(loginForm, getCurrentUser()));
+			return badRequest(views.html.login.render(loginForm,
+					getCurrentUser()));
 		} else {
 			session().clear();
 			session("email", loginForm.get().email);
-			flash("success", "Sie haben sich erfolgreich eingeloggt als: " + loginForm.get().email);
-			return redirect(
-					routes.Application.contacts()
-					);
+			flash("success", "Sie haben sich erfolgreich eingeloggt als: "
+					+ loginForm.get().email);
+			return redirect(routes.Application.contacts());
 		}
 	}
 
 	@Security.Authenticated(Secured.class)
-	public static Result logout(){
+	public static Result logout() {
 		session().clear();
 		flash("success", "Sie sind nun ausgeloggt.");
 		return redirect(routes.Application.login());
@@ -71,113 +64,118 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * Lists all the contacts, where the logged in user
-	 * is owner of the corresponding contact group
+	 * Lists all the contacts, where the logged in user is owner of the
+	 * corresponding contact group
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result contacts() {
 		User user = getCurrentUser();
 		String btn = "all";
-		return ok(
-				views.html.index.render(Contact.findInvolvingGroupOwner(user.email), contactForm, user, btn)    		
-				);
+		return ok(views.html.index.render(
+				Contact.findInvolvingGroupOwner(user.email), contactForm, user,
+				btn));
 	}
-	
+
 	@Security.Authenticated(Secured.class)
 	public static Result editedContacts() {
 		User user = getCurrentUser();
-		return ok(
-				views.html.editedContacts.render(Contact.findEditedContacts(), user)    		
-				);
+		return ok(views.html.editedContacts.render(
+				Contact.findEditedContacts(), user));
 	}
-	
+
 	/**
 	 * Lists all the contacts of the specifed group
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsBy(String groupname) {
 		User user = getCurrentUser();
-		if(!user.isAdmin)
-		    return redirect(routes.Application.contacts());
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
 		String btn = groupname;
-		System.out.println(btn);
-		return ok(
-				views.html.index.render(Contact.findByGroupname(groupname), contactForm, user, btn)    		
-				);
+		return ok(views.html.index.render(Contact.findByGroupname(groupname),
+				contactForm, user, btn));
 	}
-	
+
 	/**
 	 * Lists all the contacts with yearbook subscription
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsWithYearbookSubscription() {
 		User user = getCurrentUser();
-		if(!user.isAdmin)
-		    return redirect(routes.Application.contacts());
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
 		String btn = "yearbook";
-		return ok(
-				views.html.index.render(Contact.withYearbookSubscription(), contactForm, user, btn)    		
-				);
+		return ok(views.html.index.render(Contact.withYearbookSubscription(),
+				contactForm, user, btn));
 	}
-	
+
 	/**
-	 * Generates a pdf file of all the contacts, 
-	 * where the logged in user is owner of the
-	 * corresponding contact group
+	 * Generates a pdf file of all the contacts, where the logged in user is
+	 * owner of the corresponding contact group
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result pdfSummary() {
 		User user = getCurrentUser();
-		return PDF.ok(views.html.pdfSummary.render(Contact.findInvolvingGroupOwner(user.email)));
-    }
-	
+		return PDF.ok(views.html.pdfSummary.render(Contact
+				.findInvolvingGroupOwner(user.email)));
+	}
+
 	@Security.Authenticated(Secured.class)
 	public static Result pdfLabels() {
 		User user = getCurrentUser();
 		PDFiText.generateLabels(Contact.findInvolvingGroupOwner(user.email));
 		response().setContentType("application/pdf");
-		//response().setHeader("Content-disposition","attachment; filename=labels.pdf");
+		// response().setHeader("Content-disposition","attachment; filename=labels.pdf");
 		return ok(new File("output/labels.pdf"));
 	}
-	
+
 	/**
 	 * Renders the file upload view
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result fileUpload() {
-		if(!getCurrentUser().isAdmin)
-	        return redirect(routes.Application.contacts());
+		if (!getCurrentUser().isAdmin)
+			return redirect(routes.Application.contacts());
 		return ok(views.html.fileUpload.render(getCurrentUser()));
 	}
-	
+
 	/**
 	 * Renders the excel import / export view
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result excelImportExport() {
-		if(!getCurrentUser().isAdmin)
-	        return redirect(routes.Application.contacts());
+		if (!getCurrentUser().isAdmin)
+			return redirect(routes.Application.contacts());
 		return ok(views.html.excelImportExport.render(getCurrentUser()));
 	}
-	
+
 	@Security.Authenticated(Secured.class)
 	public static Result upload() {
-		  Http.MultipartFormData body = request().body().asMultipartFormData();
-		  Http.MultipartFormData.FilePart contactfile = body.getFile("contactfile");
-		  if (contactfile != null) {
-		    String fileName = contactfile.getFilename();
-		    String contentType = contactfile.getContentType(); 
-		    File file = contactfile.getFile();
-		    file.renameTo(new File("/public/upload", fileName));
-		    System.out.println(fileName);
-			flash("success", "Datei: " + fileName + " hochgeladen und Kontakte importiert");
-		    return redirect(routes.Application.contacts());
-		  } else {
-		    flash("error", "Fehlende Datei");
-		    return redirect(routes.Application.contacts());    
-		  }
+		Http.MultipartFormData body = request().body().asMultipartFormData();
+		Http.MultipartFormData.FilePart contactfile = body
+				.getFile("contactfile");
+		if (contactfile != null) {
+			String fileName = contactfile.getFilename();
+			String contentType = contactfile.getContentType();
+			File file = contactfile.getFile();
+			//file.renameTo(new File("/public/upload", fileName));
+			System.out.println(fileName);
+			
+			try {
+	            FileUtils.moveFile(file, new File("public/upload", fileName));
+	        } catch (IOException ioe) {
+	            System.out.println("Problem operating on filesystem");
+	        }
+			
+			flash("success", "Datei: " + fileName
+					+ " hochgeladen und Kontakte importiert");
+			return redirect(routes.Application.contacts());
+		} else {
+			flash("error", "Ein Fehler ist aufgetreten, bitte versuchen sie es erneut");
+			return redirect(routes.Application.contacts());
 		}
-	
+	}
+
 	@Security.Authenticated(Secured.class)
 	public static Result readFile() {
 		PoiExcelFileReader.readFile();
@@ -186,8 +184,8 @@ public class Application extends Controller {
 
 	private static User getCurrentUser() {
 		String currentId = request().username();
-		User current; 
-		if(currentId == null)
+		User current;
+		if (currentId == null)
 			current = ANONYMOUS;
 		else {
 			current = User.find.byId(request().username());
@@ -195,7 +193,7 @@ public class Application extends Controller {
 		return current;
 	}
 
-	//TODO change to use Contact.create() method
+	// TODO change to use Contact.create() method
 	@Security.Authenticated(Secured.class)
 	public static Result newContact() {
 
@@ -227,30 +225,31 @@ public class Application extends Controller {
 		newContact.city = city;
 		newContact.country = country;
 		newContact.phone = phone;
-		
-		if(yearbook.equals("true"))
+
+		if (yearbook.equals("true"))
 			newContact.yearbookSubscription = true;
 		newContact.memberCategory = memberCategory;
 
-		for(int j = 0; j < ContactGroup.options().size(); j++){
+		for (int j = 0; j < ContactGroup.options().size(); j++) {
 			String item = "belongsTo[" + j + "]";
-			if(filledForm.data().get(item) != null){
-				ContactGroup cg = ContactGroup.find.byId((long) Integer.parseInt(filledForm.data().get(item)));
+			if (filledForm.data().get(item) != null) {
+				ContactGroup cg = ContactGroup.find.byId((long) Integer
+						.parseInt(filledForm.data().get(item)));
 				newContact.belongsTo.add(cg);
 			}
 		}
 		newContact.createdAt = new Timestamp(new Date().getTime());
 		newContact.lastEditedAt = newContact.createdAt;
-		
+
 		newContact.save();
-		
+
 		flash("success", "Kontakt " + newContact + " erstellt und gespeichert.");
-		return redirect(routes.Application.contacts());  
+		return redirect(routes.Application.contacts());
 	}
 
 	/**
-	 * Deletes the contact by first removing contact from
-	 * corresponding contact groups and then deleting the contact
+	 * Deletes the contact by first removing contact from corresponding contact
+	 * groups and then deleting the contact
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result deleteContact(Long id) {
@@ -261,15 +260,14 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result updateContact(Long id) {
 		Form<Contact> updatedForm = contactForm.bindFromRequest();
-		if(updatedForm.hasErrors()) {
+		if (updatedForm.hasErrors()) {
 			String btn = "all";
-			return badRequest(
-					views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn)
-					);
+			return badRequest(views.html.index.render(Contact.all(),
+					updatedForm, getCurrentUser(), btn));
 		} else {
 			Contact.find.byId(id).update(updatedForm);
 			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
-			return redirect(routes.Application.contacts());  
+			return redirect(routes.Application.contacts());
 		}
 	}
 
@@ -284,66 +282,71 @@ public class Application extends Controller {
 	public static Result editContact(Long id) {
 		Contact contact = Contact.find.byId(id);
 		contactForm = contactForm.fill(contact);
-		return ok(views.html.edit.render(contactForm, contact, getCurrentUser()));
+		return ok(views.html.edit
+				.render(contactForm, contact, getCurrentUser()));
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result add() {
-		return ok(views.html.add.render(contactForm, getCurrentUser(), ContactGroup.all()));
+		return ok(views.html.add.render(contactForm, getCurrentUser(),
+				ContactGroup.all()));
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result addUser() {
-		if(!getCurrentUser().isAdmin)
+		if (!getCurrentUser().isAdmin)
 			return redirect(routes.Application.contacts());
 		Form<User> userForm = Form.form(User.class);
-		return ok(views.html.addUser.render(userForm, getCurrentUser(), User.find.all()));
+		return ok(views.html.addUser.render(userForm, getCurrentUser(),
+				User.find.all()));
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result newUser() {
 		Form<User> filledForm = userForm.bindFromRequest();
-		if(filledForm.hasErrors()) {
+		if (filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
 			flash("error", "Bitte korrigieren sie ihre Eingaben!");
-			return badRequest(
-					views.html.addUser.render(filledForm, getCurrentUser(), User.find.all())
-					);
+			return badRequest(views.html.addUser.render(filledForm,
+					getCurrentUser(), User.find.all()));
 		} else {
 			User.create(filledForm.get());
-			flash("success", "Benutzer " + filledForm.get().email + " erstellt.");
-			return redirect(routes.Application.contacts());  
+			flash("success", "Benutzer " + filledForm.get().email
+					+ " erstellt.");
+			return redirect(routes.Application.contacts());
 		}
 	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result addContactGroup() {
-		if(!getCurrentUser().isAdmin)
+		if (!getCurrentUser().isAdmin)
 			return redirect(routes.Application.contacts());
 		Form<ContactGroup> contactGroupForm = Form.form(ContactGroup.class);
-		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
+		return ok(views.html.addContactGroup.render(contactGroupForm,
+				getCurrentUser(), ContactGroup.find.all()));
 	}
 
-	//TODO Automatic binding of owner is still missing at the moment
+	// TODO Automatic binding of owner is still missing at the moment
 	@Security.Authenticated(Secured.class)
 	public static Result newContactGroup() {
 		Form<ContactGroup> filledForm = contactGroupForm.bindFromRequest();
 
-		if(filledForm.hasErrors()) {
+		if (filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
 			flash("error", "Bitte korrigieren sie ihre Eingaben!");
-			return badRequest(
-					views.html.addContactGroup.render(filledForm, getCurrentUser(), ContactGroup.find.all())
-					);
+			return badRequest(views.html.addContactGroup.render(filledForm,
+					getCurrentUser(), ContactGroup.find.all()));
 		} else {
 
 			ContactGroup.create(filledForm.get());
-			flash("success", "Kontaktgruppe " + filledForm.get().name + " erstellt.");
-			if(User.findByEmail(request().username()).isAdmin) {
+			flash("success", "Kontaktgruppe " + filledForm.get().name
+					+ " erstellt.");
+			if (User.findByEmail(request().username()).isAdmin) {
 				// manual binding of owner
-				ContactGroup.find.ref(filledForm.get().id).addOwner(User.findByEmail(request().username()));
+				ContactGroup.find.ref(filledForm.get().id).addOwner(
+						User.findByEmail(request().username()));
 			}
-			return redirect(routes.Application.contacts());  
+			return redirect(routes.Application.contacts());
 		}
 	}
 
@@ -352,15 +355,17 @@ public class Application extends Controller {
 		DynamicForm form = Form.form().bindFromRequest();
 		Collection<String> newOwners = form.data().values();
 		ContactGroup group = ContactGroup.find.byId(id);
-		
+
 		Iterator it = newOwners.iterator();
-		while(it.hasNext()){
+		while (it.hasNext()) {
 			String userEmail = (String) it.next();
 			group.addOwner(User.findByEmail(userEmail));
 		}
-		
-		flash("success", newOwners.toString() + " ist / sind nun Besitzer der Gruppe " + group.name);
-		return ok(views.html.addContactGroup.render(contactGroupForm, getCurrentUser(), ContactGroup.find.all()));
+
+		flash("success", newOwners.toString()
+				+ " ist / sind nun Besitzer der Gruppe " + group.name);
+		return ok(views.html.addContactGroup.render(contactGroupForm,
+				getCurrentUser(), ContactGroup.find.all()));
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -369,7 +374,8 @@ public class Application extends Controller {
 		List<Contact> groupContacts = cg.contacts;
 		List<User> groupOwners = cg.owners;
 		List<User> allUsers = User.find.all();
-		return ok(views.html.contactGroupView.render(cg, groupContacts, groupOwners, allUsers, getCurrentUser()));
+		return ok(views.html.contactGroupView.render(cg, groupContacts,
+				groupOwners, allUsers, getCurrentUser()));
 	}
 
 	public static class Login {
