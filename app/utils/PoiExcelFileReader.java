@@ -39,40 +39,76 @@ public class PoiExcelFileReader {
 				HSSFRow row = sheet.getRow(j);
 				if(row!=null){
 					
-					String title = row.getCell(1).getRichStringCellValue().getString();
-					String firstName = row.getCell(2).getRichStringCellValue().getString();
-					String name = row.getCell(3).getRichStringCellValue().getString();
+					String title = "";
+					if(row.getCell(1)!=null)
+						title = row.getCell(1).getRichStringCellValue().getString();
+					
+					String firstName = "";
+					if(row.getCell(2)!=null)
+						firstName = row.getCell(2).getRichStringCellValue().getString();
+					
+					String name = "";
+					if(row.getCell(3)!=null)
+						name = row.getCell(3).getRichStringCellValue().getString();
 					
 					String nr = "";
-					if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
-						Double nrDouble = row.getCell(5).getNumericCellValue();
-						nr = nrDouble.toString();
-						nr = nr.substring(0, nr.length()-2);
+					if(row.getCell(5)!=null){
+						if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
+							Double nrDouble = row.getCell(5).getNumericCellValue();
+							nr = nrDouble.toString();
+							nr = nr.substring(0, nr.length()-2);
+						}
+						if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_STRING){
+							nr = row.getCell(5).getRichStringCellValue().getString();
+						}
 					}
-					if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_STRING){
-						nr = row.getCell(5).getRichStringCellValue().getString();
-					}
+					String street = "";
+					if(row.getCell(4)!=null)
+						street = row.getCell(4).getRichStringCellValue().getString() + " " + nr;
 					
-					String street = row.getCell(4).getRichStringCellValue().getString() + " " + nr;
-					String appendix1 = row.getCell(6).getRichStringCellValue().getString();
-					String appendix2 = row.getCell(7).getRichStringCellValue().getString();
+					String appendix1 = "";
+					if(row.getCell(6)!=null)
+						appendix1 = row.getCell(6).getRichStringCellValue().getString();
+					
+					String appendix2 = "";
+					if(row.getCell(7)!=null)
+						appendix2 = row.getCell(7).getRichStringCellValue().getString();
 					
 					String zipcode = "";
-					if(row.getCell(8).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
-						Double zipcodeDouble = row.getCell(8).getNumericCellValue();
-						zipcode = zipcodeDouble.toString();
-						zipcode = zipcode.substring(0, zipcode.length()-2);
-					}
-					if(row.getCell(8).getCellType()==HSSFCell.CELL_TYPE_STRING){
-						zipcode = row.getCell(8).getRichStringCellValue().getString();
+					if(row.getCell(8)!=null){
+						if(row.getCell(8).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
+							Double zipcodeDouble = row.getCell(8).getNumericCellValue();
+							zipcode = zipcodeDouble.toString();
+							zipcode = zipcode.substring(0, zipcode.length()-2);
+						}
+						if(row.getCell(8).getCellType()==HSSFCell.CELL_TYPE_STRING){
+							zipcode = row.getCell(8).getRichStringCellValue().getString();
+						}
 					}
 					
-					String city = row.getCell(9).getRichStringCellValue().getString();
-					String country = row.getCell(10).getRichStringCellValue().getString();
-					String phone = row.getCell(12).getRichStringCellValue().getString();
-					String belongsTo = row.getCell(13).getRichStringCellValue().getString();
-					String yearbook = row.getCell(14).getRichStringCellValue().getString();
-					String email = row.getCell(16).getRichStringCellValue().getString();
+					String city = "";
+					if(row.getCell(9)!=null)
+						city = row.getCell(9).getRichStringCellValue().getString();
+					
+					String country = "";
+					if(row.getCell(10)!=null)
+						country = row.getCell(10).getRichStringCellValue().getString();
+					
+					String phone = "";
+					if(row.getCell(12)!=null)
+						phone = row.getCell(12).getRichStringCellValue().getString();
+					
+					String belongsTo = "";
+					if(row.getCell(13)!=null)
+						belongsTo = row.getCell(13).getRichStringCellValue().getString();
+					
+					String yearbook = "";
+					if(row.getCell(14)!=null)
+						yearbook = row.getCell(14).getRichStringCellValue().getString();
+					
+					String email = "";
+					if(row.getCell(16)!=null)
+						email = row.getCell(16).getRichStringCellValue().getString();
 					
 					if(name.equals("") & firstName.equals("") & city.equals("")){
 						endOfFile = true;
