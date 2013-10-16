@@ -245,7 +245,22 @@ public class Contact extends Model {
 		String result = "";
 		for (int i = 0; i < belongsTo.size(); i++) {
 			result += belongsTo.get(i).toString();
+			result += " ";
 		}
 		return result;
+	}
+
+	public static boolean alreadyExists(String name, String firstName,
+			String street, String city) {
+		List<Contact> result = Contact.findByNameFirstNameStreetCity(name, firstName, street, city);
+		return !result.isEmpty();
+	}
+
+	private static List<Contact> findByNameFirstNameStreetCity(String name,
+			String firstName, String street, String city) {
+		return find.where().eq("name", name)
+		.eq("firstName", firstName)
+		.eq("street", street)
+		.eq("city", city).findList();
 	}
 }

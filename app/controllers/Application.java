@@ -58,10 +58,10 @@ public class Application extends Controller {
 		return redirect(routes.Application.login());
 	}
 
-	@Security.Authenticated(Secured.class)
-	public static Result index() {
-		return redirect(routes.Application.contacts());
-	}
+//	@Security.Authenticated(Secured.class)
+//	public static Result index() {
+//		return redirect(routes.Application.contacts());
+//	}
 
 	/**
 	 * Lists all the contacts, where the logged in user is owner of the
@@ -130,16 +130,6 @@ public class Application extends Controller {
 	}
 
 	/**
-	 * Renders the file upload view
-	 */
-	@Security.Authenticated(Secured.class)
-	public static Result fileUpload() {
-		if (!getCurrentUser().isAdmin)
-			return redirect(routes.Application.contacts());
-		return ok(views.html.fileUpload.render(getCurrentUser()));
-	}
-
-	/**
 	 * Renders the excel import / export view
 	 */
 	@Security.Authenticated(Secured.class)
@@ -151,15 +141,15 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result upload() {
+		User user = getCurrentUser();
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
 		Http.MultipartFormData body = request().body().asMultipartFormData();
 		Http.MultipartFormData.FilePart contactfile = body
 				.getFile("contactfile");
 		if (contactfile != null) {
 			String fileName = contactfile.getFilename();
-			String contentType = contactfile.getContentType();
 			File file = contactfile.getFile();
-			//file.renameTo(new File("/public/upload", fileName));
-			System.out.println(fileName);
 			
 			try {
 	            FileUtils.moveFile(file, new File("public/upload", fileName));
@@ -167,6 +157,7 @@ public class Application extends Controller {
 	            System.out.println("Problem operating on filesystem");
 	        }
 			
+			PoiExcelFileReader.readFile(fileName);
 			flash("success", "Datei: " + fileName
 					+ " hochgeladen und Kontakte importiert");
 			return redirect(routes.Application.contacts());
@@ -175,11 +166,19 @@ public class Application extends Controller {
 			return redirect(routes.Application.contacts());
 		}
 	}
-
+	
 	@Security.Authenticated(Secured.class)
-	public static Result readFile() {
-		PoiExcelFileReader.readFile();
-		return redirect(routes.Application.contacts());
+	public static Result download() {
+		User user = getCurrentUser();
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
+		String filename = PoiExcelFileReader.writeFile(Contact.all());
+		response().setContentType("application/x-download");
+		String headerName = "Content-disposition";
+		String headerValue = "attachment; filename=" + filename;
+		response().setHeader(headerName, headerValue); 
+		return ok(new File(filename));
+		//return redirect(routes.Application.contacts());
 	}
 
 	private static User getCurrentUser() {
@@ -303,6 +302,9 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result newUser() {
+		User user = getCurrentUser();
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
 		Form<User> filledForm = userForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
@@ -329,6 +331,10 @@ public class Application extends Controller {
 	// TODO Automatic binding of owner is still missing at the moment
 	@Security.Authenticated(Secured.class)
 	public static Result newContactGroup() {
+		User user = getCurrentUser();
+		if (!user.isAdmin)
+			return redirect(routes.Application.contacts());
+		
 		Form<ContactGroup> filledForm = contactGroupForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
