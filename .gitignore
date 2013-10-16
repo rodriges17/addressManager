@@ -12,6 +12,7 @@ dist
 /.project
 /RUNNING_PID
 /.settings
+public/upload
 
 # general
 *~
