@@ -1,5 +1,8 @@
 package models;
 
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +20,7 @@ import play.data.validation.Constraints.Required;
 import play.db.ebean.Model;
 
 @Entity
-public class Contact extends Model {
+public class Contact extends Model implements Comparable<Contact> {
 
 	@Id
 	public Long id;
@@ -158,8 +161,13 @@ public class Contact extends Model {
 		}
 	}
 
+	/**
+	 * Lists all the contacts alphabetically sorted using Comparable interface.
+	 */
 	public static List<Contact> all() {
-		return find.all();
+		List<Contact> all = find.all();
+		Collections.sort(all);
+		return all;
 	}
 
 	public static List<Contact> findInvolvingGroupOwner(String user) {
@@ -216,12 +224,12 @@ public class Contact extends Model {
 	}
 
 	public static List<Contact> findEditedContacts() {
-		return find.where().eq("isEdited", true).orderBy("name asc").findList();
+		return find.where().eq("isEdited", Boolean.TRUE).orderBy("name asc").findList();
 	}
 
 	public static List<Contact> findByGroupname(String groupname) {
-		if (groupname.equals("St.+Gallen-Ostschweiz"))
-			groupname = "St. Gallen-Ostschweiz";
+		if (groupname.equals("StGallenZurich"))
+			groupname = "St. Gallen-Zürich";
 		if (groupname.equals("zurich"))
 			groupname = "Zürich";
 		List<Contact> all = all();
@@ -232,13 +240,13 @@ public class Contact extends Model {
 					result.add(contact);
 			}
 		}
+		//List<Contact> sortedList = new LinkedList<Contact>(result);
+		//Collections.sort(sortedList, new ContactComparator());
 		return result;
 	}
 
-	// TODO fix
 	public static List<Contact> withYearbookSubscription() {
-		return find.where().eq("yearbookSubscription", "true")
-				.orderBy("name asc").findList();
+		return find.where().eq("yearbookSubscription", Boolean.TRUE).orderBy("name asc").findList();
 	}
 
 	public String belongsTo() {
@@ -263,4 +271,18 @@ public class Contact extends Model {
 		.eq("street", street)
 		.eq("city", city).findList();
 	}
+
+	@Override
+	public int compareTo(Contact o) {
+		if(this.name.equals(o.name)) {
+			if(this.firstName.equals(o.firstName)) {
+				return this.city.compareTo(o.city);
+			} else {
+				return this.firstName.compareTo(o.firstName);
+			} 
+		} else {
+			return this.name.compareTo(o.name);
+		}
+	}
+
 }

@@ -101,6 +101,7 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result filteredContactsWithYearbookSubscription() {
+		System.out.println("Method: filteredContactsWithYearbookSubscription()");
 		User user = getCurrentUser();
 		if (!user.isAdmin)
 			return redirect(routes.Application.contacts());
