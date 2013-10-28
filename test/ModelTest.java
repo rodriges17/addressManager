@@ -44,7 +44,7 @@ public class ModelTest extends WithApplication {
 		assertNotNull(cg);
 		assertEquals("Bern", cg.name);
 		assertEquals("admin@test.com", cg.owners.get(0).email);
-		assertEquals(8, ContactGroup.all().size());
+		assertEquals(7, ContactGroup.all().size());
     }
 	
 	@Test
@@ -99,7 +99,7 @@ public class ModelTest extends WithApplication {
 	@Test
 	public void deleteContact() {
 		assertEquals(1, Contact.all().size());
-		assertEquals(8, ContactGroup.all().size());
+		assertEquals(7, ContactGroup.all().size());
 		Contact contactToDelete = Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
 		assertEquals(2, Contact.all().size());
 		Contact createdContactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
