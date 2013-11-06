@@ -21,9 +21,6 @@ public class User extends Model {
     public String password;
 	
     public boolean isAdmin;
-
-//    @ManyToMany
-//    public List<ContactGroup> administratedContactGroups = new LinkedList<ContactGroup>();
     
     public User(String email, String password, boolean isAdmin) {
       this.email = email;
