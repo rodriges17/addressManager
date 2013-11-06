@@ -3,10 +3,14 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 
@@ -198,7 +202,7 @@ public class Application extends Controller {
 	public static Result newContact() {
 
 		Form<Contact> filledForm = contactForm.bindFromRequest();
-
+			
 		String name = filledForm.data().get("name");
 		String firstName = filledForm.data().get("firstName");
 		String title = filledForm.data().get("title");
@@ -212,6 +216,7 @@ public class Application extends Controller {
 		String phone = filledForm.data().get("phone");
 		String yearbook = filledForm.data().get("yearbookSubscription");
 		String memberCategory = filledForm.data().get("memberCategory");
+		String membershipSince = filledForm.data().get("membershipSince");
 
 		Contact newContact = new Contact();
 		newContact.name = name;
@@ -238,13 +243,20 @@ public class Application extends Controller {
 				newContact.belongsTo.add(cg);
 			}
 		}
+		
+		if (newContact.belongsTo.isEmpty())
+			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
+			
+		
+		newContact.membershipSince = membershipSince;
+		
 		newContact.createdAt = new Timestamp(new Date().getTime());
 		newContact.lastEditedAt = newContact.createdAt;
 
-		newContact.save();
-
+        newContact.save();
 		flash("success", "Kontakt " + newContact + " erstellt und gespeichert.");
 		return redirect(routes.Application.contacts());
+
 	}
 
 	/**

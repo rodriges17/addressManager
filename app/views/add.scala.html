@@ -3,6 +3,8 @@
 @import helper._
 
 @main("Add Contact", user, nav = "add") {
+
+	<a href="@routes.Application.contacts()" class="btn">zur&uuml;ck</a>
     
 	<h2>Kontakt erstellen</h2>
 	
@@ -17,8 +19,8 @@
 		@inputText(contactForm("street"), '_label -> "Strasse")
 		@inputText(contactForm("appendix1"), '_label -> "Zusatz 1")
 		@inputText(contactForm("appendix2"), '_label -> "Zusatz 2")
-		@inputText(contactForm("zipcode"), '_label -> "PLZ")
-		@inputText(contactForm("city"), '_label -> "Stadt")
+		@inputText(contactForm("zipcode"), '_label -> "PLZ", '_showConstraints -> false)
+		@inputText(contactForm("city"), '_label -> "Stadt", '_showConstraints -> false)
 		@inputText(contactForm("country"), '_label -> "Land")
  		
 		@inputText(contactForm("membershipSince"), '_label -> "Mitglied seit")

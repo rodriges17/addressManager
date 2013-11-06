@@ -19,7 +19,7 @@ create table contact (
   created_at                timestamp,
   last_edited_at            timestamp,
   is_edited                 boolean,
-  membership_since          timestamp,
+  membership_since          varchar(255),
   member_category           varchar(255),
   yearbook_subscription     boolean,
   constraint pk_contact primary key (id))

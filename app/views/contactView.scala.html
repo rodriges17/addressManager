@@ -17,6 +17,8 @@
 	@for(contactgroup <- contact.belongsTo) {
     	@contactgroup.name
     }
+    <br>
+    @if(contact.membershipSince){Mitglied seit: @contact.membershipSince<br>}
 </address>
 <p>
 	<a href="@routes.Application.contacts()" class="btn">zur&uuml;ck</a>

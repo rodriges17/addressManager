@@ -45,8 +45,10 @@ public class Contact extends Model implements Comparable<Contact> {
 
 	public String appendix2;
 
+	@Required
 	public String zipcode;
 
+	@Required
 	public String city;
 
 	public String country;
@@ -58,7 +60,7 @@ public class Contact extends Model implements Comparable<Contact> {
 	public boolean isEdited = false;
 
 	@Formats.DateTime(pattern = "dd.MM.yyyy")
-	public Date membershipSince;
+	public String membershipSince;
 
 	public String memberCategory;
 
