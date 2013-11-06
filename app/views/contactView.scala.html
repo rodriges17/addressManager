@@ -19,9 +19,10 @@
     }
 </address>
 <p>
-	<a href="@routes.Application.contacts()" class="btn">back</a>
-	<a href="@routes.Application.editContact(contact.id)" class="btn">edit</a>	
-	<a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger">delete</a>
+	<a href="@routes.Application.contacts()" class="btn">zur&uuml;ck</a>
+	<a href="@routes.Application.editContact(contact.id)" class="btn">editieren</a>	
+	<a href="@routes.Application.deleteContact(contact.id)" class="btn btn-danger" onclick="return confirm('Sind sie sicher?');">l&ouml;schen</a>
+				</td>
 </p>
 
 }
