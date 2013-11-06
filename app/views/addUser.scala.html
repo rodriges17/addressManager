@@ -16,8 +16,8 @@
 	@form(action = routes.Application.newUser()) {
 	
 		<fieldset>
-		@inputText(userForm("email"), '_label -> "Email")		
-		@inputText(userForm("password"), '_label -> "Passwort")
+		@inputText(userForm("email"), '_label -> "Email", '_showConstraints -> false)		
+		@inputText(userForm("password"), '_label -> "Passwort", '_showConstraints -> false)
 		@inputPassword(
                 userForm("repeatPassword"), 
                 '_label -> "Passwort wiederholen",
