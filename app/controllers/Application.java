@@ -307,6 +307,13 @@ public class Application extends Controller {
 		if (!user.isAdmin)
 			return redirect(routes.Application.contacts());
 		Form<User> filledForm = userForm.bindFromRequest();
+		
+		if(!filledForm.field("password").valueOr("").isEmpty()) {
+            if(!filledForm.field("password").valueOr("").equals(filledForm.field("repeatPassword").value())) {
+                filledForm.reject("repeatPassword", "Passwörter stimmen nicht überein");
+            }
+        }
+		
 		if (filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
 			flash("error", "Bitte korrigieren sie ihre Eingaben!");

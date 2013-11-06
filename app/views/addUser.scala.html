@@ -17,7 +17,12 @@
 	
 		<fieldset>
 		@inputText(userForm("email"), '_label -> "Email")		
-		@inputText(userForm("password"), '_label -> "Passwort")		
+		@inputText(userForm("password"), '_label -> "Passwort")
+		@inputPassword(
+                userForm("repeatPassword"), 
+                '_label -> "Passwort wiederholen",
+                '_error -> userForm.error("password")
+            )		
 		
 		@checkbox(field = userForm("isAdmin"), '_label -> "Benutzer hat Adminrechte" )
 		<input type="hidden" name="isAdmin" value="false" /> 
