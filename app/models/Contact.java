@@ -216,8 +216,10 @@ public class Contact extends Model implements Comparable<Contact> {
 			String zipcode, String city, String country, String phone, String membershipSince, 
 			String memberCategory, String yearbook, String belongsTo) {
 		
+		System.out.println(yearbook);
+		
 		boolean yearbookSubscription = false;
-		if (yearbook.contains("ja") || yearbook.contains("Ja"))
+		if (yearbook.contains("true"))
 			yearbookSubscription = true;
 		
 		List<ContactGroup> belongingContactGroups = new LinkedList<ContactGroup>();
@@ -241,16 +243,24 @@ public class Contact extends Model implements Comparable<Contact> {
 				belongingContactGroups.add(cg);
 			}
 		}
-			this.title = title;
-			this.name = name;
-			this.firstName = firstName;
-			this.country = country;
-			this.belongsTo = belongingContactGroups;
-			
-			//this.saveManyToManyAssociations("belongsTo");
-			
-			this.save();		
-	
+		
+		this.title = title;
+		this.name = name;
+		this.firstName = firstName;
+		this.email = email;
+		this.street = street;
+		this.appendix1 = appendix1;
+		this.appendix2 = appendix2;
+		this.zipcode = zipcode;
+		this.city = city;
+		this.country = country;
+		this.phone = phone;
+		this.memberCategory = memberCategory;
+		this.yearbookSubscription = yearbookSubscription;
+		this.isEdited = true;
+		this.lastEditedAt = new Date();
+		this.belongsTo = belongingContactGroups;	
+		this.save();		
 	}
 
 	public static Contact create(Contact contact) {

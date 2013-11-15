@@ -336,8 +336,11 @@ Form<Contact> filledForm = contactForm.bindFromRequest();
 	public static Result editContact(Long id) {
 		Contact contact = Contact.find.byId(id);
 		contactForm = contactForm.fill(contact);
+		List<ContactGroup> belongingToGroups = contact.belongsTo;
+
+		List<ContactGroup> allGroups = ContactGroup.find.all();
 		return ok(views.html.edit
-				.render(contactForm, contact, getCurrentUser()));
+				.render(contactForm, contact, getCurrentUser(), allGroups, belongingToGroups));
 	}
 
 	@Security.Authenticated(Secured.class)
