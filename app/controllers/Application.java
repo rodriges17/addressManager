@@ -62,10 +62,10 @@ public class Application extends Controller {
 		return redirect(routes.Application.login());
 	}
 
-//	@Security.Authenticated(Secured.class)
-//	public static Result index() {
-//		return redirect(routes.Application.contacts());
-//	}
+	//	@Security.Authenticated(Secured.class)
+	//	public static Result index() {
+	//		return redirect(routes.Application.contacts());
+	//	}
 
 	/**
 	 * Lists all the contacts, where the logged in user is owner of the
@@ -155,13 +155,13 @@ public class Application extends Controller {
 		if (contactfile != null) {
 			String fileName = contactfile.getFilename();
 			File file = contactfile.getFile();
-			
+
 			try {
-	            FileUtils.moveFile(file, new File("public/upload", fileName));
-	        } catch (IOException ioe) {
-	            System.out.println("Problem operating on filesystem");
-	        }
-			
+				FileUtils.moveFile(file, new File("public/upload", fileName));
+			} catch (IOException ioe) {
+				System.out.println("Problem operating on filesystem");
+			}
+
 			PoiExcelFileReader.readFile(fileName);
 			flash("success", "Datei: " + fileName
 					+ " hochgeladen und Kontakte importiert");
@@ -171,7 +171,7 @@ public class Application extends Controller {
 			return redirect(routes.Application.contacts());
 		}
 	}
-	
+
 	@Security.Authenticated(Secured.class)
 	public static Result download() {
 		User user = getCurrentUser();
@@ -202,7 +202,7 @@ public class Application extends Controller {
 	public static Result newContact() {
 
 		Form<Contact> filledForm = contactForm.bindFromRequest();
-			
+
 		String name = filledForm.data().get("name");
 		String firstName = filledForm.data().get("firstName");
 		String title = filledForm.data().get("title");
@@ -243,17 +243,17 @@ public class Application extends Controller {
 				newContact.belongsTo.add(cg);
 			}
 		}
-		
+
 		if (newContact.belongsTo.isEmpty())
 			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
-			
-		
+
+
 		newContact.membershipSince = membershipSince;
-		
+
 		newContact.createdAt = new Timestamp(new Date().getTime());
 		newContact.lastEditedAt = newContact.createdAt;
 
-        newContact.save();
+		newContact.save();
 		flash("success", "Kontakt " + newContact + " erstellt und gespeichert.");
 		return redirect(routes.Application.contacts());
 
@@ -271,9 +271,9 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result updateContact(Long id) {
-		
-Form<Contact> filledForm = contactForm.bindFromRequest();
-		
+
+		Form<Contact> filledForm = contactForm.bindFromRequest();
+
 		String name = filledForm.data().get("name");
 		String firstName = filledForm.data().get("firstName");
 		String title = filledForm.data().get("title");
@@ -298,31 +298,27 @@ Form<Contact> filledForm = contactForm.bindFromRequest();
 				contactGroup += filledForm.data().get(item);
 			}
 		}
-		
+
 		if (contactGroup.isEmpty())
 			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
-			
-		String lastEditedAt = new Timestamp(new Date().getTime()).toString();
 
 		Contact.find.byId(id).update(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, membershipSince, memberCategory, yearbook, contactGroup);
 		flash("success", "Kontakt bearbeitet und gespeichert.");
 		return redirect(routes.Application.contacts());
-	
-		//Contact.find.byId(id).update(updatedForm);
-		
-//		Form<Contact> updatedForm = contactForm.bindFromRequest();
-//		if (updatedForm.hasErrors()) {
-//			flash("error", "Bitte korrigieren sie ihre Eingaben!");
-//			String btn = "all";
-//			System.out.println(updatedForm.errors().toString());
-//			System.out.println(updatedForm.toString());
-//			//return badRequest(views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn));
-//			return badRequest(views.html.edit.render(updatedForm, Contact.find.byId(id), getCurrentUser()));
-//		} else {
-//			Contact.find.byId(id).update(updatedForm);
-//			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
-//			return redirect(routes.Application.contacts());
-//		}
+
+		//		Form<Contact> updatedForm = contactForm.bindFromRequest();
+		//		if (updatedForm.hasErrors()) {
+		//			flash("error", "Bitte korrigieren sie ihre Eingaben!");
+		//			String btn = "all";
+		//			System.out.println(updatedForm.errors().toString());
+		//			System.out.println(updatedForm.toString());
+		//			//return badRequest(views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn));
+		//			return badRequest(views.html.edit.render(updatedForm, Contact.find.byId(id), getCurrentUser()));
+		//		} else {
+		//			Contact.find.byId(id).update(updatedForm);
+		//			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
+		//			return redirect(routes.Application.contacts());
+		//		}
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -364,13 +360,13 @@ Form<Contact> filledForm = contactForm.bindFromRequest();
 		if (!user.isAdmin)
 			return redirect(routes.Application.contacts());
 		Form<User> filledForm = userForm.bindFromRequest();
-		
+
 		if(!filledForm.field("password").valueOr("").isEmpty()) {
-            if(!filledForm.field("password").valueOr("").equals(filledForm.field("repeatPassword").value())) {
-                filledForm.reject("repeatPassword", "Passwörter stimmen nicht überein");
-            }
-        }
-		
+			if(!filledForm.field("password").valueOr("").equals(filledForm.field("repeatPassword").value())) {
+				filledForm.reject("repeatPassword", "Passwörter stimmen nicht überein");
+			}
+		}
+
 		if (filledForm.hasErrors()) {
 			System.out.println(filledForm.errors().toString());
 			flash("error", "Bitte korrigieren sie ihre Eingaben!");
@@ -399,7 +395,7 @@ Form<Contact> filledForm = contactForm.bindFromRequest();
 		User user = getCurrentUser();
 		if (!user.isAdmin)
 			return redirect(routes.Application.contacts());
-		
+
 		Form<ContactGroup> filledForm = contactGroupForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
