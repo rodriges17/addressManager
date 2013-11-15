@@ -10,6 +10,7 @@ public class MemberCategories {
         all.add("Student");
         all.add("Institution");
         all.add("Familie");
+        all.add("Nichtmitglied");
         return all;
 	}
 

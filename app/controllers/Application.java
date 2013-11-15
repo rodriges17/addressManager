@@ -271,16 +271,58 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result updateContact(Long id) {
-		Form<Contact> updatedForm = contactForm.bindFromRequest();
-		if (updatedForm.hasErrors()) {
-			String btn = "all";
-			return badRequest(views.html.index.render(Contact.all(),
-					updatedForm, getCurrentUser(), btn));
-		} else {
-			Contact.find.byId(id).update(updatedForm);
-			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
-			return redirect(routes.Application.contacts());
+		
+Form<Contact> filledForm = contactForm.bindFromRequest();
+		
+		String name = filledForm.data().get("name");
+		String firstName = filledForm.data().get("firstName");
+		String title = filledForm.data().get("title");
+		String email = filledForm.data().get("email");
+		String street = filledForm.data().get("street");
+		String appendix1 = filledForm.data().get("appendix1");
+		String appendix2 = filledForm.data().get("appendix2");
+		String zipcode = filledForm.data().get("zipcode");
+		String country = filledForm.data().get("country");
+		String city = filledForm.data().get("city");
+		String phone = filledForm.data().get("phone");
+		String memberCategory = filledForm.data().get("memberCategory");
+		String membershipSince = filledForm.data().get("membershipSince");
+		String yearbook = filledForm.data().get("yearbookSubscription");
+
+		String contactGroup = "";
+		for (int j = 0; j < ContactGroup.options().size(); j++) {
+			String item = "belongsTo[" + j + "]";
+			if (filledForm.data().get(item) != null) {
+				if(j>0)
+					contactGroup += "/";
+				contactGroup += filledForm.data().get(item);
+			}
 		}
+		
+		if (contactGroup.isEmpty())
+			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
+			
+		String lastEditedAt = new Timestamp(new Date().getTime()).toString();
+
+		Contact.find.byId(id).update(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, membershipSince, memberCategory, yearbook, contactGroup);
+		flash("success", "Kontakt bearbeitet und gespeichert.");
+		return redirect(routes.Application.contacts());
+	
+		//Contact.find.byId(id).update(updatedForm);
+		
+//		Form<Contact> updatedForm = contactForm.bindFromRequest();
+//		if (updatedForm.hasErrors()) {
+//			flash("error", "Bitte korrigieren sie ihre Eingaben!");
+//			String btn = "all";
+//			System.out.println(updatedForm.errors().toString());
+//			System.out.println(updatedForm.toString());
+//			//return badRequest(views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn));
+//			return badRequest(views.html.edit.render(updatedForm, Contact.find.byId(id), getCurrentUser()));
+//		} else {
+//			Contact.find.byId(id).update(updatedForm);
+//			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
+//			return redirect(routes.Application.contacts());
+//		}
 	}
 
 	@Security.Authenticated(Secured.class)

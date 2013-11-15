@@ -202,13 +202,55 @@ public class Contact extends Model implements Comparable<Contact> {
 		this.street = updatedSource.street;
 		this.city = updatedSource.city;
 		this.country = updatedSource.country;
-		// this.belongsTo = updatedSource.belongsTo;
+		this.belongsTo = updatedSource.belongsTo;
 		this.lastEditedAt = new Date();
 		this.isEdited = true;
 		this.membershipSince = updatedSource.membershipSince;
 		this.memberCategory = updatedSource.memberCategory;
 		this.yearbookSubscription = updatedSource.yearbookSubscription;
 		this.save();
+	}
+	
+	public void update(String title, String name, String firstName,
+			String email, String street, String appendix1, String appendix2,
+			String zipcode, String city, String country, String phone, String membershipSince, 
+			String memberCategory, String yearbook, String belongsTo) {
+		
+		boolean yearbookSubscription = false;
+		if (yearbook.contains("ja") || yearbook.contains("Ja"))
+			yearbookSubscription = true;
+		
+		List<ContactGroup> belongingContactGroups = new LinkedList<ContactGroup>();
+		// case: contact belongs to more than 1 contact group
+		if (belongsTo.contains("/")) {
+			String[] belongsToSplit = belongsTo.split("/");
+			for (int i = 0; i < belongsToSplit.length; i++) {
+				
+				ContactGroup cg = ContactGroup.find.where()
+						.eq("id", belongsToSplit[i]).findUnique();
+				System.out.println(cg);
+				if(cg!=null)
+				belongingContactGroups.add(cg);
+			}
+		} else {
+			if(!belongsTo.isEmpty()) {
+			ContactGroup cg = ContactGroup.find.where()
+					.eq("id", belongsTo).findUnique();
+			System.out.println(cg);
+			if(cg!=null)
+				belongingContactGroups.add(cg);
+			}
+		}
+			this.title = title;
+			this.name = name;
+			this.firstName = firstName;
+			this.country = country;
+			this.belongsTo = belongingContactGroups;
+			
+			//this.saveManyToManyAssociations("belongsTo");
+			
+			this.save();		
+	
 	}
 
 	public static Contact create(Contact contact) {

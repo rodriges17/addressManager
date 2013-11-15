@@ -32,7 +32,7 @@
     
 	    @if(user.email != "anon@ymous.com") {		                          
 			<ul class="nav nav-tabs">
-			    <li class="@("active".when(nav == "list" || nav == "add"))">
+			    <li class="@("active".when(nav == "list" || nav == "add" || nav == "contactView" || nav == "edit"))">
 			        <a href="@routes.Application.contacts()">Kontakte</a>
 			    </li>
 			    @if(user.isAdmin == true) {
