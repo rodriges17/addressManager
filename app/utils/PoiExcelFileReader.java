@@ -34,7 +34,7 @@ public class PoiExcelFileReader {
 			boolean endOfFile = false;
 			//int j = 1;
 			//while(!endOfFile){
-			for(int j = 1; j < 633; j++){
+			for(int j = 1; j < 650; j++){
 				System.out.println("row: " + j);
 				HSSFRow row = sheet.getRow(j);
 				if(row!=null){
@@ -99,8 +99,10 @@ public class PoiExcelFileReader {
 						phone = row.getCell(12).getRichStringCellValue().getString();
 					
 					String belongsTo = "";
-					if(row.getCell(13)!=null)
-						belongsTo = row.getCell(13).getRichStringCellValue().getString();
+					if(row.getCell(13)!=null){
+						if(!row.getCell(13).getRichStringCellValue().getString().isEmpty())
+							belongsTo = row.getCell(13).getRichStringCellValue().getString();
+					}
 					
 					String yearbook = "";
 					if(row.getCell(14)!=null)
