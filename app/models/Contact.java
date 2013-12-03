@@ -309,16 +309,16 @@ public class Contact extends Model implements Comparable<Contact> {
 
 	public static boolean alreadyExists(String name, String firstName,
 			String street, String city) {
-		List<Contact> result = Contact.findByNameFirstNameStreetCity(name, firstName, street, city);
-		return !result.isEmpty();
+		Contact result = Contact.findByNameFirstNameStreetCity(name, firstName, street, city);
+		return result != null;
 	}
 
-	private static List<Contact> findByNameFirstNameStreetCity(String name,
+	private static Contact findByNameFirstNameStreetCity(String name,
 			String firstName, String street, String city) {
 		return find.where().eq("name", name)
 		.eq("firstName", firstName)
 		.eq("street", street)
-		.eq("city", city).findList();
+		.eq("city", city).findUnique();
 	}
 
 	@Override
