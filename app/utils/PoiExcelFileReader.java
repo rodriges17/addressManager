@@ -18,9 +18,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-
 public class PoiExcelFileReader {
 
+	// Reader stops when name, firstName and city are blank
 	public static void readFile(String fileName) {
 		try {
 			String fileNameWithPath = "public/upload/" + fileName;
@@ -32,9 +32,8 @@ public class PoiExcelFileReader {
 			System.out.println("Last row number: " + sheet.getLastRowNum());
 			
 			boolean endOfFile = false;
-			//int j = 1;
-			//while(!endOfFile){
-			for(int j = 1; j < 650; j++){
+			int j = 1;
+			while(!endOfFile){
 				System.out.println("row: " + j);
 				HSSFRow row = sheet.getRow(j);
 				if(row!=null){
@@ -114,15 +113,14 @@ public class PoiExcelFileReader {
 					
 					if(name.equals("") & firstName.equals("") & city.equals("")){
 						endOfFile = true;
-						System.out.println("EOF EOF EOF");
 					}
 					if(!Contact.alreadyExists(name, firstName, street, city) && !endOfFile) {
 						Contact.create(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, belongsTo, yearbook);
 					} else {
-						System.out.println("Contact " + name + " already exists");
+						System.out.println("Contact " + name + " " + firstName + " already exists");
 					}
 				}
-				//j++;
+				j++;
 			}
 
 		} catch (FileNotFoundException e) {
