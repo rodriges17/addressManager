@@ -216,8 +216,6 @@ public class Contact extends Model implements Comparable<Contact> {
 			String zipcode, String city, String country, String phone, String membershipSince, 
 			String memberCategory, String yearbook, String belongsTo) {
 		
-		System.out.println(yearbook);
-		
 		boolean yearbookSubscription = false;
 		if (yearbook.contains("true"))
 			yearbookSubscription = true;
@@ -230,7 +228,6 @@ public class Contact extends Model implements Comparable<Contact> {
 				
 				ContactGroup cg = ContactGroup.find.where()
 						.eq("id", belongsToSplit[i]).findUnique();
-				System.out.println(cg);
 				if(cg!=null)
 				belongingContactGroups.add(cg);
 			}
@@ -238,7 +235,6 @@ public class Contact extends Model implements Comparable<Contact> {
 			if(!belongsTo.isEmpty()) {
 			ContactGroup cg = ContactGroup.find.where()
 					.eq("id", belongsTo).findUnique();
-			System.out.println(cg);
 			if(cg!=null)
 				belongingContactGroups.add(cg);
 			}

@@ -3,20 +3,17 @@ package controllers;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-
-import org.apache.commons.io.FileUtils;
 
 import models.Contact;
 import models.ContactGroup;
 import models.User;
+
+import org.apache.commons.io.FileUtils;
+
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.Controller;
@@ -246,17 +243,18 @@ public class Application extends Controller {
 
 		if (newContact.belongsTo.isEmpty())
 			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
-
-
+		
+		//TODO Check fields for errors
+		
+		if(filledForm.hasErrors())
+			System.out.println(filledForm.errors().toString());
+		
 		newContact.membershipSince = membershipSince;
-
 		newContact.createdAt = new Timestamp(new Date().getTime());
 		newContact.lastEditedAt = newContact.createdAt;
-
 		newContact.save();
 		flash("success", "Kontakt " + newContact + " erstellt und gespeichert.");
 		return redirect(routes.Application.contacts());
-
 	}
 
 	/**
@@ -272,53 +270,39 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result updateContact(Long id) {
 
-		Form<Contact> filledForm = contactForm.bindFromRequest();
+		Form<Contact> updatedForm = contactForm.bindFromRequest();
 
-		String name = filledForm.data().get("name");
-		String firstName = filledForm.data().get("firstName");
-		String title = filledForm.data().get("title");
-		String email = filledForm.data().get("email");
-		String street = filledForm.data().get("street");
-		String appendix1 = filledForm.data().get("appendix1");
-		String appendix2 = filledForm.data().get("appendix2");
-		String zipcode = filledForm.data().get("zipcode");
-		String country = filledForm.data().get("country");
-		String city = filledForm.data().get("city");
-		String phone = filledForm.data().get("phone");
-		String memberCategory = filledForm.data().get("memberCategory");
-		String membershipSince = filledForm.data().get("membershipSince");
-		String yearbook = filledForm.data().get("yearbookSubscription");
+		String name = updatedForm.data().get("name");
+		String firstName = updatedForm.data().get("firstName");
+		String title = updatedForm.data().get("title");
+		String email = updatedForm.data().get("email");
+		String street = updatedForm.data().get("street");
+		String appendix1 = updatedForm.data().get("appendix1");
+		String appendix2 = updatedForm.data().get("appendix2");
+		String zipcode = updatedForm.data().get("zipcode");
+		String country = updatedForm.data().get("country");
+		String city = updatedForm.data().get("city");
+		String phone = updatedForm.data().get("phone");
+		String memberCategory = updatedForm.data().get("memberCategory");
+		String membershipSince = updatedForm.data().get("membershipSince");
+		String yearbook = updatedForm.data().get("yearbookSubscription");
 
 		String contactGroup = "";
 		for (int j = 0; j < ContactGroup.options().size(); j++) {
 			String item = "belongsTo[" + j + "]";
-			if (filledForm.data().get(item) != null) {
+			if (updatedForm.data().get(item) != null) {
 				if(j>0)
 					contactGroup += "/";
-				contactGroup += filledForm.data().get(item);
+				contactGroup += updatedForm.data().get(item);
 			}
 		}
 
 		if (contactGroup.isEmpty())
-			filledForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
-
+			updatedForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
+		
 		Contact.find.byId(id).update(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, membershipSince, memberCategory, yearbook, contactGroup);
 		flash("success", "Kontakt bearbeitet und gespeichert.");
 		return redirect(routes.Application.contacts());
-
-		//		Form<Contact> updatedForm = contactForm.bindFromRequest();
-		//		if (updatedForm.hasErrors()) {
-		//			flash("error", "Bitte korrigieren sie ihre Eingaben!");
-		//			String btn = "all";
-		//			System.out.println(updatedForm.errors().toString());
-		//			System.out.println(updatedForm.toString());
-		//			//return badRequest(views.html.index.render(Contact.all(), updatedForm, getCurrentUser(), btn));
-		//			return badRequest(views.html.edit.render(updatedForm, Contact.find.byId(id), getCurrentUser()));
-		//		} else {
-		//			Contact.find.byId(id).update(updatedForm);
-		//			flash("success", "Kontakt " + updatedForm.get().name + " geändert.");
-		//			return redirect(routes.Application.contacts());
-		//		}
 	}
 
 	@Security.Authenticated(Secured.class)
@@ -333,7 +317,6 @@ public class Application extends Controller {
 		Contact contact = Contact.find.byId(id);
 		contactForm = contactForm.fill(contact);
 		List<ContactGroup> belongingToGroups = contact.belongsTo;
-
 		List<ContactGroup> allGroups = ContactGroup.find.all();
 		return ok(views.html.edit
 				.render(contactForm, contact, getCurrentUser(), allGroups, belongingToGroups));
@@ -366,9 +349,14 @@ public class Application extends Controller {
 				filledForm.reject("repeatPassword", "Passwörter stimmen nicht überein");
 			}
 		}
+		
+        if(!filledForm.hasErrors()) {
+            if(userAlreadyExists(filledForm.get().email)) {
+                filledForm.reject("email", "Diese Emailadresse ist bereits vergeben");
+            }
+        }
 
 		if (filledForm.hasErrors()) {
-			System.out.println(filledForm.errors().toString());
 			flash("error", "Bitte korrigieren sie ihre Eingaben!");
 			return badRequest(views.html.addUser.render(filledForm,
 					getCurrentUser(), User.find.all()));
@@ -378,6 +366,10 @@ public class Application extends Controller {
 					+ " erstellt.");
 			return redirect(routes.Application.contacts());
 		}
+	}
+
+	private static boolean userAlreadyExists(String email) {
+		return User.find.byId(email) != null;
 	}
 
 	@Security.Authenticated(Secured.class)
