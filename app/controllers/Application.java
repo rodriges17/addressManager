@@ -154,6 +154,9 @@ public class Application extends Controller {
 			File file = contactfile.getFile();
 
 			try {
+				File f = new File("public/upload/" + fileName);
+				if(f.isFile())
+					f.delete();
 				FileUtils.moveFile(file, new File("public/upload", fileName));
 			} catch (IOException ioe) {
 				System.out.println("Problem operating on filesystem");

@@ -131,6 +131,7 @@ public class Contact extends Model implements Comparable<Contact> {
 			String email, String street, String appendix1, String appendix2,
 			String zipcode, String city, String phone, String belongsTo,
 			String yearbook) {
+		System.out.println(belongsTo);
 		boolean yearbookSubscription = false;
 		if (yearbook.contains("ja") || yearbook.contains("Ja"))
 			yearbookSubscription = true;
