@@ -17,7 +17,8 @@ public class ModelTest extends WithApplication {
    
 	@Before
     public void setUp() {
-        start(fakeApplication(inMemoryDatabase()));
+		// By using fakeGlobal() we override behaviour from Global.java
+        start(fakeApplication(inMemoryDatabase(), fakeGlobal()));
     }
 	
 	@Test
@@ -39,24 +40,30 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveContactGroup() {
-		//User admin = User.find.where().eq("email", "admin@test.com").findUnique();
+		new User("admin@test.com", "admin", true).save();
+		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
+		new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
 		assertNotNull(cg);
 		assertEquals("Bern", cg.name);
 		assertEquals("admin@test.com", cg.owners.get(0).email);
-		assertEquals(7, ContactGroup.all().size());
+		assertEquals(1, ContactGroup.all().size());
     }
 	
 	@Test
     public void findContactGroupsInvolvingOwner() {
+		User admin = new User("admin@test.com", "admin", true);
+		admin.save();
         User bob = new User("bob@gmail.com", "secret", false);
         bob.save();
         User jane = new User("jane@gmail.com", "secret", false);
         jane.save();   
-        ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
-        cg.addOwner(bob);
-        ContactGroup cg2 = ContactGroup.find.where().eq("name", "Basel").findUnique();
-        cg2.addOwner(jane);
+        new ContactGroup("Bern", admin).save();
+        new ContactGroup("Basel", admin).save();
+        ContactGroup bern= ContactGroup.find.where().eq("name", "Bern").findUnique();
+        bern.addOwner(bob);
+        ContactGroup basel = ContactGroup.find.where().eq("name", "Basel").findUnique();
+        basel.addOwner(jane);
         List<ContactGroup> results = ContactGroup.findInvolvingOwner(bob);
         assertEquals(1, results.size());
         assertEquals("Bern", results.get(0).name);
@@ -64,47 +71,50 @@ public class ModelTest extends WithApplication {
 	
 	@Test
     public void createAndRetrieveContact() {
-		//new User("admin@test.com", "admin", false).save();
+		new User("admin@test.com", "admin", true).save();
 		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
-		//new ContactGroup("Bern", admin).save();
+		new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
 		new Contact("Mr.", "Doe", "Mark", "mark.doe@test.com", "Test Street 5", "App1", "App2", "3012", "Test City", "01234567", cg, true).save();
 		Contact contact = Contact.create("Mr.", "Doe", "Joe", "joe.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", "Bern", "ja");
 		Contact con1 = new Contact("Mr.", "Doe", "Hal", "hal.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", cg, false);
 		con1.save();
-		// 1 Kontakt wird in Global.java erstellt, daher 4
-		assertEquals(4, Contact.all().size());
+		assertEquals(3, Contact.all().size());
 	}
 	
 	@Test
     public void findContactsInvolvingGroupOwner() {
+		User admin = new User("admin@test.com", "admin", true);
+		admin.save();
 		User bob = new User("bob@gmail.com", "secret", false);
         bob.save();
         User alice = new User("alice@gmail.com", "topsecret", false);
         alice.save();
-		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
-		ContactGroup cg2 = ContactGroup.find.where().eq("name", "Basel").findUnique();
-        cg.addOwner(bob);
-        cg2.addOwner(alice);
-        Contact c1 = Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
-        Contact c2 = Contact.create("Ms.", "Test2", "fTest2", "email2@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "");
+        new ContactGroup("Bern", admin).save();
+        new ContactGroup("Basel", admin).save();
+		ContactGroup bern = ContactGroup.find.where().eq("name", "Bern").findUnique();
+		ContactGroup basel = ContactGroup.find.where().eq("name", "Basel").findUnique();
+        bern.addOwner(bob);
+        basel.addOwner(alice);
+        Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
+        Contact.create("Ms.", "Test2", "fTest2", "email2@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "");
         List<Contact> results = Contact.findInvolvingGroupOwner("bob@gmail.com");
-        // 1 Gruppe wird in Global.java erstellt, daher 3
-        assertEquals(3, results.size());
-        assertEquals("Test1", results.get(1).name);
+        assertEquals(2, results.size());
+        assertEquals("Test1", results.get(0).name);
         List<Contact> resultsEmpty = Contact.findInvolvingGroupOwner("alice@gmail.com");
         assertEquals(0, resultsEmpty.size());
     }
 	
 	@Test
 	public void deleteContact() {
+		User admin = new User("admin@test.com", "admin", true);
+		admin.save();
+		new ContactGroup("Bern", admin).save();
+		Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
 		assertEquals(1, Contact.all().size());
-		assertEquals(7, ContactGroup.all().size());
-		Contact contactToDelete = Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
-		assertEquals(2, Contact.all().size());
-		Contact createdContactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
-		createdContactToDelete.delete(createdContactToDelete.id);
-		assertEquals(1, Contact.all().size());
+		Contact contactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
+		contactToDelete.delete(contactToDelete.id);
+		assertEquals(0, Contact.all().size());
 	}
 
 }

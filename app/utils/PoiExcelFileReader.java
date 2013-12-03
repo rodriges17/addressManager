@@ -18,62 +18,58 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-
 public class PoiExcelFileReader {
 
 	// Reader stops when name, firstName and city are blank
-		public static void readFile(String fileName) {
-			try {
-				String fileNameWithPath = "public/upload/" + fileName;
-				FileInputStream fileInputStream = new FileInputStream(fileNameWithPath);
-				HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
-				HSSFSheet sheet = workbook.getSheetAt (0);
-				HSSFRow header = sheet.getRow(0);
-				
-				System.out.println("Last row number: " + sheet.getLastRowNum());
-				
-				boolean endOfFile = false;
-				int j = 1;
-				while(!endOfFile){
-					System.out.println("row: " + j);
-					HSSFRow row = sheet.getRow(j);
-					if(row!=null){
-						
-						String title = "";
-						if(row.getCell(1)!=null)
-							title = row.getCell(1).getRichStringCellValue().getString();
-						
-						String firstName = "";
-						if(row.getCell(2)!=null)
-							firstName = row.getCell(2).getRichStringCellValue().getString();
-						
-						String name = "";
-						if(row.getCell(3)!=null)
-							name = row.getCell(3).getRichStringCellValue().getString();
-						
-						String nr = "";
-						if(row.getCell(5)!=null){
-							if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
-								Double nrDouble = row.getCell(5).getNumericCellValue();
-								nr = nrDouble.toString();
-								nr = nr.substring(0, nr.length()-2);
-							}
-							if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_STRING){
-								nr = row.getCell(5).getRichStringCellValue().getString();
-							}
+
+	public static void readFile(String fileName) {
+		try {
+			String fileNameWithPath = "public/upload/" + fileName;
+			FileInputStream fileInputStream = new FileInputStream(fileNameWithPath);
+			HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
+			HSSFSheet sheet = workbook.getSheetAt (0);
+			HSSFRow header = sheet.getRow(0);
+
+			System.out.println("Last row number: " + sheet.getLastRowNum());
+
+			boolean endOfFile = false;
+			int j = 1;
+			while(!endOfFile){
+				System.out.println("row: " + j);
+				HSSFRow row = sheet.getRow(j);
+				if(row!=null){
+
+					String title = "";
+					if(row.getCell(1)!=null)
+						title = row.getCell(1).getRichStringCellValue().getString();
+
+					String firstName = "";
+					if(row.getCell(2)!=null)
+						firstName = row.getCell(2).getRichStringCellValue().getString();
+
+					String name = "";
+					if(row.getCell(3)!=null)
+						name = row.getCell(3).getRichStringCellValue().getString();
+
+					String nr = "";
+					if(row.getCell(5)!=null){
+						if(row.getCell(5).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
+							Double nrDouble = row.getCell(5).getNumericCellValue();
+							nr = nrDouble.toString();
+							nr = nr.substring(0, nr.length()-2);
 						}
 						String street = "";
 						if(row.getCell(4)!=null)
 							street = row.getCell(4).getRichStringCellValue().getString() + " " + nr;
-						
+
 						String appendix1 = "";
 						if(row.getCell(6)!=null)
 							appendix1 = row.getCell(6).getRichStringCellValue().getString();
-						
+
 						String appendix2 = "";
 						if(row.getCell(7)!=null)
 							appendix2 = row.getCell(7).getRichStringCellValue().getString();
-						
+
 						String zipcode = "";
 						if(row.getCell(8)!=null){
 							if(row.getCell(8).getCellType()==HSSFCell.CELL_TYPE_NUMERIC){
@@ -85,33 +81,34 @@ public class PoiExcelFileReader {
 								zipcode = row.getCell(8).getRichStringCellValue().getString();
 							}
 						}
-						
+
+
 						String city = "";
 						if(row.getCell(9)!=null)
 							city = row.getCell(9).getRichStringCellValue().getString();
-						
+
 						String country = "";
 						if(row.getCell(10)!=null)
 							country = row.getCell(10).getRichStringCellValue().getString();
-						
+
 						String phone = "";
 						if(row.getCell(12)!=null)
 							phone = row.getCell(12).getRichStringCellValue().getString();
-						
+
 						String belongsTo = "";
 						if(row.getCell(13)!=null){
 							if(!row.getCell(13).getRichStringCellValue().getString().isEmpty())
 								belongsTo = row.getCell(13).getRichStringCellValue().getString();
 						}
-						
+
 						String yearbook = "";
 						if(row.getCell(14)!=null)
 							yearbook = row.getCell(14).getRichStringCellValue().getString();
-						
+
 						String email = "";
 						if(row.getCell(16)!=null)
 							email = row.getCell(16).getRichStringCellValue().getString();
-						
+
 						if(name.equals("") & firstName.equals("") & city.equals("")){
 							endOfFile = true;
 						}
@@ -120,30 +117,31 @@ public class PoiExcelFileReader {
 						} else {
 							System.out.println("Contact " + name + " " + firstName + " already exists");
 						}
-					} else {
-						endOfFile = true;
+						j++;
 					}
-					j++;
+				} else {
+					endOfFile = true;
 				}
-
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-	
+	}
+
 	public static String writeFile(List<Contact> contacts) {
 		Workbook workbook = new HSSFWorkbook();
-		
+
 		Sheet sheet = workbook.createSheet();
-		
+
 		String filename = "";
 		try {
 			String now = new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 			filename = "SMG_Kontakte_" + now + ".xls";
 			FileOutputStream fos = new FileOutputStream(filename);
-			
+
 			for(int i = 0; i < contacts.size(); i++) {
 				Contact contact = contacts.get(i);
 				Row row = sheet.createRow(i);
@@ -174,7 +172,7 @@ public class PoiExcelFileReader {
 			}
 			workbook.write(fos);
 			fos.close();
-			
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
