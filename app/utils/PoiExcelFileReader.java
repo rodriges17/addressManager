@@ -104,6 +104,10 @@ public class PoiExcelFileReader {
 						String yearbook = "";
 						if(row.getCell(14)!=null)
 							yearbook = row.getCell(14).getRichStringCellValue().getString();
+						
+						String remarks = "";
+						if(row.getCell(15)!=null)
+							remarks = row.getCell(15).getRichStringCellValue().getString();
 
 						String email = "";
 						if(row.getCell(16)!=null)
@@ -113,7 +117,7 @@ public class PoiExcelFileReader {
 							endOfFile = true;
 						}
 						if(!Contact.alreadyExists(name, firstName, street, city) && !endOfFile) {
-							Contact.create(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, belongsTo, yearbook);
+							Contact.create(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, belongsTo, yearbook, remarks);
 						} else {
 							System.out.println("Contact " + name + " " + firstName + " already exists");
 						}

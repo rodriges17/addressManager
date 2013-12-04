@@ -65,6 +65,8 @@ public class Contact extends Model implements Comparable<Contact> {
 	public String memberCategory;
 
 	public boolean yearbookSubscription;
+	
+	public String remarks;
 
 	@ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "contacts")
 	public List<ContactGroup> belongsTo = new LinkedList<ContactGroup>();
@@ -78,7 +80,7 @@ public class Contact extends Model implements Comparable<Contact> {
 	public Contact(String title, String name, String firstName, String email,
 			String street, String appendix1, String appendix2, String zipcode,
 			String city, String phone, ContactGroup belongsTo,
-			boolean yearbookSubscription) {
+			boolean yearbookSubscription, String remarks) {
 		this.title = title;
 		this.name = name;
 		this.firstName = firstName;
@@ -97,13 +99,14 @@ public class Contact extends Model implements Comparable<Contact> {
 		belongsTo.save();
 		this.belongsTo.add(belongsTo);
 		this.yearbookSubscription = yearbookSubscription;
+		this.remarks = remarks;
 	}
 
 	public Contact(String title, String name, String firstName, String email,
 			String street, String appendix1, String appendix2, String zipcode,
 			String city, String phone,
 			List<ContactGroup> belongingContactGroups,
-			boolean yearbookSubscription) {
+			boolean yearbookSubscription, String remarks) {
 		this.title = title;
 		this.name = name;
 		this.firstName = firstName;
@@ -125,12 +128,13 @@ public class Contact extends Model implements Comparable<Contact> {
 
 		}
 		this.yearbookSubscription = yearbookSubscription;
+		this.remarks = remarks;
 	}
 
 	public static Contact create(String title, String name, String firstName,
 			String email, String street, String appendix1, String appendix2,
 			String zipcode, String city, String phone, String belongsTo,
-			String yearbook) {
+			String yearbook, String remarks) {
 		System.out.println(belongsTo);
 		boolean yearbookSubscription = false;
 		if (yearbook.contains("ja") || yearbook.contains("Ja"))
@@ -146,7 +150,7 @@ public class Contact extends Model implements Comparable<Contact> {
 			}
 			Contact contact = new Contact(title, name, firstName, email,
 					street, appendix1, appendix2, zipcode, city, phone,
-					belongingContactGroups, yearbookSubscription);
+					belongingContactGroups, yearbookSubscription, remarks);
 			contact.save();
 			return contact;
 		}
@@ -156,7 +160,7 @@ public class Contact extends Model implements Comparable<Contact> {
 					.findUnique();
 			Contact contact = new Contact(title, name, firstName, email,
 					street, appendix1, appendix2, zipcode, city, phone, cg,
-					yearbookSubscription);
+					yearbookSubscription, remarks);
 			contact.save();
 			return contact;
 		}

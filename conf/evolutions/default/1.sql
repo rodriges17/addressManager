@@ -22,6 +22,7 @@ create table contact (
   membership_since          varchar(255),
   member_category           varchar(255),
   yearbook_subscription     boolean,
+  remarks                   varchar(255),
   constraint pk_contact primary key (id))
 ;
 

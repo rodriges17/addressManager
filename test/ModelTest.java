@@ -75,9 +75,9 @@ public class ModelTest extends WithApplication {
 		User admin = User.find.where().eq("email", "admin@test.com").findUnique();
 		new ContactGroup("Bern", admin).save();
 		ContactGroup cg = ContactGroup.find.where().eq("name", "Bern").findUnique();
-		new Contact("Mr.", "Doe", "Mark", "mark.doe@test.com", "Test Street 5", "App1", "App2", "3012", "Test City", "01234567", cg, true).save();
-		Contact contact = Contact.create("Mr.", "Doe", "Joe", "joe.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", "Bern", "ja");
-		Contact con1 = new Contact("Mr.", "Doe", "Hal", "hal.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", cg, false);
+		new Contact("Mr.", "Doe", "Mark", "mark.doe@test.com", "Test Street 5", "App1", "App2", "3012", "Test City", "01234567", cg, true, "Blabla").save();
+		Contact contact = Contact.create("Mr.", "Doe", "Joe", "joe.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", "Bern", "ja", "This is a remark");
+		Contact con1 = new Contact("Mr.", "Doe", "Hal", "hal.doe@test.com", "Test Street", "App1", "App2", "3012", "Test City", "01234567", cg, false, "This is a remark 2");
 		con1.save();
 		assertEquals(3, Contact.all().size());
 	}
@@ -96,8 +96,8 @@ public class ModelTest extends WithApplication {
 		ContactGroup basel = ContactGroup.find.where().eq("name", "Basel").findUnique();
         bern.addOwner(bob);
         basel.addOwner(alice);
-        Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
-        Contact.create("Ms.", "Test2", "fTest2", "email2@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "");
+        Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja", "Blabla");
+        Contact.create("Ms.", "Test2", "fTest2", "email2@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "", "Blabla");
         List<Contact> results = Contact.findInvolvingGroupOwner("bob@gmail.com");
         assertEquals(2, results.size());
         assertEquals("Test1", results.get(0).name);
@@ -110,7 +110,7 @@ public class ModelTest extends WithApplication {
 		User admin = new User("admin@test.com", "admin", true);
 		admin.save();
 		new ContactGroup("Bern", admin).save();
-		Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja");
+		Contact.create("Mr.", "Test1", "fTest1", "email1@g.ch", "street", "App1", "App2", "3012", "city", "phone", "Bern", "ja", "This is a remark");
 		assertEquals(1, Contact.all().size());
 		Contact contactToDelete = Contact.find.where().eq("name", "Test1").findUnique();
 		contactToDelete.delete(contactToDelete.id);
