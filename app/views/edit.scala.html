@@ -27,11 +27,13 @@
 				'_label -> "Contact Group", '_default -> "-- Choose a contact group --",
 				'_showConstraints -> false	
 			) -->
+			@inputText(contactForm("remarks"), '_label -> "Bemerkungen")
+			@inputText(contactForm("preferredLanguage"), '_label -> "Bevorzugte Sprache")
 			@inputText(contactForm("membershipSince"), '_label -> "Mitglied seit")
 			@select(
 				contactForm("memberCategory"),
 				options(MemberCategories.list),
-				'_label -> "Mitgliederkategorie", '_default -> "-- WŠhlen sie eine Kategorie --"
+				'_label -> "Mitgliederkategorie", '_default -> "-- Wï¿½hlen sie eine Kategorie --"
 			)
 			@checkbox(field = contactForm("yearbookSubscription"), '_label -> "Jahrbuch abonniert" )
 			<input type="hidden" name="yearbookSubscription" value="false" />

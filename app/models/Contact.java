@@ -67,6 +67,8 @@ public class Contact extends Model implements Comparable<Contact> {
 	public boolean yearbookSubscription;
 	
 	public String remarks;
+	
+	public String preferredLanguage;
 
 	@ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "contacts")
 	public List<ContactGroup> belongsTo = new LinkedList<ContactGroup>();
@@ -79,8 +81,8 @@ public class Contact extends Model implements Comparable<Contact> {
 
 	public Contact(String title, String name, String firstName, String email,
 			String street, String appendix1, String appendix2, String zipcode,
-			String city, String phone, ContactGroup belongsTo,
-			boolean yearbookSubscription, String remarks) {
+			String city, String country, String phone, ContactGroup belongsTo,
+			boolean yearbookSubscription, String remarks, String preferredLanguage) {
 		this.title = title;
 		this.name = name;
 		this.firstName = firstName;
@@ -90,6 +92,7 @@ public class Contact extends Model implements Comparable<Contact> {
 		this.appendix2 = appendix2;
 		this.zipcode = zipcode;
 		this.city = city;
+		this.country = country;
 		this.phone = phone;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
@@ -100,13 +103,14 @@ public class Contact extends Model implements Comparable<Contact> {
 		this.belongsTo.add(belongsTo);
 		this.yearbookSubscription = yearbookSubscription;
 		this.remarks = remarks;
+		this.preferredLanguage = preferredLanguage;
 	}
 
 	public Contact(String title, String name, String firstName, String email,
 			String street, String appendix1, String appendix2, String zipcode,
-			String city, String phone,
+			String city, String country, String phone,
 			List<ContactGroup> belongingContactGroups,
-			boolean yearbookSubscription, String remarks) {
+			boolean yearbookSubscription, String remarks, String preferredLanguage) {
 		this.title = title;
 		this.name = name;
 		this.firstName = firstName;
@@ -116,6 +120,7 @@ public class Contact extends Model implements Comparable<Contact> {
 		this.appendix1 = appendix2;
 		this.zipcode = zipcode;
 		this.city = city;
+		this.country = country;
 		this.phone = phone;
 		this.createdAt = new Date();
 		this.lastEditedAt = this.createdAt;
@@ -129,13 +134,14 @@ public class Contact extends Model implements Comparable<Contact> {
 		}
 		this.yearbookSubscription = yearbookSubscription;
 		this.remarks = remarks;
+		this.preferredLanguage = preferredLanguage;
 	}
 
 	public static Contact create(String title, String name, String firstName,
 			String email, String street, String appendix1, String appendix2,
-			String zipcode, String city, String phone, String belongsTo,
-			String yearbook, String remarks) {
-		System.out.println(belongsTo);
+			String zipcode, String city, String country, String phone, String belongsTo,
+			String yearbook, String remarks, String preferredLanguage) {
+		//System.out.println(belongsTo);
 		boolean yearbookSubscription = false;
 		if (yearbook.contains("ja") || yearbook.contains("Ja"))
 			yearbookSubscription = true;
@@ -149,8 +155,8 @@ public class Contact extends Model implements Comparable<Contact> {
 				belongingContactGroups.add(cg);
 			}
 			Contact contact = new Contact(title, name, firstName, email,
-					street, appendix1, appendix2, zipcode, city, phone,
-					belongingContactGroups, yearbookSubscription, remarks);
+					street, appendix1, appendix2, zipcode, city, country, phone,
+					belongingContactGroups, yearbookSubscription, remarks, preferredLanguage);
 			contact.save();
 			return contact;
 		}
@@ -159,8 +165,8 @@ public class Contact extends Model implements Comparable<Contact> {
 			ContactGroup cg = ContactGroup.find.where().eq("name", belongsTo)
 					.findUnique();
 			Contact contact = new Contact(title, name, firstName, email,
-					street, appendix1, appendix2, zipcode, city, phone, cg,
-					yearbookSubscription, remarks);
+					street, appendix1, appendix2, zipcode, city, country, phone, cg,
+					yearbookSubscription, remarks, preferredLanguage);
 			contact.save();
 			return contact;
 		}

@@ -214,6 +214,7 @@ public class Application extends Controller {
 		String memberCategory = filledForm.data().get("memberCategory");
 		String membershipSince = filledForm.data().get("membershipSince");
 		String remarks = filledForm.data().get("remarks");
+		String preferredLanguage = filledForm.data().get("preferredLanguage");
 
 		Contact newContact = new Contact();
 		newContact.name = name;
@@ -228,6 +229,7 @@ public class Application extends Controller {
 		newContact.country = country;
 		newContact.phone = phone;
 		newContact.remarks = remarks;
+		newContact.preferredLanguage = preferredLanguage;
 
 		if (yearbook.equals("true"))
 			newContact.yearbookSubscription = true;

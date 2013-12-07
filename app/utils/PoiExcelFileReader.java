@@ -35,7 +35,7 @@ public class PoiExcelFileReader {
 			boolean endOfFile = false;
 			int j = 1;
 			while(!endOfFile){
-				System.out.println("row: " + j);
+				//System.out.println("row: " + j);
 				HSSFRow row = sheet.getRow(j);
 				if(row!=null){
 
@@ -112,20 +112,27 @@ public class PoiExcelFileReader {
 						String email = "";
 						if(row.getCell(16)!=null)
 							email = row.getCell(16).getRichStringCellValue().getString();
+						
+						String preferredLanguage = "";
+						if(row.getCell(17)!=null)
+							remarks = row.getCell(15).getRichStringCellValue().getString();
 
 						if(name.equals("") & firstName.equals("") & city.equals("")){
 							endOfFile = true;
 						}
 						if(!Contact.alreadyExists(name, firstName, street, city) && !endOfFile) {
-							Contact.create(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, phone, belongsTo, yearbook, remarks);
+							Contact.create(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, belongsTo, yearbook, remarks, preferredLanguage);
 						} else {
+							System.out.println("Contact: " + name + " nicht erstellt");
 							System.out.println("Contact " + name + " " + firstName + " already exists");
 						}
-						j++;
+						
 					}
 				} else {
+					System.out.println("Row: " + j + " is null");
 					endOfFile = true;
 				}
+				j++;
 			}
 
 		} catch (FileNotFoundException e) {

@@ -7,10 +7,11 @@
 <address>
 	@if(contact.title){@contact.title<br>}
 	<strong>@contact.firstName @contact.name</strong><br>
-	@contact.street<br>
+	@if(contact.street){@contact.street<br>}
 	@if(contact.appendix1){@contact.appendix1<br>}
 	@if(contact.appendix2){@contact.appendix2<br>}
 	@contact.zipcode @contact.city<br>
+	@if(contact.country){@contact.country<br>}
 	@if(contact.phone){<abbr title="Phone">P:</abbr> @contact.phone<br>}
 	@if(contact.email){<a href="mailto:@contact.email">@contact.email</a><br>}
 	<strong>Sektion: </strong>
@@ -18,6 +19,7 @@
     	@contactgroup.name
     }
     <br>
+    @if(contact.remarks){@contact.remarks<br>}
     @if(contact.membershipSince){Mitglied seit: @contact.membershipSince<br>}
 </address>
 <p>

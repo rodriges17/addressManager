@@ -31,6 +31,7 @@
 				<th>Land</th>
 				<th>Gruppe</th>
 				<th>Kategorie</th>
+				<th>Bemerkungen</th>
 				<th>Jahrbuch</th>
 				<th></th>
 			</tr>
@@ -63,6 +64,8 @@
 				<td><a href="@routes.Application.viewContact(contact.id)">@for(cg <- contact.belongsTo) {@cg.name } </a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@contact.memberCategory</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.remarks</a>
 				</td>
 				<td><a href="@routes.Application.viewContact(contact.id)">@if(contact.yearbookSubscription) {
 		        ja

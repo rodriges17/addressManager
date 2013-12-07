@@ -33,6 +33,6 @@ public class Global extends GlobalSettings {
 
         // Check if there is no contact in the database
         if (Contact.find.findRowCount() == 0)
-        	Contact.create("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "012 345 6789", "Bern", "ja", "Hier keine");             
+        	Contact.create("Sir", "Test", "John", "john.test@test.com", "Teststreet 3", "App1", "App2", "3012", "Test City", "Switzerland", "012 345 6789", "Bern", "ja", "Hier keine", "Schwizerdütsch");             
     }
 }
