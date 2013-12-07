@@ -136,8 +136,6 @@ public class Application extends Controller {
 	 */
 	@Security.Authenticated(Secured.class)
 	public static Result excelImportExport() {
-		if (!getCurrentUser().isAdmin)
-			return redirect(routes.Application.contacts());
 		return ok(views.html.excelImportExport.render(getCurrentUser()));
 	}
 
@@ -175,9 +173,7 @@ public class Application extends Controller {
 	@Security.Authenticated(Secured.class)
 	public static Result download() {
 		User user = getCurrentUser();
-		if (!user.isAdmin)
-			return redirect(routes.Application.contacts());
-		String filename = PoiExcelFileReader.writeFile(Contact.all());
+		String filename = PoiExcelFileReader.writeFile(Contact.findInvolvingGroupOwner(user.email));
 		response().setContentType("application/x-download");
 		String headerName = "Content-disposition";
 		String headerValue = "attachment; filename=" + filename;

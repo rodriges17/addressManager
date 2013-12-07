@@ -4,6 +4,7 @@
 
 @main("Excel Import / Export", user, nav = "importexport") {
     
+    @if(user.isAdmin) {
     <h2>Import</h2>
     @form(action = routes.Application.upload, 'enctype -> "multipart/form-data") {
     
@@ -11,6 +12,7 @@
     <br>
     <br>
     <input type="submit" class="btn btn-primary">
+    }
     }
 
 	<h2>Export</h2>

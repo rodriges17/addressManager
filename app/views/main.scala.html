@@ -35,6 +35,9 @@
 			    <li class="@("active".when(nav == "list" || nav == "add" || nav == "contactView" || nav == "edit"))">
 			        <a href="@routes.Application.contacts()">Kontakte</a>
 			    </li>
+			    <li class="@("active".when(nav == "importexport"))">
+			        <a href=@routes.Application.excelImportExport()>Excel Import / Export</a>
+			    </li>
 			    @if(user.isAdmin == true) {
 			    	<li class="@("active".when(nav == "addcontactgroup"))">
 			     	   <a href=@routes.Application.addContactGroup()>Kontaktgruppen</a>
@@ -42,9 +45,7 @@
 				    <li class="@("active".when(nav == "adduser"))">
 				        <a href=@routes.Application.addUser()>Benutzer</a>
 				    </li>			    
-			    	<li class="@("active".when(nav == "importexport"))">
-			        	<a href=@routes.Application.excelImportExport()>Excel Import / Export</a>
-			    	</li>
+			    	
 			    }
 	        </ul>
 	    }   
