@@ -18,6 +18,8 @@ GET     /filteredcontacts/:groupname    controllers.Application.filteredContacts
 GET     /filteredcontactswith/yearbook  controllers.Application.filteredContactsWithYearbookSubscription()
 GET     /users/add                  controllers.Application.addUser()
 POST    /users                      controllers.Application.newUser()
+GET     /users/:email/edit          controllers.Application.editUser(email:String)
+POST    /users/:email/update        controllers.Application.updateUser(email:String)
 GET     /contactgroups/add          controllers.Application.addContactGroup()
 POST    /contactgroups              controllers.Application.newContactGroup()
 POST    /contactgroups/:id/addowner controllers.Application.addOwner(id:Long)

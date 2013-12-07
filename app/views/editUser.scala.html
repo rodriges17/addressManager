@@ -1,0 +1,22 @@
+@(userForm: Form[User], user: User)
+
+@import helper._
+
+	@main("Benutzer bearbeiten", user, nav = "edit") {
+	
+	<a href="@routes.Application.contacts()" class="btn">zur&uuml;ck</a>
+	
+	<h2>Benutzer @user.email bearbeiten</h2>
+	    
+	    @form(action = routes.Application.updateUser(user.email)) {
+	        <fieldset>
+			@inputPassword(userForm("oldPassword"), '_label -> "Altes Passwort", '_error -> userForm.error("oldPassword"))
+			@inputPassword(userForm("newPassword"), '_label -> "Neues Passwort")
+			@inputPassword(userForm("confirmNewPassword"), '_label -> "Passwort wiederholen", '_error -> userForm.error("confirmNewPassword"))
+				
+			<input type="submit" value="Update" class="btn">
+			</fieldset>
+		  
+	    }
+	    
+	}

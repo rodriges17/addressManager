@@ -21,7 +21,7 @@
 	    	@if(user.email == "anon@ymous.com") {
 		        Sie sind nicht eingeloggt
 		    } else {
-		        <dt>Benutzer <span>@user.email</span></dt>
+		        <dt>Benutzer <a href="@routes.Application.editUser(user.email)"><span>@user.email</span></a></dt>
 		        <dd>
 		            <a href="@routes.Application.logout()" class="btn">Logout</a>
 		        </dd>

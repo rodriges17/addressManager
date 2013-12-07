@@ -374,6 +374,35 @@ public class Application extends Controller {
 	private static boolean userAlreadyExists(String email) {
 		return User.find.byId(email) != null;
 	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result editUser(String email) {
+		User user = User.findByEmail(email);
+		Form<User> userForm = Form.form(User.class);
+		return ok(views.html.editUser
+				.render(userForm, getCurrentUser()));
+	}
+	
+	@Security.Authenticated(Secured.class)
+	public static Result updateUser(String email) {
+		User user = User.findByEmail(email);
+		Form<User> updatedForm = userForm.bindFromRequest();
+		if(!updatedForm.data().get("oldPassword").equals(user.password)){
+			updatedForm.reject("oldPassword", "Passwort falsch");
+			return badRequest(views.html.editUser.render(updatedForm,
+					getCurrentUser()));
+		}
+		
+		if(!updatedForm.data().get("newPassword").equals(updatedForm.data().get("confirmNewPassword"))){
+			updatedForm.reject("confirmNewPassword", "Passwörter müssen übereinstimmen");
+			return badRequest(views.html.editUser.render(updatedForm,
+					getCurrentUser()));
+		}
+		
+		user.password = updatedForm.data().get("newPassword");
+		user.save();
+		return redirect(routes.Application.contacts());
+	}
 
 	@Security.Authenticated(Secured.class)
 	public static Result addContactGroup() {
