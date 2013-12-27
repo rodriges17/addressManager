@@ -29,6 +29,8 @@ public class Global extends GlobalSettings {
             romande.save();
             ContactGroup stgallen = new ContactGroup("St. Gallen-Zürich", admin);
             stgallen.save();
+            ContactGroup nichtmitglied = new ContactGroup("Nichtmitglied", admin);
+            nichtmitglied.save();
         }
 
         // Check if there is no contact in the database

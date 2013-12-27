@@ -312,7 +312,8 @@ public class Contact extends Model implements Comparable<Contact> {
 		String result = "";
 		for (int i = 0; i < belongsTo.size(); i++) {
 			result += belongsTo.get(i).toString();
-			result += " ";
+			if(i+1 != belongsTo.size())
+				result += "/";
 		}
 		return result;
 	}

@@ -115,7 +115,7 @@ public class PoiExcelFileReader {
 						
 						String preferredLanguage = "";
 						if(row.getCell(17)!=null)
-							remarks = row.getCell(15).getRichStringCellValue().getString();
+							preferredLanguage = row.getCell(17).getRichStringCellValue().getString();
 
 						if(name.equals("") & firstName.equals("") & city.equals("")){
 							endOfFile = true;
@@ -152,33 +152,81 @@ public class PoiExcelFileReader {
 			String now = new SimpleDateFormat("yyyy_MM_dd").format(new Date());
 			filename = "SMG_Kontakte_" + now + ".xls";
 			FileOutputStream fos = new FileOutputStream(filename);
-
+			
+			// Set headers of the table
+			Row row = sheet.createRow(0);
+			Cell cnrHeader = row.createCell(0);
+			cnrHeader.setCellValue("KDN");
+			Cell titleHeader = row.createCell(1);
+			titleHeader.setCellValue("Titel und Anrede");
+			Cell firstNameHeader = row.createCell(2);
+			firstNameHeader.setCellValue("Vorname");
+			Cell nameHeader = row.createCell(3);
+			nameHeader.setCellValue("Name");
+			Cell streetHeader = row.createCell(4);
+			streetHeader.setCellValue("Strasse");
+			Cell numberHeader = row.createCell(5);
+			numberHeader.setCellValue("Nr.");
+			Cell app1Header = row.createCell(6);
+			app1Header.setCellValue("Zusatz 1");
+			Cell app2Header = row.createCell(7);
+			app2Header.setCellValue("Zusatz 2");
+			Cell zipcodeHeader = row.createCell(8);
+			zipcodeHeader.setCellValue("PLZ");
+			Cell cityHeader = row.createCell(9);
+			cityHeader.setCellValue("Stadt");
+			Cell countryHeader = row.createCell(10);
+			countryHeader.setCellValue("Land");
+			Cell amountHeader = row.createCell(11);
+			amountHeader.setCellValue("Menge");
+			Cell phoneHeader = row.createCell(12);
+			phoneHeader.setCellValue("Telefon");
+			Cell groupHeader = row.createCell(13);
+			groupHeader.setCellValue("Sektion");
+			Cell yearbookHeader = row.createCell(14);
+			yearbookHeader.setCellValue("Jahrbuch");
+			Cell remarksHeader = row.createCell(15);
+			remarksHeader.setCellValue("Bemerkungen");
+			Cell emailHeader = row.createCell(16);
+			emailHeader.setCellValue("Email");
+			
 			for(int i = 0; i < contacts.size(); i++) {
 				Contact contact = contacts.get(i);
-				Row row = sheet.createRow(i);
-				Cell title = row.createCell(0);
+				row = sheet.createRow(i + 1);
+				Cell cnr = row.createCell(0);
+				cnr.setCellValue("");
+				Cell title = row.createCell(1);
 				title.setCellValue(contact.title);
-				Cell firstName = row.createCell(1);
+				Cell firstName = row.createCell(2);
 				firstName.setCellValue(contact.firstName);
-				Cell name = row.createCell(2);
+				Cell name = row.createCell(3);
 				name.setCellValue(contact.name);
-				Cell street = row.createCell(3);
+				Cell street = row.createCell(4);
 				street.setCellValue(contact.street);
-				Cell app1 = row.createCell(4);
+				Cell nr = row.createCell(5);
+				nr.setCellValue("");
+				Cell app1 = row.createCell(6);
 				app1.setCellValue(contact.appendix1);
-				Cell app2 = row.createCell(5);
+				Cell app2 = row.createCell(7);
 				app2.setCellValue(contact.appendix2);
-				Cell zipcode = row.createCell(6);
+				Cell zipcode = row.createCell(8);
 				zipcode.setCellValue(contact.zipcode);
-				Cell city = row.createCell(7);
+				Cell city = row.createCell(9);
 				city.setCellValue(contact.city);
-				Cell country = row.createCell(8);
+				Cell country = row.createCell(10);
 				country.setCellValue(contact.country);
-				Cell phone = row.createCell(9);
+				Cell amount = row.createCell(11);
+				amount.setCellValue("");
+				Cell phone = row.createCell(12);
 				phone.setCellValue(contact.phone);
-				Cell group = row.createCell(10);
+				Cell group = row.createCell(13);
 				group.setCellValue(contact.belongsTo());
-				Cell email = row.createCell(11);
+				Cell yearbook = row.createCell(14);
+				String yearbookToString = contact.yearbookSubscription ? "Ja" : "";
+				yearbook.setCellValue(yearbookToString);
+				Cell remarks = row.createCell(15);
+				remarks.setCellValue(contact.remarks);
+				Cell email = row.createCell(16);
 				email.setCellValue(contact.email);
 			}
 			workbook.write(fos);

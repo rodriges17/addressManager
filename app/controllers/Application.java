@@ -387,6 +387,7 @@ public class Application extends Controller {
 	public static Result updateUser(String email) {
 		User user = User.findByEmail(email);
 		Form<User> updatedForm = userForm.bindFromRequest();
+		
 		if(!updatedForm.data().get("oldPassword").equals(user.password)){
 			updatedForm.reject("oldPassword", "Passwort falsch");
 			return badRequest(views.html.editUser.render(updatedForm,
