@@ -289,6 +289,8 @@ public class Application extends Controller {
 		String memberCategory = updatedForm.data().get("memberCategory");
 		String membershipSince = updatedForm.data().get("membershipSince");
 		String yearbook = updatedForm.data().get("yearbookSubscription");
+		String remarks = updatedForm.data().get("remarks");
+		String preferredLanguage = updatedForm.data().get("preferredLanguage");
 
 		String contactGroup = "";
 		for (int j = 0; j < ContactGroup.options().size(); j++) {
@@ -303,7 +305,7 @@ public class Application extends Controller {
 		if (contactGroup.isEmpty())
 			updatedForm.reject("belongsTo[]", "Keine Sektion ausgewählt");
 		
-		Contact.find.byId(id).update(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, membershipSince, memberCategory, yearbook, contactGroup);
+		Contact.find.byId(id).update(title, name, firstName, email, street, appendix1, appendix2, zipcode, city, country, phone, membershipSince, memberCategory, yearbook, contactGroup, remarks, preferredLanguage);
 		flash("success", "Kontakt bearbeitet und gespeichert.");
 		return redirect(routes.Application.contacts());
 	}

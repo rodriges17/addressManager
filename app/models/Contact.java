@@ -225,7 +225,7 @@ public class Contact extends Model implements Comparable<Contact> {
 	public void update(String title, String name, String firstName,
 			String email, String street, String appendix1, String appendix2,
 			String zipcode, String city, String country, String phone, String membershipSince, 
-			String memberCategory, String yearbook, String belongsTo) {
+			String memberCategory, String yearbook, String belongsTo, String remarks, String preferredLanguage) {
 		
 		boolean yearbookSubscription = false;
 		if (yearbook.contains("true"))
@@ -266,7 +266,9 @@ public class Contact extends Model implements Comparable<Contact> {
 		this.yearbookSubscription = yearbookSubscription;
 		this.isEdited = true;
 		this.lastEditedAt = new Date();
-		this.belongsTo = belongingContactGroups;	
+		this.belongsTo = belongingContactGroups;
+		this.remarks = remarks;
+		this.preferredLanguage = preferredLanguage;
 		this.save();		
 	}
 
