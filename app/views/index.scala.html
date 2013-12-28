@@ -33,6 +33,7 @@
 				<th>Kategorie</th>
 				<th>Bemerkungen</th>
 				<th>Jahrbuch</th>
+				<th>Sprache</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -72,6 +73,8 @@
 		    } else {
 		        nein
 		    }</a>
+				</td>
+				<td><a href="@routes.Application.viewContact(contact.id)">@contact.preferredLanguage</a>
 				</td>
 				</tr>
 			}
