@@ -329,6 +329,7 @@ public class Application extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result add() {
+		contactForm = Form.form(Contact.class);
 		return ok(views.html.add.render(contactForm, getCurrentUser(),
 				ContactGroup.all()));
 	}
